@@ -1,10 +1,9 @@
 import PropTypes from "prop-types";
-export default function CardContainer({ type, position, children }) {
+export default function CardContainer({ type = "", position = "", children }) {
   const classes =
     type === "add"
       ? position +
-        " col-12 col-md-4 rounded-4 p-4  mx-auto d-flex \
-         align-items-center"
+        " col-12 col-md-4 rounded-4 p-4  mx-auto d-flex align-items-center"
       : position +
         (position === "right"
           ? " col-12 col-md-6 col-lg-5 rounded-4 p-4 border-2 border border-secondary mx-auto"
@@ -14,7 +13,7 @@ export default function CardContainer({ type, position, children }) {
 }
 
 CardContainer.propTypes = {
-  children: PropTypes.any,
+  children: PropTypes.any.isRequired,
   position: PropTypes.string,
   type: PropTypes.string,
 };

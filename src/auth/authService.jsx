@@ -52,6 +52,7 @@ export function validatePassword(password) {
   };
 }
 
+
 export function validateCredentials(email, password, usersList) {
   const user = usersList.find((u) => u.email === email);
   if (user && user.password === password) return { isValid: true, user: user };

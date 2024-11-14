@@ -1,5 +1,4 @@
 // import React from 'react'
-import PropTypes from "prop-types";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { logout } from "../../auth/authService";
@@ -55,7 +54,3 @@ export default function Navbar() {
   );
 }
 
-Navbar.propTypes = {
-  isLoggedIn: PropTypes.bool,
-  setIsLoggedIn: PropTypes.func,
-};

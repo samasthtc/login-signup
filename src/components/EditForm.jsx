@@ -202,11 +202,11 @@ export default function EditForm({ user, onSubmit }) {
 }
 
 EditForm.propTypes = {
-  onSubmit: PropTypes.func,
+  onSubmit: PropTypes.func.isRequired,
   user: PropTypes.shape({
-    id: PropTypes.any,
-    email: PropTypes.any,
-    name: PropTypes.any,
-    password: PropTypes.any,
-  }),
+    id: PropTypes.any.isRequired,
+    email: PropTypes.any.isRequired,
+    name: PropTypes.any.isRequired,
+    password: PropTypes.any.isRequired,
+  }).isRequired,
 };

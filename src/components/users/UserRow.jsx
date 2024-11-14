@@ -58,8 +58,8 @@ export default function UserRow({ user }) {
 
 UserRow.propTypes = {
   user: PropTypes.shape({
-    email: PropTypes.string,
-    id: PropTypes.any,
-    name: PropTypes.string,
-  }),
+    email: PropTypes.string.isRequired,
+    id: PropTypes.any.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
 };

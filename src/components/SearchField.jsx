@@ -47,8 +47,8 @@ export default function SearchField({
 }
 
 SearchField.propTypes = {
-  filter: PropTypes.string,
-  searchTerm: PropTypes.string,
-  setFilter: PropTypes.func,
-  setSearchTerm: PropTypes.func,
+  filter: PropTypes.string.isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  setSearchTerm: PropTypes.func.isRequired,
 };

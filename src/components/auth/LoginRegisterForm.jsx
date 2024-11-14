@@ -14,6 +14,8 @@ import CardContainer from "../common/CardContainer";
 import Input from "../Input";
 
 export default function LoginRegisterForm({ type, onSubmit }) {
+  const navigate = useNavigate();
+
   const { usersList, setUsersList } = useContext(UsersListContext);
   const { setLoggedInUser } = useContext(LoggedInUserContext);
   const [form, setForm] = useState({
@@ -62,15 +64,13 @@ export default function LoginRegisterForm({ type, onSubmit }) {
     initialValidationState
   );
 
+  const allFieldsNotEmpty =
+    (type !== "login" ? !!form.name : true) && !!form.email && !!form.password;
   const isValid =
-    validationState.isNameValid &&
+    (type !== "login" ? validationState.isNameValid : true) &&
     validationState.isEmailValid &&
     validationState.isPasswordValid &&
-    form.name &&
-    form.email &&
-    form.password;
-    
-  const navigate = useNavigate();
+    allFieldsNotEmpty;
 
   const handleFieldChange = (e, field) => {
     setForm({ ...form, [field]: e.target.value });
@@ -91,11 +91,11 @@ export default function LoginRegisterForm({ type, onSubmit }) {
       ...prevErrors,
       [field]: isValid
         ? ""
-        : field === "name" && type !== "login"
+        : type !== "login"
         ? errorMessage
-        : field === "email" && type === "login"
+        : field === "email"
         ? " "
-        : field === "password" && type === "login"
+        : field === "password"
         ? "Invalid credentials."
         : errorMessage,
     }));
@@ -128,7 +128,7 @@ export default function LoginRegisterForm({ type, onSubmit }) {
         if (type === "register" || type === "add") {
           const result = onSubmit(form, usersList);
           if (result.isValid) {
-            // @ts-ignore
+            
             setUsersList(result.updatedList);
             type === "register" && navigate("/login");
             emptyFields();
@@ -144,10 +144,12 @@ export default function LoginRegisterForm({ type, onSubmit }) {
         }
       }
     } else {
+      if (!allFieldsNotEmpty) return;
+
       const result = onSubmit(form, usersList);
 
       if (result.isValid) {
-        // @ts-ignore
+        
         setLoggedInUser(result.user);
         navigate("/");
         emptyFields();
@@ -237,7 +239,7 @@ export default function LoginRegisterForm({ type, onSubmit }) {
           placeholder="Enter your email..."
           autoComplete="email"
           label="Email"
-          autoFocus={type === "login" && true}
+          autoFocus={type === "login"}
           value={form.email}
           onChange={(e) => {
             handleFieldChange(e, "email");
@@ -278,6 +280,6 @@ export default function LoginRegisterForm({ type, onSubmit }) {
 }
 
 LoginRegisterForm.propTypes = {
-  onSubmit: PropTypes.func,
-  type: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
 };
