@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useCallback, useContext, useReducer, useState } from "react";
+import { useCallback, useContext, useEffect, useReducer, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   validateEmail,
@@ -118,6 +118,14 @@ export default function EditForm({ user, onSubmit }) {
       }
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+      setPassword(user.password);
+    }
+  }, [user]);
 
   return (
     <CardContainer>

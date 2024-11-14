@@ -9,32 +9,19 @@ export default function Profile() {
   const { loggedInUser } = useContext(LoggedInUserContext);
   const { usersList } = useContext(UsersListContext);
   const location = useLocation();
-
-  const [queries, setQueries] = useState(
-    new URLSearchParams(window.location.search)
-  );
   const [user, setUser] = useState(null);
 
-  // let userId = queries.get("id");
-  // let isCurrent = queries.get("current");
-  // if (isCurrent === "true") user = loggedInUser;
-  // else user = usersList.find((u) => u.id === Number(userId));
-
-  // const handleQueryChange = () => {
-
-  // };
-
   useEffect(() => {
-    const currentQueries = new URLSearchParams(window.location.search);
-    setQueries(currentQueries);
+    const currentQueries = new URLSearchParams(location.search);
     const userId = currentQueries.get("id");
     const isCurrent = currentQueries.get("current");
     console.log("location changed", userId, isCurrent);
 
     if (isCurrent === "true") {
-      setUser(loggedInUser);
+      setUser({ ...loggedInUser });
     } else {
-      setUser(usersList.find((u) => u.id === Number(userId)));
+      const foundUser = usersList.find((u) => u.id === Number(userId));
+      setUser(foundUser ? { ...foundUser } : null);
     }
   }, [location, loggedInUser, usersList]);
 
