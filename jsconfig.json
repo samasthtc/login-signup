@@ -1,0 +1,23 @@
+// {
+//   "compilerOptions": {
+//     "baseUrl": "./src",
+//     "jsx": "react"
+//   }
+// }
+
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2021",
+    "jsx": "preserve",
+    "baseUrl": "./src",
+    "checkJs": true,
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/lib/*": ["lib/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/node_modules/*"],
+  "javascript.preferences.importModuleSpecifier": "non-relative"
+}

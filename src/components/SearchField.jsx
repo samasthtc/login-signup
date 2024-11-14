@@ -1,0 +1,54 @@
+import PropTypes from "prop-types";
+import Input from "./Input";
+
+export default function SearchField({
+  searchTerm,
+  setSearchTerm,
+  filter,
+  setFilter,
+}) {
+  return (
+    <form action="#" className="container-fluid px-0 ms-auto w-100">
+      <div className="row g-1 input-group my-3">
+        <div className="col-7 col-sm-8">
+          <Input
+            type="search"
+            id="search"
+            name="search"
+            label="search"
+            placeholder="Search"
+            autoComplete="off"
+            my={0}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        <div className="col-5 col-sm-4">
+          <div className="form-floating">
+            <select
+              className="form-select border-secondary border-2"
+              name="filter"
+              id="filter"
+              defaultValue={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              <option value="name">Name</option>
+              <option value="email">Email</option>
+            </select>
+            <label htmlFor="filter" className="form-label">
+              By:
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+SearchField.propTypes = {
+  filter: PropTypes.string,
+  searchTerm: PropTypes.string,
+  setFilter: PropTypes.func,
+  setSearchTerm: PropTypes.func,
+};
