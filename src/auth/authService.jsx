@@ -79,7 +79,6 @@ export function register({ name, email, password }, usersList) {
   localStorage.setItem("usersList", JSON.stringify(usersList));
   return {
     isValid: true,
-    message: "Registration successful!",
     newUser: newUser,
     updatedList: updatedList,
   };
