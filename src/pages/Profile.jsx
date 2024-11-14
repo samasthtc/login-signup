@@ -15,7 +15,6 @@ export default function Profile() {
     const currentQueries = new URLSearchParams(location.search);
     const userId = currentQueries.get("id");
     const isCurrent = currentQueries.get("current");
-    console.log("location changed", userId, isCurrent);
 
     if (isCurrent === "true") {
       setUser({ ...loggedInUser });
@@ -24,12 +23,6 @@ export default function Profile() {
       setUser(foundUser ? { ...foundUser } : null);
     }
   }, [location, loggedInUser, usersList]);
-
-  useEffect(() => {
-    if (user) {
-      console.log("Updated user:", user);
-    }
-  }, [user]);
 
   return (
     <main
