@@ -26,7 +26,7 @@ export function validateEmail(value) {
 export function validatePassword(password) {
   if (
     password.match(
-      /^(?=.*[0-9])(?=.*[\s.,!@#$%^&*])(?=.*[A-Z])[a-zA-Z0-9\s.,!@#$%^&*]{8,16}$/
+      /^(?=.*[0-9])(?=.*[\s.-_,!@#$%^&*])(?=.*[A-Z])[a-zA-Z0-9\s.-_,!@#$%^&*]{8,16}$/
     )
   ) {
     return { isValid: true, errorMessage: "" };
@@ -34,7 +34,7 @@ export function validatePassword(password) {
 
   // let errorText = "Password must be between 8 and 16 characters, contain a number, special character, and uppercase letter.";
   // return { isValid: false, errorMessage: errorText };
-  
+
   let errorText = "";
 
   if (password.length < 8 || password.length > 16) {
