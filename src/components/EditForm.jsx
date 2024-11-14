@@ -1,5 +1,11 @@
 import PropTypes from "prop-types";
-import { useCallback, useContext, useEffect, useReducer, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { Link } from "react-router-dom";
 import {
   validateEmail,
@@ -14,13 +20,16 @@ import EditableInput from "./EditableInput";
 
 export default function EditForm({ user, onSubmit }) {
   const { usersList, setUsersList } = useContext(UsersListContext);
-  // TODO: join all states into one object
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
-  const [password, setPassword] = useState(user.password);
-  const [nameError, setNameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [form, setForm] = useState({
+    name: user.name,
+    email: user.email,
+    password: user.password,
+  });
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   const initialValidationState = {
     isNameValidated: true,
@@ -39,15 +48,6 @@ export default function EditForm({ user, onSubmit }) {
           [`is${action.field}Validated`]: true,
           [`is${action.field}Valid`]: action.isValid,
         };
-      case "SET_CREDENTIALS_VALIDITY":
-        return {
-          ...state,
-          isEmailValidated: true,
-          isEmailValid: action.isValid,
-          isPasswordValidated: true,
-          isPasswordValid: action.isValid,
-          areCredentialsValid: action.isValid,
-        };
       default:
         return state;
     }
@@ -61,10 +61,13 @@ export default function EditForm({ user, onSubmit }) {
   const isValid =
     validationState.isNameValid &&
     validationState.isEmailValid &&
-    validationState.isPasswordValid;
+    validationState.isPasswordValid &&
+    !!form.name &&
+    !!form.email &&
+    !!form.password;
 
-  const handleFieldChange = (e, field, setField) => {
-    setField(e.target.value);
+  const handleFieldChange = (e, field) => {
+    setForm({ ...form, [field]: e.target.value });
     debouncedValidation(e.target.value, field);
   };
 
@@ -78,9 +81,10 @@ export default function EditForm({ user, onSubmit }) {
         : validatePassword
     );
 
-    if (field === "name") setNameError(isValid ? "" : errorMessage);
-    if (field === "email") setEmailError(isValid ? "" : errorMessage);
-    if (field === "password") setPasswordError(isValid ? "" : errorMessage);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: isValid ? "" : errorMessage,
+    }));
 
     // @ts-ignore
     dispatch({
@@ -98,32 +102,27 @@ export default function EditForm({ user, onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleFieldValidation(name, "name");
-    handleFieldValidation(email, "email");
-    handleFieldValidation(password, "password");
+    handleFieldValidation(form.name, "name");
+    handleFieldValidation(form.email, "email");
+    handleFieldValidation(form.password, "password");
 
-    if (
-      !validationState.isNameValid ||
-      !validationState.isEmailValid ||
-      !validationState.isPasswordValid
-    ) {
-      return;
-    }
+    if (!isValid) return;
 
-    if (isValid) {
-      const result = onSubmit({ ...user, name, email, password }, usersList);
-      if (result.isValid) {
-        // @ts-ignore
-        setUsersList(result.updatedList);
-      }
+    const result = onSubmit(user.id, form, usersList);
+
+    if (result.isValid) {
+      // @ts-ignore
+      setUsersList(result.updatedList);
     }
   };
 
   useEffect(() => {
     if (user) {
-      setName(user.name);
-      setEmail(user.email);
-      setPassword(user.password);
+      setForm({
+        name: user.name,
+        email: user.email,
+        password: user.password,
+      });
     }
   }, [user]);
 
@@ -144,11 +143,11 @@ export default function EditForm({ user, onSubmit }) {
           name="name"
           placeholder="Enter your name..."
           autoComplete="off"
-          value={name}
+          value={form.name}
           onChange={(e) => {
-            handleFieldChange(e, "name", setName);
+            handleFieldChange(e, "name");
           }}
-          errorMessage={nameError}
+          errorMessage={errors.name}
           isValidated={validationState.isNameValidated}
         />
 
@@ -158,11 +157,11 @@ export default function EditForm({ user, onSubmit }) {
           name="email"
           placeholder="Enter your email..."
           autoComplete="email"
-          value={email}
+          value={form.email}
           onChange={(e) => {
-            handleFieldChange(e, "email", setEmail);
+            handleFieldChange(e, "email");
           }}
-          errorMessage={emailError}
+          errorMessage={errors.email}
           isValidated={validationState.isEmailValidated}
         />
 
@@ -172,11 +171,11 @@ export default function EditForm({ user, onSubmit }) {
           name="password"
           placeholder="Enter your password..."
           autoComplete="new-password"
-          value={password}
+          value={form.password}
           onChange={(e) => {
-            handleFieldChange(e, "password", setPassword);
+            handleFieldChange(e, "password");
           }}
-          errorMessage={passwordError}
+          errorMessage={errors.password}
           isValidated={validationState.isPasswordValidated}
         />
 
@@ -205,6 +204,7 @@ export default function EditForm({ user, onSubmit }) {
 EditForm.propTypes = {
   onSubmit: PropTypes.func,
   user: PropTypes.shape({
+    id: PropTypes.any,
     email: PropTypes.any,
     name: PropTypes.any,
     password: PropTypes.any,

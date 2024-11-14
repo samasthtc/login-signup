@@ -59,7 +59,7 @@ export function validateCredentials(email, password, usersList) {
   return { isValid: false, message: "Invalid credentials" };
 }
 
-export function login(email, password, usersList) {
+export function login({ email, password }, usersList) {
   const result = validateCredentials(email, password, usersList);
   if (result.isValid) {
     localStorage.setItem("loggedInUserId", result.userId);
@@ -90,10 +90,10 @@ export function logout() {
   localStorage.setItem("loggedInUserId", "-1");
 }
 
-export function saveProfile({ id, name, email, password }, usersList) {
+export function saveProfile(id, { name, email, password }, usersList) {
   const updatedList = usersList.map((user) => {
     if (user.id === id) {
-      return { ...user, name, email, password };
+      return { id, name, email, password };
     }
     return user;
   });

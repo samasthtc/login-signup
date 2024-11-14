@@ -1,4 +1,3 @@
-import LoggedInUserContext from "../../context/loggedInUser/LoggedInUserContext";
 import PropTypes from "prop-types";
 import { useCallback, useContext, useReducer, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,6 +7,7 @@ import {
   validateName,
   validatePassword,
 } from "../../auth/authService";
+import LoggedInUserContext from "../../context/loggedInUser/LoggedInUserContext";
 import UsersListContext from "../../context/usersList/UsersListContext";
 import debounce from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
@@ -16,12 +16,16 @@ import Input from "../Input";
 export default function LoginRegisterForm({ type, onSubmit }) {
   const { usersList, setUsersList } = useContext(UsersListContext);
   const { setLoggedInUser } = useContext(LoggedInUserContext);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   const initialValidationState = {
     isNameValidated: false,
@@ -30,7 +34,6 @@ export default function LoginRegisterForm({ type, onSubmit }) {
     isEmailValid: false,
     isPasswordValidated: false,
     isPasswordValid: false,
-    areCredentialsValid: false,
   };
 
   function validationReducer(state, action) {
@@ -48,7 +51,6 @@ export default function LoginRegisterForm({ type, onSubmit }) {
           isEmailValid: action.isValid,
           isPasswordValidated: true,
           isPasswordValid: action.isValid,
-          areCredentialsValid: action.isValid,
         };
       default:
         return state;
@@ -63,11 +65,15 @@ export default function LoginRegisterForm({ type, onSubmit }) {
   const isValid =
     validationState.isNameValid &&
     validationState.isEmailValid &&
-    validationState.isPasswordValid;
+    validationState.isPasswordValid &&
+    form.name &&
+    form.email &&
+    form.password;
+    
   const navigate = useNavigate();
 
-  const handleFieldChange = (e, field, setField) => {
-    setField(e.target.value);
+  const handleFieldChange = (e, field) => {
+    setForm({ ...form, [field]: e.target.value });
     !(type === "login") && debouncedValidation(e.target.value, field);
   };
 
@@ -81,13 +87,18 @@ export default function LoginRegisterForm({ type, onSubmit }) {
         : validatePassword
     );
 
-    if (field === "name") setNameError(isValid ? "" : errorMessage);
-    if (field === "email")
-      setEmailError(isValid ? "" : type === "login" ? " " : errorMessage);
-    if (field === "password")
-      setPasswordError(
-        isValid ? "" : type === "login" ? "Invalid credentials." : errorMessage
-      );
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: isValid
+        ? ""
+        : field === "name" && type !== "login"
+        ? errorMessage
+        : field === "email" && type === "login"
+        ? " "
+        : field === "password" && type === "login"
+        ? "Invalid credentials."
+        : errorMessage,
+    }));
 
     // @ts-ignore
     dispatch({
@@ -107,26 +118,22 @@ export default function LoginRegisterForm({ type, onSubmit }) {
     e.preventDefault();
 
     if (type !== "login") {
-      handleFieldValidation(name, "name");
-      handleFieldValidation(email, "email");
-      handleFieldValidation(password, "password");
+      handleFieldValidation(form.name, "name");
+      handleFieldValidation(form.email, "email");
+      handleFieldValidation(form.password, "password");
 
-      if (
-        !validationState.isNameValid ||
-        !validationState.isEmailValid ||
-        !validationState.isPasswordValid
-      ) {
-        return;
-      }
+      if (!isValid) return;
+
       if (isValid) {
         if (type === "register" || type === "add") {
-          const result = onSubmit({ name, email, password }, usersList);
+          const result = onSubmit(form, usersList);
           if (result.isValid) {
             // @ts-ignore
             setUsersList(result.updatedList);
             type === "register" && navigate("/login");
+            emptyFields();
           } else {
-            setEmailError(result.message);
+            setErrors({ ...errors, email: result.message });
             // @ts-ignore
             dispatch({
               type: "VALIDATE_FIELD",
@@ -137,7 +144,7 @@ export default function LoginRegisterForm({ type, onSubmit }) {
         }
       }
     } else {
-      const result = onSubmit(email, password, usersList);
+      const result = onSubmit(form, usersList);
 
       if (result.isValid) {
         // @ts-ignore
@@ -145,8 +152,7 @@ export default function LoginRegisterForm({ type, onSubmit }) {
         navigate("/");
         emptyFields();
       } else {
-        setEmailError(" ");
-        setPasswordError(result.message);
+        setErrors({ ...errors, email: " ", password: result.message });
       }
 
       // @ts-ignore
@@ -158,9 +164,8 @@ export default function LoginRegisterForm({ type, onSubmit }) {
   };
 
   const emptyFields = () => {
-    setName("");
-    setEmail("");
-    setPassword("");
+    setForm({ name: "", email: "", password: "" });
+    setErrors({ name: "", email: "", password: "" });
   };
 
   const nameInput = (
@@ -171,12 +176,12 @@ export default function LoginRegisterForm({ type, onSubmit }) {
       placeholder="Enter your name..."
       autoComplete="name"
       label="Name"
-      autoFocus={type === "register" && true}
-      value={name}
+      autoFocus={type === "register"}
+      value={form.name}
       onChange={(e) => {
-        handleFieldChange(e, "name", setName);
+        handleFieldChange(e, "name");
       }}
-      errorMessage={nameError}
+      errorMessage={errors.name}
       isValidated={validationState.isNameValidated}
     />
   );
@@ -233,11 +238,11 @@ export default function LoginRegisterForm({ type, onSubmit }) {
           autoComplete="email"
           label="Email"
           autoFocus={type === "login" && true}
-          value={email}
+          value={form.email}
           onChange={(e) => {
-            handleFieldChange(e, "email", setEmail);
+            handleFieldChange(e, "email");
           }}
-          errorMessage={emailError}
+          errorMessage={errors.email}
           isValidated={validationState.isEmailValidated}
         />
 
@@ -249,11 +254,11 @@ export default function LoginRegisterForm({ type, onSubmit }) {
           autoComplete={autoCompletePassword}
           label="Password"
           autoFocus={false}
-          value={password}
+          value={form.password}
           onChange={(e) => {
-            handleFieldChange(e, "password", setPassword);
+            handleFieldChange(e, "password");
           }}
-          errorMessage={passwordError}
+          errorMessage={errors.password}
           isValidated={validationState.isPasswordValidated}
         />
 
