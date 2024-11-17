@@ -66,15 +66,6 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
     }
   }, [isCurrent, loggedInUser, userId, usersList]);
 
-  useEffect(() => {
-    setForm({
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      changed: false,
-    });
-  }, [user]);
-
   function validationReducer(state, action) {
     switch (action.type) {
       case "VALIDATE_FIELD":
@@ -153,9 +144,9 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
           email: false,
           password: false,
         });
+        setForm({ ...form, changed: false });
       }
     }
-    setForm({ ...form, changed: false });
   };
 
   return (

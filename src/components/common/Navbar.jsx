@@ -1,17 +1,19 @@
 // import React from 'react'
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { logout } from "../../auth/authService";
 import LoggedInUserContext from "../../context/loggedInUser/LoggedInUserContext";
 
 export default function Navbar() {
   const { loggedInUser, setLoggedInUser } = useContext(LoggedInUserContext);
+  const location = useLocation();
 
   const handleLogout = () => {
     logout();
     // @ts-ignore
     setLoggedInUser(null);
   };
+
   return (
     <nav className="navbar navbar-expand navbar-dark">
       <button
@@ -29,14 +31,23 @@ export default function Navbar() {
         >
           {loggedInUser && (
             <>
-              <li className="nav-item" id="navbar-profile">
-                <Link
-                  to={`/profile?current=true&id=${loggedInUser?.id}`}
-                  className="nav-link"
-                >
-                  <i className="fas fa-user text-primary"></i>
-                </Link>
-              </li>
+              {location.pathname === "/" && (
+                <li className="nav-item" id="navbar-profile">
+                  <Link
+                    to={`/profile?current=true&id=${loggedInUser?.id}`}
+                    className="nav-link"
+                  >
+                    <i className="fas fa-user text-primary"></i>
+                  </Link>
+                </li>
+              )}
+              {location.pathname === "/profile" && (
+                <li className="nav-item" id="navbar-home">
+                  <Link to={`/`} className="nav-link">
+                    <i className="fas fa-home text-primary"></i>
+                  </Link>
+                </li>
+              )}
               <li
                 className="nav-item"
                 id="navbar-logout"
@@ -53,4 +64,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
