@@ -66,6 +66,15 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
     }
   }, [isCurrent, loggedInUser, userId, usersList]);
 
+  useEffect(() => {
+    setForm({
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      changed: false,
+    });
+  }, [user]);
+
   function validationReducer(state, action) {
     switch (action.type) {
       case "VALIDATE_FIELD":
@@ -137,7 +146,7 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
 
       const result = onSubmit(user.id, form, usersList);
       if (result.isValid) {
-        // @ts-ignore 
+        // @ts-ignore
         setUsersList(result.updatedList);
         setEditingState({
           name: false,
@@ -186,7 +195,6 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
           isValidated={validationState.isEmailValidated}
           editingState={editingState.email}
           setEditingState={setEditingState}
-
         />
 
         <EditableInput
