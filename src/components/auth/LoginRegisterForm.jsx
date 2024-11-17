@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useCallback, useContext, useReducer, useState } from "react";
+import { useContext, useReducer, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   validateEmail,
@@ -9,7 +9,7 @@ import {
 } from "../../auth/authService";
 import LoggedInUserContext from "../../context/loggedInUser/LoggedInUserContext";
 import UsersListContext from "../../context/usersList/UsersListContext";
-import debounce from "../../utils/debounce";
+import useDebounce from "../../utils/useDebounce";
 import CardContainer from "../common/CardContainer";
 import Input from "../inputFields/Input";
 
@@ -108,10 +108,8 @@ export default function LoginRegisterForm({ type, onSubmit }) {
     });
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedValidation = useCallback(
-    debounce((value, field) => handleFieldValidation(value, field), 600),
-    [handleFieldValidation]
+  const debouncedValidation = useDebounce((value, field) =>
+    handleFieldValidation(value, field)
   );
 
   const handleSubmit = (e) => {
@@ -150,7 +148,6 @@ export default function LoginRegisterForm({ type, onSubmit }) {
       if (result.isValid) {
         setLoggedInUser(result.user);
         navigate("/");
-        emptyFields();
       } else {
         setErrors({ ...errors, email: " ", password: result.message });
       }
