@@ -27,7 +27,7 @@ export default function Navbar() {
           className="navbar-nav ms-auto me-2 d-flex justify-content-end w-100"
           id="navbar-list"
         >
-          {loggedInUser?.id !== -1 && (
+          {loggedInUser && (
             <>
               <li className="nav-item" id="navbar-profile">
                 <Link
