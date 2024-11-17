@@ -13,10 +13,7 @@ export default function SearchField({
         <div className="col-7 col-sm-8">
           <Input
             type="search"
-            id="search"
             name="search"
-            label="search"
-            placeholder="Search"
             autoComplete="off"
             my={0}
             value={searchTerm}

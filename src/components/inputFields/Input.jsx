@@ -40,7 +40,11 @@ export default function Input({
             }`}
             id={name}
             name={name}
-            placeholder={`Enter your ${name}...`}
+            placeholder={
+              name !== "search"
+                ? `Enter your ${name}...`
+                : "Search for users..."
+            }
             autoComplete={autoComplete}
             autoFocus={autoFocus}
             value={value}
