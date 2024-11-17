@@ -4,9 +4,11 @@ import {
   useContext,
   useEffect,
   useReducer,
+  useRef,
   useState,
 } from "react";
 import { Link } from "react-router-dom";
+// import {Tooltip} from "boostrap";
 import {
   validateEmail,
   validateField,
@@ -47,6 +49,8 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
     email: false,
     password: false,
   });
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   const initialValidationState = {
     isNameValidated: true,
@@ -145,9 +149,40 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
           password: false,
         });
         setForm({ ...form, changed: false });
+
+        setSuccessMessage("Profile updated successfully!");
+        setShowAlert(true);
+        setTimeout(() => {
+          setSuccessMessage("");
+          setShowAlert(false);
+        }, 3000);
       }
     }
   };
+
+  const tooltipRef = useRef();
+
+  useEffect(() => {
+    if (tooltipRef.current && !form.changed) {
+      new window.bootstrap.Tooltip(tooltipRef.current, {
+        title: "No changes were made",
+        placement: "bottom",
+        trigger: "hover",
+        container: "body",
+      });
+    }
+  }, [form.changed]);
+
+  // const saveToolTip = new Tooltip(
+  //   <button
+  //         type="submit"
+  //         className="btn border-2 rounded-pill btn-outline-primary
+  //          mt-3 mb-1 text-semibold me-2"
+  //         disabled={!form.changed}
+  //       >
+  //         Save Changes
+  //       </button>
+  // )
 
   return (
     <CardContainer>
@@ -171,7 +206,7 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
           errorMessage={errors.name}
           isValidated={validationState.isNameValidated}
           editingState={editingState.name}
-          setEditingState={setEditingState}
+          setEditingState={(value) => setEditingState({ name: value })}
         />
 
         <EditableInput
@@ -185,7 +220,7 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
           errorMessage={errors.email}
           isValidated={validationState.isEmailValidated}
           editingState={editingState.email}
-          setEditingState={setEditingState}
+          setEditingState={(value) => setEditingState({ email: value })}
         />
 
         <EditableInput
@@ -199,28 +234,59 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
           errorMessage={errors.password}
           isValidated={validationState.isPasswordValidated}
           editingState={editingState.password}
-          setEditingState={setEditingState}
+          setEditingState={(value) =>
+            setEditingState({ ...editingState, password: value })
+          }
         />
 
-        <button
-          type="submit"
-          className="btn border-2 rounded-pill btn-outline-primary
-           mt-3 mb-1 text-semibold me-2"
-          disabled={!form.changed}
-        >
-          Save Changes
-        </button>
+        {!form.changed ? (
+          <div
+            className="position-relative d-inline-block"
+            ref={tooltipRef}
+            data-bs-toggle={tooltipRef}
+          >
+            <button
+              type="submit"
+              className="btn border-2 rounded-pill btn-outline-primary
+             mt-3 mb-1 text-semibold me-2"
+              disabled={!form.changed}
+            >
+              Save Changes
+            </button>
+          </div>
+        ) : (
+          <button
+            type="submit"
+            className="btn border-2 rounded-pill btn-outline-primary
+             mt-3 mb-1 text-semibold me-2"
+            disabled={!form.changed}
+          >
+            Save Changes
+          </button>
+        )}
 
         <Link className=" text-decoration-none" to="/">
           <button
             type="button"
             className="btn border-2 rounded-pill btn-outline-secondary mt-3 mb-1
-              text-semibold text-black-50"
+                text-semibold text-black-50"
           >
             Back
           </button>
         </Link>
       </form>
+
+      {showAlert && (
+        <div
+          className={"alert alert-success text-center fade-in-out"}
+          role="alert"
+          onAnimationEnd={(e) => {
+            setShowAlert(false);
+          }}
+        >
+          {successMessage}
+        </div>
+      )}
     </CardContainer>
   );
 }

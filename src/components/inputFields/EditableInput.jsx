@@ -18,9 +18,9 @@ export default function EditableInput({
 
   const toggleEditing = () => {
     if (!editingState) {
-      setEditingState({ ...editingState, [name]: !editingState });
+      setEditingState(!editingState);
     } else {
-      !errorMessage && setEditingState({ ...editingState, [name]: !editingState });
+      !errorMessage && setEditingState(!editingState);
     }
   };
 

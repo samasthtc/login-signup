@@ -12102,6 +12102,37 @@ span.input-group-text:active {
   padding: 0;
 }
 
+.alert {
+  margin-top: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.fade-in-out {
+  animation: fadeInOut 2.5s ease-in forwards;
+}
+
 @media (max-width: 768px) {
   .vr-hr {
     display: block;
