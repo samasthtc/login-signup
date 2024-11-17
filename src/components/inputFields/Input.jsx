@@ -1,13 +1,10 @@
 import PropTypes from "prop-types";
-import {  useState } from "react";
+import { useState } from "react";
 export default function Input({
   type,
-  id,
   name,
-  placeholder,
   autoComplete,
   autoFocus,
-  label,
   errorMessage,
   my = 3,
   value,
@@ -41,9 +38,9 @@ export default function Input({
                   : "input-success"
                 : ""
             }`}
-            id={id}
+            id={name}
             name={name}
-            placeholder={placeholder}
+            placeholder={`Enter your ${name}...`}
             autoComplete={autoComplete}
             autoFocus={autoFocus}
             value={value}
@@ -52,7 +49,7 @@ export default function Input({
             }}
           />
           <label htmlFor={name} className="form-label">
-            {label[0].toUpperCase() + label.slice(1)}
+            {name[0].toUpperCase() + name.slice(1)}
           </label>
         </div>
         {type === "password" && (
@@ -92,12 +89,9 @@ Input.propTypes = {
   autoComplete: PropTypes.string,
   autoFocus: PropTypes.bool,
   errorMessage: PropTypes.string,
-  id: PropTypes.string,
-  label: PropTypes.string,
   my: PropTypes.number,
   name: PropTypes.string,
   onChange: PropTypes.func,
-  placeholder: PropTypes.string,
   type: PropTypes.string,
   isValidated: PropTypes.bool,
   value: PropTypes.any,

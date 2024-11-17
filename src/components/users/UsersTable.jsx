@@ -1,7 +1,7 @@
 import { useContext, useMemo, useState } from "react";
 import UsersListContext from "../../context/usersList/UsersListContext";
 import CardContainer from "../common/CardContainer";
-import SearchField from "../SearchField";
+import SearchField from "../inputFields/SearchField";
 import UserRow from "./UserRow";
 
 export default function UsersTable() {

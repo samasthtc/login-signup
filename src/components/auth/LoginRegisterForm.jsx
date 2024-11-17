@@ -11,7 +11,7 @@ import LoggedInUserContext from "../../context/loggedInUser/LoggedInUserContext"
 import UsersListContext from "../../context/usersList/UsersListContext";
 import debounce from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
-import Input from "../Input";
+import Input from "../inputFields/Input";
 
 export default function LoginRegisterForm({ type, onSubmit }) {
   const navigate = useNavigate();
@@ -128,7 +128,6 @@ export default function LoginRegisterForm({ type, onSubmit }) {
         if (type === "register" || type === "add") {
           const result = onSubmit(form, usersList);
           if (result.isValid) {
-            
             setUsersList(result.updatedList);
             type === "register" && navigate("/login");
             emptyFields();
@@ -149,7 +148,6 @@ export default function LoginRegisterForm({ type, onSubmit }) {
       const result = onSubmit(form, usersList);
 
       if (result.isValid) {
-        
         setLoggedInUser(result.user);
         navigate("/");
         emptyFields();
@@ -173,11 +171,8 @@ export default function LoginRegisterForm({ type, onSubmit }) {
   const nameInput = (
     <Input
       type="text"
-      id="name"
       name="name"
-      placeholder="Enter your name..."
       autoComplete="name"
-      label="Name"
       autoFocus={type === "register"}
       value={form.name}
       onChange={(e) => {
@@ -234,11 +229,8 @@ export default function LoginRegisterForm({ type, onSubmit }) {
 
         <Input
           type="email"
-          id="email"
           name="email"
-          placeholder="Enter your email..."
           autoComplete="email"
-          label="Email"
           autoFocus={type === "login"}
           value={form.email}
           onChange={(e) => {
@@ -250,11 +242,8 @@ export default function LoginRegisterForm({ type, onSubmit }) {
 
         <Input
           type="password"
-          id="password"
           name="password"
-          placeholder="Enter your password..."
           autoComplete={autoCompletePassword}
-          label="Password"
           autoFocus={false}
           value={form.password}
           onChange={(e) => {

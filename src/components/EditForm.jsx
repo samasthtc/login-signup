@@ -16,7 +16,7 @@ import {
 import UsersListContext from "../context/usersList/UsersListContext";
 import debounce from "../utils/debounce";
 import CardContainer from "./common/CardContainer";
-import EditableInput from "./EditableInput";
+import EditableInput from "./inputFields/EditableInput";
 
 export default function EditForm({ user, onSubmit }) {
   const { usersList, setUsersList } = useContext(UsersListContext);
@@ -139,9 +139,7 @@ export default function EditForm({ user, onSubmit }) {
       >
         <EditableInput
           type="text"
-          id="name"
           name="name"
-          placeholder="Enter your name..."
           autoComplete="off"
           value={form.name}
           onChange={(e) => {
@@ -153,9 +151,7 @@ export default function EditForm({ user, onSubmit }) {
 
         <EditableInput
           type="email"
-          id="email"
           name="email"
-          placeholder="Enter your email..."
           autoComplete="email"
           value={form.email}
           onChange={(e) => {
@@ -167,9 +163,7 @@ export default function EditForm({ user, onSubmit }) {
 
         <EditableInput
           type="password"
-          id="password"
           name="password"
-          placeholder="Enter your password..."
           autoComplete="new-password"
           value={form.password}
           onChange={(e) => {

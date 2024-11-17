@@ -2,9 +2,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 export default function EditableInput({
   type,
-  id,
   name,
-  placeholder,
   autoComplete,
   value,
   errorMessage,
@@ -69,9 +67,10 @@ export default function EditableInput({
                   : "input-success"
                 : ""
             }`}
-            id={id}
+            id={name}
+
             name={name}
-            placeholder={placeholder}
+            placeholder={`Enter your ${name}...`}
             autoComplete={autoComplete}
             disabled={!isEditing}
             value={value}
@@ -101,11 +100,9 @@ export default function EditableInput({
 EditableInput.propTypes = {
   autoComplete: PropTypes.string,
   errorMessage: PropTypes.string,
-  id: PropTypes.string,
   isValidated: PropTypes.bool,
   name: PropTypes.string,
   onChange: PropTypes.func,
-  placeholder: PropTypes.string,
   type: PropTypes.string,
   value: PropTypes.string,
 };
