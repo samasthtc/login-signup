@@ -126,28 +126,24 @@ span.input-group-text {
   border: 2px solid $dangerous-darker !important;
   border-left-width: 0 !important;
   transition: all 0.15s ease-in-out;
-
 }
 
 .password-error:focus {
   border: 2px solid $dangerous-darker !important;
   border-left-width: 0 !important;
   transition: all 0.05s ease-in-out;
-
 }
 
 .password-success {
   border: 2px solid hsl(120, 36%, 59%) !important;
   border-left-width: 0 !important;
   transition: all 0.05s ease-in-out;
-
 }
 
 .password-success:focus {
   border: 2px solid hsl(120, 36%, 59%) !important;
   border-left-width: 0 !important;
   transition: all 0.05s ease-in-out;
-
 }
 
 .password-toggle-icon {
@@ -157,6 +153,27 @@ span.input-group-text {
 .user-header,
 .user-info {
   display: none;
+}
+
+.vr-hr {
+  display: inline-block;
+  align-self: stretch;
+  width: var(--bs-border-width);
+  min-height: 1em;
+  background-color: currentcolor;
+  opacity: 0.25;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .vr-hr {
+    display: block;
+    box-sizing: border-box;
+    min-height: unset;
+    max-width: 100%;
+    width: 91%;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 576px) {
