@@ -8,18 +8,19 @@ export default function EditableInput({
   errorMessage,
   onChange,
   isValidated,
+  editingState,
+  setEditingState,
 }) {
-  const [isEditing, setIsEditing] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
   const toggleEditing = () => {
-    if (!isEditing) {
-      setIsEditing(!isEditing);
+    if (!editingState) {
+      setEditingState({ ...editingState, [name]: !editingState });
     } else {
-      !errorMessage && setIsEditing(!isEditing);
+      !errorMessage && setEditingState({ ...editingState, [name]: !editingState });
     }
   };
 
@@ -61,7 +62,7 @@ export default function EditableInput({
           <input
             type={inputType}
             className={`form-control ${
-              isValidated && isEditing
+              isValidated && editingState
                 ? errorMessage
                   ? "is-invalid input-error"
                   : "input-success"
@@ -72,7 +73,7 @@ export default function EditableInput({
             name={name}
             placeholder={`Enter your ${name}...`}
             autoComplete={autoComplete}
-            disabled={!isEditing}
+            disabled={!editingState}
             value={value}
             onChange={(e) => {
               onChange(e);
@@ -99,10 +100,12 @@ export default function EditableInput({
 
 EditableInput.propTypes = {
   autoComplete: PropTypes.string,
+  editingState: PropTypes.any,
   errorMessage: PropTypes.string,
   isValidated: PropTypes.bool,
   name: PropTypes.string,
   onChange: PropTypes.func,
+  setEditingState: PropTypes.func,
   type: PropTypes.string,
-  value: PropTypes.string,
-};
+  value: PropTypes.string
+}

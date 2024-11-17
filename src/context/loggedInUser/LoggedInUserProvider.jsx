@@ -28,7 +28,6 @@ export default function LoggedInUserProvider({ children }) {
     if (!loggedInUser) {
       navigate("/login");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedInUser]);
 
   return (

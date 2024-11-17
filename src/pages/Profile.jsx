@@ -1,28 +1,25 @@
 import EditForm from "@/components/EditForm";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { saveProfile } from "../auth/authService";
-import LoggedInUserContext from "../context/loggedInUser/LoggedInUserContext";
-import UsersListContext from "../context/usersList/UsersListContext";
 
 export default function Profile() {
-  const { loggedInUser } = useContext(LoggedInUserContext);
-  const { usersList } = useContext(UsersListContext);
   const location = useLocation();
-  const [user, setUser] = useState(null);
+  const [queries, setQueries] = useState({
+    userId: null,
+    isCurrent: null,
+  });
 
   useEffect(() => {
     const currentQueries = new URLSearchParams(location.search);
-    const userId = currentQueries.get("id");
-    const isCurrent = currentQueries.get("current");
-
-    if (isCurrent === "true") {
-      setUser({ ...loggedInUser });
-    } else {
-      const foundUser = usersList.find((u) => u.id === Number(userId));
-      setUser(foundUser ? { ...foundUser } : null);
+    const newQueries = {
+      userId: currentQueries.get("id"),
+      isCurrent: currentQueries.get("current"),
+    };
+    if (JSON.stringify(newQueries) !== JSON.stringify(queries)) {
+      setQueries(newQueries);
     }
-  }, [location, loggedInUser, usersList]);
+  }, [location, queries]);
 
   return (
     <main
@@ -33,7 +30,13 @@ export default function Profile() {
         className="row d-flex justify-content-center
      align-items-center align-content-center w-100"
       >
-        {user && <EditForm user={user} onSubmit={saveProfile} />}
+        {!!queries.userId && (
+          <EditForm
+            userId={queries.userId}
+            isCurrent={queries.isCurrent}
+            onSubmit={saveProfile}
+          />
+        )}
       </div>
     </main>
   );

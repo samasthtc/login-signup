@@ -13,22 +13,39 @@ import {
   validateName,
   validatePassword,
 } from "../auth/authService";
+import LoggedInUserContext from "../context/loggedInUser/LoggedInUserContext";
 import UsersListContext from "../context/usersList/UsersListContext";
-import debounce from "../utils/debounce";
+import debounce from "../utils/useDebounce";
 import CardContainer from "./common/CardContainer";
 import EditableInput from "./inputFields/EditableInput";
 
-export default function EditForm({ user, onSubmit }) {
+export default function EditForm({ userId, isCurrent, onSubmit }) {
+  const { loggedInUser } = useContext(LoggedInUserContext);
   const { usersList, setUsersList } = useContext(UsersListContext);
+  const [user, setUser] = useState(() => {
+    if (isCurrent === "true") {
+      return { ...loggedInUser };
+    } else {
+      const foundUser = usersList.find((u) => u.id === Number(userId));
+      return foundUser ? { ...foundUser } : null;
+    }
+  });
   const [form, setForm] = useState({
     name: user.name,
     email: user.email,
     password: user.password,
+    changed: false,
   });
   const [errors, setErrors] = useState({
     name: "",
     email: "",
     password: "",
+  });
+
+  const [editingState, setEditingState] = useState({
+    name: false,
+    email: false,
+    password: false,
   });
 
   const initialValidationState = {
@@ -39,6 +56,15 @@ export default function EditForm({ user, onSubmit }) {
     isPasswordValidated: true,
     isPasswordValid: true,
   };
+
+  useEffect(() => {
+    if (isCurrent === "true") {
+      setUser({ ...loggedInUser });
+    } else {
+      const foundUser = usersList.find((u) => u.id === Number(userId));
+      setUser(foundUser ? { ...foundUser } : null);
+    }
+  }, [isCurrent, loggedInUser, userId, usersList]);
 
   function validationReducer(state, action) {
     switch (action.type) {
@@ -67,7 +93,7 @@ export default function EditForm({ user, onSubmit }) {
     !!form.password;
 
   const handleFieldChange = (e, field) => {
-    setForm({ ...form, [field]: e.target.value });
+    setForm({ ...form, [field]: e.target.value, changed: true });
     debouncedValidation(e.target.value, field);
   };
 
@@ -102,29 +128,26 @@ export default function EditForm({ user, onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleFieldValidation(form.name, "name");
-    handleFieldValidation(form.email, "email");
-    handleFieldValidation(form.password, "password");
+    if (form.changed) {
+      handleFieldValidation(form.name, "name");
+      handleFieldValidation(form.email, "email");
+      handleFieldValidation(form.password, "password");
 
-    if (!isValid) return;
+      if (!isValid) return;
 
-    const result = onSubmit(user.id, form, usersList);
-
-    if (result.isValid) {
-      // @ts-ignore
-      setUsersList(result.updatedList);
+      const result = onSubmit(user.id, form, usersList);
+      if (result.isValid) {
+        // @ts-ignore 
+        setUsersList(result.updatedList);
+        setEditingState({
+          name: false,
+          email: false,
+          password: false,
+        });
+      }
     }
+    setForm({ ...form, changed: false });
   };
-
-  useEffect(() => {
-    if (user) {
-      setForm({
-        name: user.name,
-        email: user.email,
-        password: user.password,
-      });
-    }
-  }, [user]);
 
   return (
     <CardContainer>
@@ -147,6 +170,8 @@ export default function EditForm({ user, onSubmit }) {
           }}
           errorMessage={errors.name}
           isValidated={validationState.isNameValidated}
+          editingState={editingState.name}
+          setEditingState={setEditingState}
         />
 
         <EditableInput
@@ -159,6 +184,9 @@ export default function EditForm({ user, onSubmit }) {
           }}
           errorMessage={errors.email}
           isValidated={validationState.isEmailValidated}
+          editingState={editingState.email}
+          setEditingState={setEditingState}
+
         />
 
         <EditableInput
@@ -171,12 +199,15 @@ export default function EditForm({ user, onSubmit }) {
           }}
           errorMessage={errors.password}
           isValidated={validationState.isPasswordValidated}
+          editingState={editingState.password}
+          setEditingState={setEditingState}
         />
 
         <button
           type="submit"
           className="btn border-2 rounded-pill btn-outline-primary
            mt-3 mb-1 text-semibold me-2"
+          disabled={!form.changed}
         >
           Save Changes
         </button>
@@ -196,11 +227,13 @@ export default function EditForm({ user, onSubmit }) {
 }
 
 EditForm.propTypes = {
+  isCurrent: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
-  user: PropTypes.shape({
-    id: PropTypes.any.isRequired,
-    email: PropTypes.any.isRequired,
-    name: PropTypes.any.isRequired,
-    password: PropTypes.any.isRequired,
-  }).isRequired,
+  // user: PropTypes.shape({
+  //   id: PropTypes.any.isRequired,
+  //   email: PropTypes.any.isRequired,
+  //   name: PropTypes.any.isRequired,
+  //   password: PropTypes.any.isRequired,
+  // }).isRequired,
+  userId: PropTypes.any,
 };
