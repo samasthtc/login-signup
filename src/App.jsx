@@ -1,24 +1,79 @@
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import Navbar from "./components/common/Navbar.jsx";
 import LoggedInUserProvider from "./context/loggedInUser/LoggedInUserProvider.jsx";
 import UsersListProvider from "./context/usersList/UsersListProvider";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
-import Register from "./pages/Register";
+import GeneralLayout from "./layouts/GeneralLayout.jsx";
+import PrivateLayout from "./layouts/PrivateLayout.jsx";
+
+// function withDelay(importFunction, delay = 1000) {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       importFunction().then(resolve);
+//     }, delay);
+//   });
+// }
+// const Home = lazy(() => withDelay(() => import("./pages/Home"), 700));
+// const Login = lazy(() => withDelay(() => import("./pages/Login"), 700));
+// const Register = lazy(() => withDelay(() => import("./pages/Register"), 700));
+// const Profile = lazy(() => withDelay(() => import("./pages/Profile"), 700));
+
+const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const Profile = lazy(() => import("./pages/Profile"));
+
+const loadingSpinner = (
+  <div
+    className="d-flex justify-content-center align-items-center my-auto"
+    style={{ height: "90vh" }}
+  >
+    <div className="spinner-border text-primary " role="status">
+      <span className="sr-only">Loading...</span>
+    </div>
+  </div>
+);
 
 function App() {
   return (
     <div className="App">
       <UsersListProvider>
         <LoggedInUserProvider>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
+          <Suspense fallback={loadingSpinner}>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <PrivateLayout>
+                    <Home />
+                  </PrivateLayout>
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  <GeneralLayout>
+                    <Login />
+                  </GeneralLayout>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <GeneralLayout>
+                    <Register />
+                  </GeneralLayout>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <PrivateLayout>
+                    <Profile />
+                  </PrivateLayout>
+                }
+              />
+            </Routes>
+          </Suspense>
         </LoggedInUserProvider>
       </UsersListProvider>
     </div>
