@@ -1,21 +1,8 @@
 import LoginRegisterForm from "@/components/auth/LoginRegisterForm";
 import UsersTable from "@/components/users/UsersTable";
-import { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { register } from "../auth/authService";
-import LoggedInUserContext from "../context/loggedInUser/LoggedInUserContext";
 
 export default function Home() {
-  const { loggedInUser } = useContext(LoggedInUserContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!loggedInUser) {
-      localStorage.setItem("loggedIn", "false");
-      navigate("/login");
-    }
-  }, [loggedInUser]);
-
   return (
     <main className="container-fluid mt-2 mt-md-5 mb-3">
       <div

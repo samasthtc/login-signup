@@ -10,7 +10,7 @@ export default function Navbar() {
   const handleLogout = () => {
     logout();
     // @ts-ignore
-    setLoggedInUser({ id: -1 });
+    setLoggedInUser(null);
   };
   return (
     <nav className="navbar navbar-expand navbar-dark">

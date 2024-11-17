@@ -64,7 +64,6 @@ export function login({ email, password }, usersList) {
   const result = validateCredentials(email, password, usersList);
   if (result.isValid) {
     localStorage.setItem("loggedInUserId", result.userId);
-    localStorage.setItem("loggedIn", "true");
   }
   return result;
 }
@@ -86,7 +85,6 @@ export function register({ name, email, password }, usersList) {
 }
 
 export function logout() {
-  localStorage.setItem("loggedIn", "false");
   localStorage.setItem("loggedInUserId", "-1");
 }
 
