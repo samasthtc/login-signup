@@ -1,14 +1,6 @@
 import PropTypes from "prop-types";
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import { useContext, useEffect, useReducer, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-// import {Tooltip} from "boostrap";
 import {
   validateEmail,
   validateField,
@@ -17,10 +9,11 @@ import {
 } from "../auth/authService";
 import LoggedInUserContext from "../context/loggedInUser/LoggedInUserContext";
 import UsersListContext from "../context/usersList/UsersListContext";
-import debounce from "../utils/useDebounce";
+import { default as useDebounce } from "../utils/useDebounce";
 import CardContainer from "./common/CardContainer";
 import EditableInput from "./inputFields/EditableInput";
 
+// TODO: REMOVE DISABLED BEFORE EDITING. MAKE IT ENABLED BY DEFAULT.
 export default function EditForm({ userId, isCurrent, onSubmit }) {
   const { loggedInUser } = useContext(LoggedInUserContext);
   const { usersList, setUsersList } = useContext(UsersListContext);
@@ -51,6 +44,9 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
   });
   const [successMessage, setSuccessMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
+
+  const handleEditingState = (value, field) =>
+    setEditingState({ ...editingState, [field]: value });
 
   const initialValidationState = {
     isNameValidated: true,
@@ -124,65 +120,85 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
     });
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedValidation = useCallback(
-    debounce((value, field) => handleFieldValidation(value, field), 600),
-    [handleFieldValidation]
+  const debouncedValidation = useDebounce((value, field) =>
+    handleFieldValidation(value, field)
   );
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (form.changed) {
-      handleFieldValidation(form.name, "name");
-      handleFieldValidation(form.email, "email");
-      handleFieldValidation(form.password, "password");
 
-      if (!isValid) return;
+    handleFieldValidation(form.name, "name");
+    handleFieldValidation(form.email, "email");
+    handleFieldValidation(form.password, "password");
 
-      const result = onSubmit(user.id, form, usersList);
-      if (result.isValid) {
-        // @ts-ignore
-        setUsersList(result.updatedList);
-        setEditingState({
-          name: false,
-          email: false,
-          password: false,
-        });
-        setForm({ ...form, changed: false });
+    if (!isValid) return;
 
-        setSuccessMessage("Profile updated successfully!");
-        setShowAlert(true);
-        setTimeout(() => {
-          setSuccessMessage("");
-          setShowAlert(false);
-        }, 3000);
-      }
+    const result = onSubmit(user.id, form, usersList);
+    if (result.isValid) {
+      // @ts-ignore
+      setUsersList(result.updatedList);
+      setEditingState({
+        name: false,
+        email: false,
+        password: false,
+      });
+      setForm({ ...form, changed: false });
+
+      setSuccessMessage("Profile updated successfully!");
+      setShowAlert(true);
+      setTimeout(() => {
+        setSuccessMessage("");
+        setShowAlert(false);
+      }, 3000);
     }
   };
 
   const tooltipRef = useRef();
 
   useEffect(() => {
-    if (tooltipRef.current && !form.changed) {
-      new window.bootstrap.Tooltip(tooltipRef.current, {
-        title: "No changes were made",
-        placement: "bottom",
-        trigger: "hover",
-        container: "body",
-      });
-    }
-  }, [form.changed]);
+    let tooltipInstance;
+    let hideTimeout;
 
-  // const saveToolTip = new Tooltip(
-  //   <button
-  //         type="submit"
-  //         className="btn border-2 rounded-pill btn-outline-primary
-  //          mt-3 mb-1 text-semibold me-2"
-  //         disabled={!form.changed}
-  //       >
-  //         Save Changes
-  //       </button>
-  // )
+    const showTooltip = () => {
+      if (tooltipRef.current && !form.changed) {
+        tooltipInstance = new window.bootstrap.Tooltip(tooltipRef.current, {
+          title: "No changes were made",
+          placement: "bottom",
+          trigger: "manual",
+          container: "body",
+        });
+        tooltipInstance.show();
+
+        hideTimeout = setTimeout(() => {
+          tooltipInstance.hide();
+        }, 1000);
+      }
+    };
+
+    const hideTooltip = () => {
+      if (tooltipInstance) {
+        tooltipInstance.hide();
+      }
+      clearTimeout(hideTimeout);
+    };
+
+    if (tooltipRef.current) {
+      // @ts-ignore
+      tooltipRef.current.addEventListener("mouseenter", showTooltip);
+      // @ts-ignore
+      tooltipRef.current.addEventListener("mouseleave", hideTooltip);
+    }
+
+    return () => {
+      if (tooltipRef.current) {
+        // @ts-ignore
+        tooltipRef.current.removeEventListener("mouseenter", showTooltip);
+        // @ts-ignore
+        tooltipRef.current.removeEventListener("mouseleave", hideTooltip);
+      }
+      tooltipInstance?.dispose();
+    };
+  }, [form.changed]);
 
   return (
     <CardContainer>
@@ -206,7 +222,7 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
           errorMessage={errors.name}
           isValidated={validationState.isNameValidated}
           editingState={editingState.name}
-          setEditingState={(value) => setEditingState({ name: value })}
+          setEditingState={handleEditingState}
         />
 
         <EditableInput
@@ -220,7 +236,7 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
           errorMessage={errors.email}
           isValidated={validationState.isEmailValidated}
           editingState={editingState.email}
-          setEditingState={(value) => setEditingState({ email: value })}
+          setEditingState={handleEditingState}
         />
 
         <EditableInput
@@ -234,27 +250,14 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
           errorMessage={errors.password}
           isValidated={validationState.isPasswordValidated}
           editingState={editingState.password}
-          setEditingState={(value) =>
-            setEditingState({ ...editingState, password: value })
-          }
+          setEditingState={handleEditingState}
         />
 
-        {!form.changed ? (
-          <div
-            className="position-relative d-inline-block"
-            ref={tooltipRef}
-            data-bs-toggle={tooltipRef}
-          >
-            <button
-              type="submit"
-              className="btn border-2 rounded-pill btn-outline-primary
-             mt-3 mb-1 text-semibold me-2"
-              disabled={!form.changed}
-            >
-              Save Changes
-            </button>
-          </div>
-        ) : (
+        <div
+          className="position-relative d-inline-block"
+          ref={!form.changed ? tooltipRef : null}
+          data-bs-toggle={!form.changed ? tooltipRef : null}
+        >
           <button
             type="submit"
             className="btn border-2 rounded-pill btn-outline-primary
@@ -263,7 +266,7 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
           >
             Save Changes
           </button>
-        )}
+        </div>
 
         <Link className=" text-decoration-none" to="/">
           <button
@@ -292,13 +295,7 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
 }
 
 EditForm.propTypes = {
-  isCurrent: PropTypes.string,
+  isCurrent: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  // user: PropTypes.shape({
-  //   id: PropTypes.any.isRequired,
-  //   email: PropTypes.any.isRequired,
-  //   name: PropTypes.any.isRequired,
-  //   password: PropTypes.any.isRequired,
-  // }).isRequired,
-  userId: PropTypes.any,
+  userId: PropTypes.any.isRequired,
 };

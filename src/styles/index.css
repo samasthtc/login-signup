@@ -12130,7 +12130,7 @@ span.input-group-text:active {
   }
 }
 .fade-in-out {
-  animation: fadeInOut 2.5s ease-in forwards;
+  animation: fadeInOut 3s ease-in forwards;
 }
 
 @media (max-width: 768px) {

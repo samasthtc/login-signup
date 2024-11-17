@@ -18,9 +18,9 @@ export default function EditableInput({
 
   const toggleEditing = () => {
     if (!editingState) {
-      setEditingState(!editingState);
+      setEditingState(!editingState, name);
     } else {
-      !errorMessage && setEditingState(!editingState);
+      !errorMessage && setEditingState(!editingState, name);
     }
   };
 
@@ -69,7 +69,6 @@ export default function EditableInput({
                 : ""
             }`}
             id={name}
-
             name={name}
             placeholder={`Enter your ${name}...`}
             autoComplete={autoComplete}
@@ -107,5 +106,5 @@ EditableInput.propTypes = {
   onChange: PropTypes.func,
   setEditingState: PropTypes.func,
   type: PropTypes.string,
-  value: PropTypes.string
-}
+  value: PropTypes.string,
+};
