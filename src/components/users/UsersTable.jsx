@@ -1,13 +1,25 @@
 import { useContext, useMemo, useState } from "react";
 import UsersListContext from "../../context/usersList/UsersListContext";
+import useDebounce from "../../utils/useDebounce";
 import CardContainer from "../common/CardContainer";
 import SearchField from "../inputFields/SearchField";
 import UserRow from "./UserRow";
 
 export default function UsersTable() {
   const { usersList } = useContext(UsersListContext);
+  const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("name");
+
+  const debouncedSearchChange = useDebounce((value) => {
+    setSearchTerm(value);
+  });
+
+  const handleSearchChange = (value) => {
+    setSearchInput(value);
+    debouncedSearchChange(value);
+  };
+
   const filteredList = useMemo(() => {
     return usersList.filter((user) => {
       return filter === "name"
@@ -23,8 +35,8 @@ export default function UsersTable() {
   return (
     <CardContainer position="right">
       <SearchField
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
+        searchTerm={searchInput}
+        setSearchTerm={handleSearchChange}
         filter={filter}
         setFilter={setFilter}
       />

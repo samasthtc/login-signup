@@ -25,6 +25,7 @@ export default function SearchField({
           <div className="form-floating">
             <select
               className="form-select border-secondary border-2"
+              role="button"
               name="filter"
               id="filter"
               defaultValue={filter}
