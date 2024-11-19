@@ -10,7 +10,7 @@ export default function Home() {
          rounded-5 border border-primary border-2 
           pb-md-5 pb-3 px-md-0 px-3"
       >
-        <LoginRegisterForm type="add" onSubmit={register} />
+        <LoginRegisterForm type="add" submit={register} />
         <div className="vr-hr border-2 border border-primary rounded col-12"></div>
         <UsersTable />
       </div>

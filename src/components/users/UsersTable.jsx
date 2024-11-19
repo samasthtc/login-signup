@@ -1,6 +1,6 @@
 import { useContext, useMemo, useState } from "react";
 import UsersListContext from "../../context/usersList/UsersListContext";
-import useDebounce from "../../utils/useDebounce";
+import useDebounce from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
 import SearchField from "../inputFields/SearchField";
 import UserRow from "./UserRow";

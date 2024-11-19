@@ -24,11 +24,12 @@ export function validateEmail(value) {
 }
 
 export function validatePassword(password) {
-  if (
-    password.match(
-      /^(?=.*[0-9])(?=.*[\s.-_,!@#$%^&*])(?=.*[A-Z])[a-zA-Z0-9\s.-_,!@#$%^&*]{8,16}$/
-    )
-  ) {
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*.,\-_]/.test(password);
+  const hasUpperCase = /[A-Z]/.test(password);
+  const isValidLength = password.length >= 8 && password.length <= 16;
+
+  if (isValidLength && hasNumber && hasSpecialChar && hasUpperCase) {
     return { isValid: true, errorMessage: "" };
   }
 
@@ -37,12 +38,13 @@ export function validatePassword(password) {
 
   let errorText = "";
 
-  if (password.length < 8 || password.length > 16) {
+  if (!isValidLength) {
     errorText = "Password must be between 8 and 16 characters long.";
-  } else if (!/^(?=.*[0-9])(?=.*[\s.,!@#$%^&*])/.test(password)) {
-    errorText =
-      "Password must contain at least one number and one special character.";
-  } else if (!/^(?=.*[A-Z])/.test(password)) {
+  } else if (!hasNumber) {
+    errorText = "Password must contain at least one number.";
+  } else if (!hasSpecialChar) {
+    errorText = "Password must contain at least one special character.";
+  } else if (!hasUpperCase) {
     errorText = "Password must contain at least one uppercase letter.";
   }
 
@@ -51,7 +53,6 @@ export function validatePassword(password) {
     errorMessage: errorText,
   };
 }
-
 
 export function validateCredentials(email, password, usersList) {
   const user = usersList.find((u) => u.email === email);

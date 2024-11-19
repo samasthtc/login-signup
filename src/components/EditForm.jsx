@@ -9,7 +9,7 @@ import {
 } from "../auth/authService";
 import LoggedInUserContext from "../context/loggedInUser/LoggedInUserContext";
 import UsersListContext from "../context/usersList/UsersListContext";
-import { default as useDebounce } from "../utils/useDebounce";
+import { default as useDebounce } from "../utils/debounce";
 import CardContainer from "./common/CardContainer";
 import EditableInput from "./inputFields/EditableInput";
 

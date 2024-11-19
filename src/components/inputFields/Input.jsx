@@ -2,16 +2,36 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 export default function Input({
   type,
-  name,
-  autoComplete,
-  autoFocus,
+  name = "",
+  autoComplete = "off",
+  autoFocus = false,
   errorMessage,
   my = 3,
-  value,
+  value = undefined,
   onChange,
-  isValidated,
+  registerProps,
 }) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isFieldDirty, setIsFieldDirty] = useState(false);
+  const { register, options } = registerProps || {};
+  const validateFunc = options.validate;
+
+  const registeredField = register(name, {
+    ...options,
+    validate: async (value) => {
+      const result = await validateFunc(value);
+      handleFieldChange();
+      return result;
+    },
+  });
+  const { name: nameFromProps, onChange: onChangeFromProps } = registeredField;
+  name = nameFromProps || name;
+  onChange = onChangeFromProps || onChange;
+
+  const handleFieldChange = (e) => {
+    !isFieldDirty && setIsFieldDirty(true);
+    e && onChange(e);
+  };
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -32,7 +52,7 @@ export default function Input({
                 : type
             }
             className={`form-control ${
-              isValidated
+              isFieldDirty || errorMessage
                 ? errorMessage
                   ? "is-invalid input-error"
                   : "input-success"
@@ -47,22 +67,23 @@ export default function Input({
             }
             autoComplete={autoComplete}
             autoFocus={autoFocus}
+            {...registeredField}
             value={value}
-            onChange={(e) => {
-              onChange(e);
-            }}
+            onChange={onChange}
           />
-          <label htmlFor={name} className="form-label">
-            {name[0].toUpperCase() + name.slice(1)}
-          </label>
+          {name && (
+            <label htmlFor={name} className="form-label">
+              {name[0]?.toUpperCase() + name?.slice(1)}
+            </label>
+          )}
         </div>
         {type === "password" && (
           <span
             className={`input-group-text password-toggle-icon
               rounded-end ${
-                isValidated
+                isFieldDirty || errorMessage
                   ? errorMessage
-                    ? "password-error"
+                    ? "password-error text-danger"
                     : "password-success"
                   : ""
               }`}
@@ -77,9 +98,9 @@ export default function Input({
         )}
         {errorMessage && (
           <p
-            className={`error-text invalid-feedback mt-1 ${
-              isValidated ? "show" : ""
-            } ${type === "password" ? "mb-0" : ""}`}
+            className={`error-text invalid-feedback mt-1 show  ${
+              type === "password" ? "mb-0" : ""
+            }`}
           >
             {errorMessage}
           </p>
@@ -92,11 +113,12 @@ export default function Input({
 Input.propTypes = {
   autoComplete: PropTypes.string,
   autoFocus: PropTypes.bool,
-  errorMessage: PropTypes.string,
   my: PropTypes.number,
   name: PropTypes.string,
-  onChange: PropTypes.func,
-  type: PropTypes.string,
-  isValidated: PropTypes.bool,
+  registerProps: PropTypes.object,
   value: PropTypes.any,
+  errorMessage: PropTypes.string,
+  isValidated: PropTypes.bool,
+  onChange: PropTypes.func,
+  type: PropTypes.string.isRequired,
 };

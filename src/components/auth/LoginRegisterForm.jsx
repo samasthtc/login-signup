@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import { useContext, useReducer, useState } from "react";
+import { useContext } from "react";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import {
   validateEmail,
@@ -9,75 +10,31 @@ import {
 } from "../../auth/authService";
 import LoggedInUserContext from "../../context/loggedInUser/LoggedInUserContext";
 import UsersListContext from "../../context/usersList/UsersListContext";
-import useDebounce from "../../utils/useDebounce";
+import { useDebouncePromise } from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
 import Input from "../inputFields/Input";
 
-export default function LoginRegisterForm({ type, onSubmit }) {
+export default function LoginRegisterForm({ type, submit }) {
   const navigate = useNavigate();
-
   const { usersList, setUsersList } = useContext(UsersListContext);
   const { setLoggedInUser } = useContext(LoggedInUserContext);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+    mode: "onChange",
   });
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
 
-  const initialValidationState = {
-    isNameValidated: false,
-    isNameValid: false,
-    isEmailValidated: false,
-    isEmailValid: false,
-    isPasswordValidated: false,
-    isPasswordValid: false,
-  };
+  // const onSubmit = (data) => console.log(data);
 
-  function validationReducer(state, action) {
-    switch (action.type) {
-      case "VALIDATE_FIELD":
-        return {
-          ...state,
-          [`is${action.field}Validated`]: true,
-          [`is${action.field}Valid`]: action.isValid,
-        };
-      case "SET_CREDENTIALS_VALIDITY":
-        return {
-          ...state,
-          isEmailValidated: true,
-          isEmailValid: action.isValid,
-          isPasswordValidated: true,
-          isPasswordValid: action.isValid,
-        };
-      default:
-        return state;
-    }
-  }
-
-  const [validationState, dispatch] = useReducer(
-    validationReducer,
-    initialValidationState
-  );
-
-  const allFieldsNotEmpty =
-    (type !== "login" ? !!form.name : true) && !!form.email && !!form.password;
-  const isValid =
-    (type !== "login" ? validationState.isNameValid : true) &&
-    validationState.isEmailValid &&
-    validationState.isPasswordValid &&
-    allFieldsNotEmpty;
-
-  const handleFieldChange = (e, field) => {
-    setForm({ ...form, [field]: e.target.value });
-    !(type === "login") && debouncedValidation(e.target.value, field);
-  };
-
-  const handleFieldValidation = (value, field) => {
+  const handleFieldValidation = (field, value) => {
     const { isValid, errorMessage } = validateField(
       value,
       field === "name"
@@ -86,97 +43,191 @@ export default function LoginRegisterForm({ type, onSubmit }) {
         ? validateEmail
         : validatePassword
     );
-
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [field]: isValid
-        ? ""
-        : type !== "login"
-        ? errorMessage
-        : field === "email"
-        ? " "
-        : field === "password"
-        ? "Invalid credentials."
-        : errorMessage,
-    }));
-
-    // @ts-ignore
-    dispatch({
-      type: "VALIDATE_FIELD",
-      field: field.charAt(0).toUpperCase() + field.slice(1),
-      isValid,
-    });
+    return isValid || errorMessage || true;
   };
 
-  const debouncedValidation = useDebounce((value, field) =>
-    handleFieldValidation(value, field)
-  );
+  const debouncedValidation = useDebouncePromise(handleFieldValidation);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const validateFieldWithDebounce = async (field, value) => {
+    return debouncedValidation(field, value).then((result) => result);
+  };
 
-    if (type !== "login") {
-      handleFieldValidation(form.name, "name");
-      handleFieldValidation(form.email, "email");
-      handleFieldValidation(form.password, "password");
+  // const [form, setForm] = useState({
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  // });
+  // const [errors, setErrors] = useState({
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  // });
 
-      if (!isValid) return;
+  // const initialValidationState = {
+  //   isNameValidated: false,
+  //   isNameValid: false,
+  //   isEmailValidated: false,
+  //   isEmailValid: false,
+  //   isPasswordValidated: false,
+  //   isPasswordValid: false,
+  // };
 
-      if (isValid) {
-        if (type === "register" || type === "add") {
-          const result = onSubmit(form, usersList);
-          if (result.isValid) {
-            setUsersList(result.updatedList);
-            type === "register" && navigate("/login");
-            emptyFields();
-          } else {
-            setErrors({ ...errors, email: result.message });
-            // @ts-ignore
-            dispatch({
-              type: "VALIDATE_FIELD",
-              field: "Email",
-              isValid: false,
-            });
-          }
-        }
-      }
-    } else {
-      if (!allFieldsNotEmpty) return;
+  // function validationReducer(state, action) {
+  //   switch (action.type) {
+  //     case "VALIDATE_FIELD":
+  //       return {
+  //         ...state,
+  //         [`is${action.field}Validated`]: true,
+  //         [`is${action.field}Valid`]: action.isValid,
+  //       };
+  //     case "SET_CREDENTIALS_VALIDITY":
+  //       return {
+  //         ...state,
+  //         isEmailValidated: true,
+  //         isEmailValid: action.isValid,
+  //         isPasswordValidated: true,
+  //         isPasswordValid: action.isValid,
+  //       };
+  //     default:
+  //       return state;
+  //   }
+  // }
 
-      const result = onSubmit(form, usersList);
+  // const [validationState, dispatch] = useReducer(
+  //   validationReducer,
+  //   initialValidationState
+  // );
 
-      if (result.isValid) {
+  // const allFieldsNotEmpty =
+  //   (type !== "login" ? !!form.name : true) && !!form.email && !!form.password;
+  // const isValid =
+  //   (type !== "login" ? validationState.isNameValid : true) &&
+  //   validationState.isEmailValid &&
+  //   validationState.isPasswordValid &&
+  //   allFieldsNotEmpty;
+
+  // const handleFieldChange = (e, field) => {
+  //   setForm({ ...form, [field]: e.target.value });
+  //   !(type === "login") &&
+  //     debouncedValidation?.debouncedCallback(e.target.value, field);
+  // };
+
+  // const handleFieldValidation = (value, field) => {
+  //   const { isValid, errorMessage } = validateField(
+  //     value,
+  //     field === "name"
+  //       ? validateName
+  //       : field === "email"
+  //       ? validateEmail
+  //       : validatePassword
+  //   );
+
+  //   setErrors((prevErrors) => ({
+  //     ...prevErrors,
+  //     [field]: isValid
+  //       ? ""
+  //       : type !== "login"
+  //       ? errorMessage
+  //       : field === "email"
+  //       ? " "
+  //       : field === "password"
+  //       ? "Invalid credentials."
+  //       : errorMessage,
+  //   }));
+
+  //   // @ts-ignore
+  //   dispatch({
+  //     type: "VALIDATE_FIELD",
+  //     field: field.charAt(0).toUpperCase() + field.slice(1),
+  //     isValid,
+  //   });
+  // };
+
+  // const debouncedValidation = useDebounce((value, field) =>
+  //   handleFieldValidation(value, field)
+  // );
+
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   if (type !== "login") {
+  //     handleFieldValidation(form.name, "name");
+  //     handleFieldValidation(form.email, "email");
+  //     handleFieldValidation(form.password, "password");
+
+  //     if (!isValid) return;
+
+  //     if (isValid) {
+  //       if (type === "register" || type === "add") {
+  //         const result = onSubmit(form, usersList);
+  //         if (result.isValid) {
+  //           setUsersList(result.updatedList);
+  //           type === "register" && navigate("/login");
+  //           emptyFields();
+  //         } else {
+  //           setErrors({ ...errors, email: result.message });
+  //           // @ts-ignore
+  //           dispatch({
+  //             type: "VALIDATE_FIELD",
+  //             field: "Email",
+  //             isValid: false,
+  //           });
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     if (!allFieldsNotEmpty) return;
+
+  //     const result = submit(form, usersList);
+
+  //     if (result.isValid) {
+  //       setLoggedInUser(result.user);
+  //       navigate("/");
+  //     } else {
+  //       setErrors({ ...errors, email: " ", password: result.message });
+  //     }
+
+  //     // @ts-ignore
+  //     dispatch({
+  //       type: "SET_CREDENTIALS_VALIDITY",
+  //       isValid: result.isValid,
+  //     });
+  //   }
+  // };
+
+  const onSubmit = (data) => {
+    // TODO: Add indicator that form is submitting
+    const result = submit(data, usersList);
+    if (result.isValid) {
+      if (type === "register" || type === "add") {
+        setUsersList(result.updatedList);
+        type === "register" && navigate("/login");
+        // emptyFields();
+      } else if (type === "login") {
         setLoggedInUser(result.user);
         navigate("/");
-      } else {
-        setErrors({ ...errors, email: " ", password: result.message });
       }
-
-      // @ts-ignore
-      dispatch({
-        type: "SET_CREDENTIALS_VALIDITY",
-        isValid: result.isValid,
-      });
     }
   };
 
-  const emptyFields = () => {
-    setForm({ name: "", email: "", password: "" });
-    setErrors({ name: "", email: "", password: "" });
-  };
+  // const emptyFields = () => {
+  //   setForm({ name: "", email: "", password: "" });
+  //   setErrors({ name: "", email: "", password: "" });
+  // };
 
   const nameInput = (
     <Input
       type="text"
       name="name"
-      autoComplete="name"
-      autoFocus={type === "register"}
-      value={form.name}
-      onChange={(e) => {
-        handleFieldChange(e, "name");
+      autoFocus={true}
+      registerProps={{
+        register: register,
+        options: {
+          required: "This field is required",
+          validate: (value) => validateFieldWithDebounce("name", value),
+        },
       }}
-      errorMessage={errors.name}
-      isValidated={validationState.isNameValidated}
+      errorMessage={errors.name?.message}
     />
   );
 
@@ -219,7 +270,7 @@ export default function LoginRegisterForm({ type, onSubmit }) {
         id={formId}
         action="#"
         className="w-100"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
         {(type === "register" || type === "add") && nameInput}
@@ -229,25 +280,28 @@ export default function LoginRegisterForm({ type, onSubmit }) {
           name="email"
           autoComplete="email"
           autoFocus={type === "login"}
-          value={form.email}
-          onChange={(e) => {
-            handleFieldChange(e, "email");
+          registerProps={{
+            register: register,
+            options: {
+              required: "This field is required",
+              validate: (value) => validateFieldWithDebounce("email", value),
+            },
           }}
-          errorMessage={errors.email}
-          isValidated={validationState.isEmailValidated}
+          errorMessage={errors.email?.message}
         />
 
         <Input
           type="password"
           name="password"
           autoComplete={autoCompletePassword}
-          autoFocus={false}
-          value={form.password}
-          onChange={(e) => {
-            handleFieldChange(e, "password");
+          registerProps={{
+            register: register,
+            options: {
+              required: "This field is required",
+              validate: (value) => validateFieldWithDebounce("password", value),
+            },
           }}
-          errorMessage={errors.password}
-          isValidated={validationState.isPasswordValidated}
+          errorMessage={errors.password?.message}
         />
 
         <button
@@ -266,6 +320,6 @@ export default function LoginRegisterForm({ type, onSubmit }) {
 }
 
 LoginRegisterForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  submit: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
 };

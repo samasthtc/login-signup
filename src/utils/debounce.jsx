@@ -27,3 +27,23 @@ export default function useDebounce(callback, delay = 600) {
 
   return debouncedCallback;
 }
+
+export function useDebouncePromise(callback, delay = 600) {
+  const timerRefs = useRef({});
+
+  const debouncedCallback = useCallback(
+    (field, value) =>
+      new Promise((resolve) => {
+        if (timerRefs.current[field]) {
+          clearTimeout(timerRefs.current[field]);
+        }
+        timerRefs.current[field] = setTimeout(() => {
+          const result = callback(field, value);
+          resolve(result);
+        }, delay);
+      }),
+    [callback, delay]
+  );
+
+  return debouncedCallback;
+}

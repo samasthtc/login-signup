@@ -21,6 +21,7 @@ const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const Profile = lazy(() => import("./pages/Profile"));
+const ReactHForm = lazy(() => import("./pages/ReactHForm"));
 
 const loadingSpinner = (
   <div
@@ -70,6 +71,14 @@ function App() {
                   <PrivateLayout>
                     <Profile />
                   </PrivateLayout>
+                }
+              />
+              <Route
+                path="/form"
+                element={
+                  <GeneralLayout>
+                    <ReactHForm />
+                  </GeneralLayout>
                 }
               />
             </Routes>

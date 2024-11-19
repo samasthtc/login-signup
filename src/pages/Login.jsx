@@ -7,7 +7,7 @@ export default function Login() {
       className="container-fluid my-5 d-flex justify-content-center
      align-items-center align-content-center"
     >
-      <LoginRegisterForm type="login" onSubmit={login} />
+      <LoginRegisterForm type="login" submit={login} />
     </main>
   );
 }
