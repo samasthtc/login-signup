@@ -28,7 +28,7 @@ export default function LoggedInUserProvider({ children }) {
     if (!loggedInUser) {
       navigate("/login");
     }
-  }, [loggedInUser]);
+  }, [loggedInUser, navigate]);
 
   return (
     <LoggedInUserContext.Provider

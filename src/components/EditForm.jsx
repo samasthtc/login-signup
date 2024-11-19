@@ -13,7 +13,6 @@ import { default as useDebounce } from "../utils/useDebounce";
 import CardContainer from "./common/CardContainer";
 import EditableInput from "./inputFields/EditableInput";
 
-// TODO: REMOVE DISABLED BEFORE EDITING. MAKE IT ENABLED BY DEFAULT.
 export default function EditForm({ userId, isCurrent, onSubmit }) {
   const { loggedInUser } = useContext(LoggedInUserContext);
   const { usersList, setUsersList } = useContext(UsersListContext);
@@ -182,19 +181,21 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
       clearTimeout(hideTimeout);
     };
 
-    if (tooltipRef.current) {
+    const currentTooltipRef = tooltipRef.current;
+
+    if (currentTooltipRef) {
       // @ts-ignore
-      tooltipRef.current.addEventListener("mouseenter", showTooltip);
+      currentTooltipRef.addEventListener("mouseenter", showTooltip);
       // @ts-ignore
-      tooltipRef.current.addEventListener("mouseleave", hideTooltip);
+      currentTooltipRef.addEventListener("mouseleave", hideTooltip);
     }
 
     return () => {
-      if (tooltipRef.current) {
+      if (currentTooltipRef) {
         // @ts-ignore
-        tooltipRef.current.removeEventListener("mouseenter", showTooltip);
+        currentTooltipRef.removeEventListener("mouseenter", showTooltip);
         // @ts-ignore
-        tooltipRef.current.removeEventListener("mouseleave", hideTooltip);
+        currentTooltipRef.removeEventListener("mouseleave", hideTooltip);
       }
       tooltipInstance?.dispose();
     };
@@ -283,7 +284,7 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
         <div
           className={"alert alert-success text-center fade-in-out"}
           role="alert"
-          onAnimationEnd={(e) => {
+          onAnimationEnd={() => {
             setShowAlert(false);
           }}
         >

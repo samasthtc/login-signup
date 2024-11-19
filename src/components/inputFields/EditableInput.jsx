@@ -18,40 +18,38 @@ export default function EditableInput({
 
   const toggleEditing = () => {
     if (!editingState) {
-      setEditingState(!editingState, name);
-    } else {
-      !errorMessage && setEditingState(!editingState, name);
+      setEditingState(true, name);
     }
   };
 
-  const buttons =
-    type === "password" ? (
-      <>
-        <span
-          className="input-group-text password-toggle-icon "
-          onClick={togglePasswordVisibility}
-        >
-          <i
-            className={`fas ${isPasswordVisible ? "fa-eye-slash" : "fa-eye"}`}
-          ></i>
-        </span>
-        <span
-          className="input-group-text edit-icon"
-          id="edit-password"
-          onClick={toggleEditing}
-        >
-          <i className="fas fa-edit"></i>
-        </span>
-      </>
-    ) : (
-      <span
-        className="input-group-text edit-icon"
-        id={"edit-" + name}
-        onClick={toggleEditing}
-      >
-        <i className="fas fa-edit"></i>
-      </span>
-    );
+  // const buttons =
+  //   type === "password" ? (
+  //     <>
+  //       <span
+  //         className="input-group-text password-toggle-icon "
+  //         onClick={togglePasswordVisibility}
+  //       >
+  //         <i
+  //           className={`fas ${isPasswordVisible ? "fa-eye-slash" : "fa-eye"}`}
+  //         ></i>
+  //       </span>
+  //       <span
+  //         className="input-group-text edit-icon"
+  //         id="edit-password"
+  //         onClick={toggleEditing}
+  //       >
+  //         <i className="fas fa-edit"></i>
+  //       </span>
+  //     </>
+  //   ) : (
+  //     <span
+  //       className="input-group-text edit-icon"
+  //       id={"edit-" + name}
+  //       onClick={toggleEditing}
+  //     >
+  //       <i className="fas fa-edit"></i>
+  //     </span>
+  //   );
 
   const inputType =
     type === "password" ? (isPasswordVisible ? "text" : "password") : type;
@@ -72,17 +70,28 @@ export default function EditableInput({
             name={name}
             placeholder={`Enter your ${name}...`}
             autoComplete={autoComplete}
-            disabled={!editingState}
+            // disabled={!editingState}
             value={value}
             onChange={(e) => {
               onChange(e);
+              toggleEditing();
             }}
           />
           <label htmlFor="name" className="form-label">
             {name[0].toUpperCase() + name.slice(1)}
           </label>
         </div>
-        {buttons}
+        {/* {buttons} */}
+        {type === "password" && (
+          <span
+            className="input-group-text password-toggle-icon "
+            onClick={togglePasswordVisibility}
+          >
+            <i
+              className={`fas ${isPasswordVisible ? "fa-eye-slash" : "fa-eye"}`}
+            ></i>
+          </span>
+        )}
       </div>
       {errorMessage && (
         <p
