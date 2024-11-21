@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
   const [loggedInUser, setLoggedInUser] = useState(() => {
     const storedLoggedInUser = localStorage.getItem("loggedInUserId");
     let currentUser;
-    console.log(storedLoggedInUser, typeof storedLoggedInUser);
 
     if (storedLoggedInUser !== "-1" && storedLoggedInUser !== "undefined") {
       currentUser = usersList.find(

@@ -16,7 +16,7 @@ import LoadingSpinner from "./common/LoadingSpinner";
 import EditableInput from "./inputFields/EditableInput";
 
 export default function EditForm({ userId, isCurrent, submit }) {
-  const { loggedInUser } = useAuth();
+  const { loggedInUser, login } = useAuth();
   const { usersList, setUsersList } = useContext(UsersListContext);
   const [user, setUser] = useState(() => {
     if (isCurrent === "true") {
@@ -81,6 +81,7 @@ export default function EditForm({ userId, isCurrent, submit }) {
     const result = submit(user.id, data, usersList);
 
     if (result.isValid) {
+      login(result.updatedUser);
       setUsersList(result.updatedList);
       setSuccessMessage("Profile updated successfully!");
       setShowAlert(isSubmitSuccessful);
@@ -206,6 +207,7 @@ export default function EditForm({ userId, isCurrent, submit }) {
             type="submit"
             className="btn border-2 rounded-pill btn-outline-primary
              mt-3 mb-1 text-semibold me-2"
+            // TODO: check why it doesnt get disaled when entering fast inputs
             disabled={!isDirty}
           >
             Save Changes

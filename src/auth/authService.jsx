@@ -92,5 +92,6 @@ export function saveProfile(id, { name, email, password }, usersList) {
     return user;
   });
   localStorage.setItem("usersList", JSON.stringify(updatedList));
-  return { isValid: true, updatedList: updatedList };
+  const user = updatedList.find((u) => u.id === id);
+  return { isValid: true, updatedList, updatedUser: user };
 }
