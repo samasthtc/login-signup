@@ -1,3 +1,4 @@
+import { useAuth } from "../auth/AuthProvider";
 import PropTypes from "prop-types";
 import { useContext, useEffect, useReducer, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -6,15 +7,14 @@ import {
   validateField,
   validateName,
   validatePassword,
-} from "../auth/authService";
-import LoggedInUserContext from "../context/loggedInUser/LoggedInUserContext";
-import UsersListContext from "../context/usersList/UsersListContext";
+} from "../auth/AuthService";
+import { UsersListContext } from "../context/usersList/UsersListProvider";
 import { default as useDebounce } from "../utils/debounce";
 import CardContainer from "./common/CardContainer";
 import EditableInput from "./inputFields/EditableInput";
 
 export default function EditForm({ userId, isCurrent, onSubmit }) {
-  const { loggedInUser } = useContext(LoggedInUserContext);
+  const { loggedInUser } = useAuth();
   const { usersList, setUsersList } = useContext(UsersListContext);
   const [user, setUser] = useState(() => {
     if (isCurrent === "true") {

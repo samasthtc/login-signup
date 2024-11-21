@@ -1,22 +1,10 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./auth/AuthProvider.jsx";
 import LoadingSpinner from "./components/common/LoadingSpinner.jsx";
-import LoggedInUserProvider from "./context/loggedInUser/LoggedInUserProvider.jsx";
 import UsersListProvider from "./context/usersList/UsersListProvider";
 import GeneralLayout from "./layouts/GeneralLayout.jsx";
 import PrivateLayout from "./layouts/PrivateLayout.jsx";
-
-// function withDelay(importFunction, delay = 1000) {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       importFunction().then(resolve);
-//     }, delay);
-//   });
-// }
-// const Home = lazy(() => withDelay(() => import("./pages/Home"), 700));
-// const Login = lazy(() => withDelay(() => import("./pages/Login"), 700));
-// const Register = lazy(() => withDelay(() => import("./pages/Register"), 700));
-// const Profile = lazy(() => withDelay(() => import("./pages/Profile"), 700));
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -29,7 +17,7 @@ const loadingSpinner = (
     className="d-flex justify-content-center align-items-center my-auto"
     style={{ height: "90vh" }}
   >
-    <LoadingSpinner/>
+    <LoadingSpinner />
   </div>
 );
 
@@ -37,7 +25,7 @@ function App() {
   return (
     <div className="App">
       <UsersListProvider>
-        <LoggedInUserProvider>
+        <AuthProvider>
           <Suspense fallback={loadingSpinner}>
             <Routes>
               <Route
@@ -82,7 +70,7 @@ function App() {
               />
             </Routes>
           </Suspense>
-        </LoggedInUserProvider>
+        </AuthProvider>
       </UsersListProvider>
     </div>
   );

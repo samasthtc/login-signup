@@ -1,18 +1,9 @@
-// import React from 'react'
-import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { logout } from "../../auth/authService";
-import LoggedInUserContext from "../../context/loggedInUser/LoggedInUserContext";
+import { useAuth } from "../../auth/AuthProvider";
 
 export default function Navbar() {
-  const { loggedInUser, setLoggedInUser } = useContext(LoggedInUserContext);
+  const { loggedInUser, logout } = useAuth();
   const location = useLocation();
-
-  const handleLogout = () => {
-    logout();
-    // @ts-ignore
-    setLoggedInUser(null);
-  };
 
   return (
     <nav className="navbar navbar-expand navbar-dark">
@@ -41,6 +32,7 @@ export default function Navbar() {
                   </Link>
                 </li>
               )}
+
               {location.pathname === "/profile" && (
                 <li className="nav-item" id="navbar-home">
                   <Link to={`/`} className="nav-link">
@@ -48,10 +40,11 @@ export default function Navbar() {
                   </Link>
                 </li>
               )}
+
               <li
                 className="nav-item"
                 id="navbar-logout"
-                onClick={handleLogout}
+                onClick={logout}
               >
                 <Link to="/login" className="nav-link">
                   <i className="fas fa-sign-out text-primary"></i>

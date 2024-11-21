@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import UsersListContext from "../../context/usersList/UsersListContext.jsx";
+import { UsersListContext } from "../../context/usersList/UsersListProvider.jsx";
 
 export default function UserRow({ user }) {
   const { usersList, setUsersList } = useContext(UsersListContext);

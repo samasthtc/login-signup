@@ -1,6 +1,6 @@
-import LoginRegisterForm from "@/components/auth/LoginRegisterForm";
+import LoginRegisterForm from "@/components/authForms/LoginRegisterForm";
 import UsersTable from "@/components/users/UsersTable";
-import { register } from "../auth/authService";
+import { register } from "../auth/AuthService";
 
 export default function Home() {
   return (

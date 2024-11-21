@@ -6,7 +6,7 @@ import {
   validateField,
   validateName,
   validatePassword,
-} from "../auth/authService";
+} from "../auth/AuthService";
 import { useDebouncePromise } from "../utils/debounce";
 
 export default function ReactHForm() {
@@ -51,8 +51,7 @@ export default function ReactHForm() {
       <CardContainer type="register">
         <h1 className="title text-center ">Register</h1>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-
-        <Input
+          <Input
             type="text"
             name="name"
             autoFocus={true}

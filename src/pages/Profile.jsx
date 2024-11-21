@@ -1,7 +1,7 @@
 import EditForm from "@/components/EditForm";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { saveProfile } from "../auth/authService";
+import { saveProfile } from "../auth/AuthService";
 
 export default function Profile() {
   const location = useLocation();

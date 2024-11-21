@@ -1,15 +1,15 @@
 import PropTypes from "prop-types";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/AuthProvider";
 import {
   validateEmail,
   validateField,
   validateName,
   validatePassword,
-} from "../../auth/authService";
-import LoggedInUserContext from "../../context/loggedInUser/LoggedInUserContext";
-import UsersListContext from "../../context/usersList/UsersListContext";
+} from "../../auth/AuthService";
+import { UsersListContext } from "../../context/usersList/UsersListProvider";
 import { useDebouncePromise } from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
 import LoadingSpinner from "../common/LoadingSpinner";
@@ -18,14 +18,16 @@ import Input from "../inputFields/Input";
 export default function LoginRegisterForm({ type, submit }) {
   const navigate = useNavigate();
   const { usersList, setUsersList } = useContext(UsersListContext);
-  const { setLoggedInUser } = useContext(LoggedInUserContext);
+  const { login } = useAuth();
   const [manualDirtyFields, setManualDirtyFields] = useState({});
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
     setError,
+    reset,
   } = useForm({
     defaultValues: {
       name: "",
@@ -34,7 +36,7 @@ export default function LoginRegisterForm({ type, submit }) {
     },
     mode: "onChange",
   });
-  
+
   const handleFieldValidation = (field, value) => {
     const { isValid, errorMessage } = validateField(
       value,
@@ -67,8 +69,8 @@ export default function LoginRegisterForm({ type, submit }) {
         type === "register" && navigate("/login");
         // emptyFields();
       } else if (type === "login") {
-        setLoggedInUser(result.user);
-        navigate("/");
+        login(result.user);
+        // navigate("/");
       }
     } else {
       setError(
@@ -83,6 +85,16 @@ export default function LoginRegisterForm({ type, submit }) {
         setError("password", { type: "manual", message: result.message });
     }
   };
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset({
+        name: "",
+        email: "",
+        password: "",
+      });
+    }
+  }, [formState, reset, isSubmitSuccessful]);
 
   const nameInput = (
     <Input

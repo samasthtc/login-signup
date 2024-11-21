@@ -61,13 +61,8 @@ export function validateCredentials(email, password, usersList) {
   return { isValid: false, message: "Invalid credentials" };
 }
 
-export function login({ email, password }, usersList) {
-  const result = validateCredentials(email, password, usersList);
-  if (result.isValid) {
-    localStorage.setItem("loggedInUserId", result.userId);
-  }
-  return result;
-}
+export const login = ({ email, password }, usersList) =>
+  validateCredentials(email, password, usersList);
 
 export function register({ name, email, password }, usersList) {
   if (
@@ -85,9 +80,9 @@ export function register({ name, email, password }, usersList) {
   };
 }
 
-export function logout() {
-  localStorage.setItem("loggedInUserId", "-1");
-}
+// export function logout() {
+//   localStorage.setItem("loggedInUserId", "-1");
+// }
 
 export function saveProfile(id, { name, email, password }, usersList) {
   const updatedList = usersList.map((user) => {

@@ -1,5 +1,5 @@
 import { useContext, useMemo, useState } from "react";
-import UsersListContext from "../../context/usersList/UsersListContext";
+import { UsersListContext } from "../../context/usersList/UsersListProvider";
 import useDebounce from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
 import SearchField from "../inputFields/SearchField";
