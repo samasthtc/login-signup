@@ -2,25 +2,34 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 export default function EditableInput({
   type,
-  name,
-  autoComplete,
-  value,
+  name = "",
+  autoComplete = "off",
+  value = undefined,
   errorMessage,
   onChange,
-  isValidated,
-  editingState,
-  setEditingState,
+  registerProps,
+  isDirty,
 }) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  const toggleEditing = () => {
-    if (!editingState) {
-      setEditingState(true, name);
-    }
-  };
+  const { register, options } = registerProps || {};
+  const validateFunc = options?.validate;
+  let registeredField;
+
+  if (register) {
+    registeredField = register(name, {
+      ...options,
+      validate: async (value) => await validateFunc(value),
+    });
+
+    const { name: nameFromProps, onChange: onChangeFromProps } =
+      registeredField;
+    name = nameFromProps || name;
+    onChange = onChangeFromProps || onChange;
+  }
 
   // const buttons =
   //   type === "password" ? (
@@ -60,11 +69,9 @@ export default function EditableInput({
           <input
             type={inputType}
             className={`form-control ${
-              isValidated && editingState
-                ? errorMessage
-                  ? "is-invalid input-error"
-                  : "input-success"
-                : ""
+              errorMessage
+                ? "is-invalid input-error"
+                : isDirty && "input-success"
             }`}
             id={name}
             name={name}
@@ -72,10 +79,8 @@ export default function EditableInput({
             autoComplete={autoComplete}
             // disabled={!editingState}
             value={value}
-            onChange={(e) => {
-              onChange(e);
-              toggleEditing();
-            }}
+            onChange={onChange}
+            {...registeredField}
           />
           <label htmlFor="name" className="form-label">
             {name[0].toUpperCase() + name.slice(1)}
@@ -84,7 +89,14 @@ export default function EditableInput({
         {/* {buttons} */}
         {type === "password" && (
           <span
-            className="input-group-text password-toggle-icon "
+            className={`input-group-text password-toggle-icon
+              rounded-end ${
+                isDirty || errorMessage
+                  ? errorMessage
+                    ? "password-error text-danger"
+                    : "password-success"
+                  : ""
+              }`}
             onClick={togglePasswordVisibility}
           >
             <i
@@ -95,9 +107,9 @@ export default function EditableInput({
       </div>
       {errorMessage && (
         <p
-          className={`error-text invalid-feedback mt-1 ${
-            isValidated ? "show" : ""
-          } ${type === "password" ? "mb-0" : ""}`}
+          className={`error-text invalid-feedback mt-1 show ${
+            type === "password" ? "mb-0" : ""
+          }`}
         >
           {errorMessage}
         </p>
@@ -108,12 +120,11 @@ export default function EditableInput({
 
 EditableInput.propTypes = {
   autoComplete: PropTypes.string,
-  editingState: PropTypes.any,
-  errorMessage: PropTypes.string,
-  isValidated: PropTypes.bool,
+  errorMessage: PropTypes.any,
+  isDirty: PropTypes.bool,
   name: PropTypes.string,
   onChange: PropTypes.func,
-  setEditingState: PropTypes.func,
+  registerProps: PropTypes.object,
   type: PropTypes.string,
   value: PropTypes.string,
 };

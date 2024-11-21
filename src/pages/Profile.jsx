@@ -34,7 +34,7 @@ export default function Profile() {
           <EditForm
             userId={queries.userId}
             isCurrent={queries.isCurrent}
-            onSubmit={saveProfile}
+            submit={saveProfile}
           />
         )}
       </div>

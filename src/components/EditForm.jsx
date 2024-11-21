@@ -1,7 +1,8 @@
-import { useAuth } from "../auth/AuthProvider";
 import PropTypes from "prop-types";
-import { useContext, useEffect, useReducer, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useAuth } from "../auth/AuthProvider";
 import {
   validateEmail,
   validateField,
@@ -9,11 +10,12 @@ import {
   validatePassword,
 } from "../auth/AuthService";
 import { UsersListContext } from "../context/usersList/UsersListProvider";
-import { default as useDebounce } from "../utils/debounce";
+import { useDebouncePromise } from "../utils/debounce";
 import CardContainer from "./common/CardContainer";
+import LoadingSpinner from "./common/LoadingSpinner";
 import EditableInput from "./inputFields/EditableInput";
 
-export default function EditForm({ userId, isCurrent, onSubmit }) {
+export default function EditForm({ userId, isCurrent, submit }) {
   const { loggedInUser } = useAuth();
   const { usersList, setUsersList } = useContext(UsersListContext);
   const [user, setUser] = useState(() => {
@@ -24,37 +26,24 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
       return foundUser ? { ...foundUser } : null;
     }
   });
-  const [form, setForm] = useState({
-    name: user.name,
-    email: user.email,
-    password: user.password,
-    changed: false,
-  });
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    password: "",
+  const [manualDirtyFields, setManualDirtyFields] = useState({});
+
+  const {
+    register,
+    handleSubmit,
+    formState,
+    formState: { errors, isSubmitting, isSubmitSuccessful, isDirty },
+  } = useForm({
+    defaultValues: {
+      name: user.name,
+      email: user.email,
+      password: user.password,
+    },
+    mode: "onChange",
   });
 
-  const [editingState, setEditingState] = useState({
-    name: false,
-    email: false,
-    password: false,
-  });
   const [successMessage, setSuccessMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-
-  const handleEditingState = (value, field) =>
-    setEditingState({ ...editingState, [field]: value });
-
-  const initialValidationState = {
-    isNameValidated: true,
-    isNameValid: true,
-    isEmailValidated: true,
-    isEmailValid: true,
-    isPasswordValidated: true,
-    isPasswordValid: true,
-  };
 
   useEffect(() => {
     if (isCurrent === "true") {
@@ -65,38 +54,7 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
     }
   }, [isCurrent, loggedInUser, userId, usersList]);
 
-  function validationReducer(state, action) {
-    switch (action.type) {
-      case "VALIDATE_FIELD":
-        return {
-          ...state,
-          [`is${action.field}Validated`]: true,
-          [`is${action.field}Valid`]: action.isValid,
-        };
-      default:
-        return state;
-    }
-  }
-
-  const [validationState, dispatch] = useReducer(
-    validationReducer,
-    initialValidationState
-  );
-
-  const isValid =
-    validationState.isNameValid &&
-    validationState.isEmailValid &&
-    validationState.isPasswordValid &&
-    !!form.name &&
-    !!form.email &&
-    !!form.password;
-
-  const handleFieldChange = (e, field) => {
-    setForm({ ...form, [field]: e.target.value, changed: true });
-    debouncedValidation(e.target.value, field);
-  };
-
-  const handleFieldValidation = (value, field) => {
+  const handleFieldValidation = (field, value) => {
     const { isValid, errorMessage } = validateField(
       value,
       field === "name"
@@ -106,45 +64,26 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
         : validatePassword
     );
 
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [field]: isValid ? "" : errorMessage,
-    }));
+    if (!manualDirtyFields[field]) {
+      setManualDirtyFields((prev) => ({ ...prev, [field]: true }));
+    }
 
-    // @ts-ignore
-    dispatch({
-      type: "VALIDATE_FIELD",
-      field: field.charAt(0).toUpperCase() + field.slice(1),
-      isValid,
-    });
+    return isValid || errorMessage || true;
   };
 
-  const debouncedValidation = useDebounce((value, field) =>
-    handleFieldValidation(value, field)
-  );
+  const debouncedValidation = useDebouncePromise(handleFieldValidation);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const validateFieldWithDebounce = async (field, value) => {
+    return await debouncedValidation(field, value).then((result) => result);
+  };
 
-    handleFieldValidation(form.name, "name");
-    handleFieldValidation(form.email, "email");
-    handleFieldValidation(form.password, "password");
+  const onSubmit = (data) => {
+    const result = submit(user.id, data, usersList);
 
-    if (!isValid) return;
-
-    const result = onSubmit(user.id, form, usersList);
     if (result.isValid) {
-      // @ts-ignore
       setUsersList(result.updatedList);
-      setEditingState({
-        name: false,
-        email: false,
-        password: false,
-      });
-      setForm({ ...form, changed: false });
-
       setSuccessMessage("Profile updated successfully!");
-      setShowAlert(true);
+      setShowAlert(isSubmitSuccessful);
       setTimeout(() => {
         setSuccessMessage("");
         setShowAlert(false);
@@ -159,7 +98,7 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
     let hideTimeout;
 
     const showTooltip = () => {
-      if (tooltipRef.current && !form.changed) {
+      if (tooltipRef.current && !isDirty) {
         tooltipInstance = new window.bootstrap.Tooltip(tooltipRef.current, {
           title: "No changes were made",
           placement: "bottom",
@@ -169,7 +108,7 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
         tooltipInstance.show();
 
         hideTimeout = setTimeout(() => {
-          tooltipInstance.hide();
+          tooltipInstance?.hide();
         }, 1000);
       }
     };
@@ -199,71 +138,75 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
       }
       tooltipInstance?.dispose();
     };
-  }, [form.changed]);
+  }, [formState, isDirty]);
 
   return (
     <CardContainer>
       <h1 className="title text-center ">Edit Profile</h1>
 
       <form
-        action="#"
         id="edit-form"
+        action="#"
         className=" w-100"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
         <EditableInput
           type="text"
           name="name"
           autoComplete="off"
-          value={form.name}
-          onChange={(e) => {
-            handleFieldChange(e, "name");
+          registerProps={{
+            register: register,
+            options: {
+              required: "This field is required",
+              validate: async (value) =>
+                await validateFieldWithDebounce("name", value),
+            },
           }}
-          errorMessage={errors.name}
-          isValidated={validationState.isNameValidated}
-          editingState={editingState.name}
-          setEditingState={handleEditingState}
+          errorMessage={errors.name?.message}
+          isDirty={manualDirtyFields["name"] ?? false}
         />
 
         <EditableInput
           type="email"
           name="email"
           autoComplete="email"
-          value={form.email}
-          onChange={(e) => {
-            handleFieldChange(e, "email");
+          registerProps={{
+            register: register,
+            options: {
+              required: "This field is required",
+              validate: (value) => validateFieldWithDebounce("email", value),
+            },
           }}
-          errorMessage={errors.email}
-          isValidated={validationState.isEmailValidated}
-          editingState={editingState.email}
-          setEditingState={handleEditingState}
+          errorMessage={errors.email?.message}
+          isDirty={manualDirtyFields["email"] ?? false}
         />
 
         <EditableInput
           type="password"
           name="password"
           autoComplete="new-password"
-          value={form.password}
-          onChange={(e) => {
-            handleFieldChange(e, "password");
+          registerProps={{
+            register: register,
+            options: {
+              required: "This field is required",
+              validate: (value) => validateFieldWithDebounce("password", value),
+            },
           }}
-          errorMessage={errors.password}
-          isValidated={validationState.isPasswordValidated}
-          editingState={editingState.password}
-          setEditingState={handleEditingState}
+          errorMessage={errors.password?.message}
+          isDirty={manualDirtyFields["password"] ?? false}
         />
 
         <div
           className="position-relative d-inline-block"
-          ref={!form.changed ? tooltipRef : null}
-          data-bs-toggle={!form.changed ? tooltipRef : null}
+          ref={!isDirty ? tooltipRef : null}
+          data-bs-toggle={!isDirty ? tooltipRef : null}
         >
           <button
             type="submit"
             className="btn border-2 rounded-pill btn-outline-primary
              mt-3 mb-1 text-semibold me-2"
-            disabled={!form.changed}
+            disabled={!isDirty}
           >
             Save Changes
           </button>
@@ -279,6 +222,12 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
           </button>
         </Link>
       </form>
+
+      {isSubmitting && (
+        <div className="col-12 text-center">
+          <LoadingSpinner />
+        </div>
+      )}
 
       {showAlert && (
         <div
@@ -297,6 +246,6 @@ export default function EditForm({ userId, isCurrent, onSubmit }) {
 
 EditForm.propTypes = {
   isCurrent: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  submit: PropTypes.func.isRequired,
   userId: PropTypes.any.isRequired,
 };

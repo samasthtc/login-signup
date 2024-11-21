@@ -92,7 +92,7 @@ export default function Input({
         )}
         {errorMessage && (
           <p
-            className={`error-text invalid-feedback mt-1 show  ${
+            className={`error-text invalid-feedback mt-1 show ${
               type === "password" ? "mb-0" : ""
             }`}
           >
