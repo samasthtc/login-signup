@@ -1,7 +1,11 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { users as initialUsers } from "../../data/mockUsers";
-import UsersListContext from "./UsersListContext";
+
+import { createContext } from "react";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const UsersListContext = createContext(null);
 
 export default function UsersListProvider({ children }) {
   const [users, setUsers] = useState(() => {
