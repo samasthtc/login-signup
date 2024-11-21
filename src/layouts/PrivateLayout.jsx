@@ -1,8 +1,8 @@
-import PropTypes from "prop-types"
 import Navbar from "@/components/common/Navbar";
-import LoggedInUserContext from "../context/loggedInUser/LoggedInUserContext";
+import PropTypes from "prop-types";
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
+import LoggedInUserContext from "../context/loggedInUser/LoggedInUserContext";
 
 export default function PrivateLayout({ children }) {
   const { loggedInUser } = useContext(LoggedInUserContext);
@@ -10,7 +10,7 @@ export default function PrivateLayout({ children }) {
   if (!loggedInUser) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return (
     <>
       <Navbar />
@@ -20,5 +20,5 @@ export default function PrivateLayout({ children }) {
 }
 
 PrivateLayout.propTypes = {
-  children: PropTypes.any
-}
+  children: PropTypes.any,
+};

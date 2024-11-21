@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
+import LoadingSpinner from "./components/common/LoadingSpinner.jsx";
 import LoggedInUserProvider from "./context/loggedInUser/LoggedInUserProvider.jsx";
 import UsersListProvider from "./context/usersList/UsersListProvider";
 import GeneralLayout from "./layouts/GeneralLayout.jsx";
@@ -28,9 +29,7 @@ const loadingSpinner = (
     className="d-flex justify-content-center align-items-center my-auto"
     style={{ height: "90vh" }}
   >
-    <div className="spinner-border text-primary " role="status">
-      <span className="sr-only">Loading...</span>
-    </div>
+    <LoadingSpinner/>
   </div>
 );
 

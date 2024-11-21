@@ -10,28 +10,24 @@ export default function Input({
   value = undefined,
   onChange,
   registerProps,
+  isDirty,
 }) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isFieldDirty, setIsFieldDirty] = useState(false);
   const { register, options } = registerProps || {};
-  const validateFunc = options.validate;
+  const validateFunc = options?.validate;
+  let registeredField;
 
-  const registeredField = register(name, {
-    ...options,
-    validate: async (value) => {
-      const result = await validateFunc(value);
-      handleFieldChange();
-      return result;
-    },
-  });
-  const { name: nameFromProps, onChange: onChangeFromProps } = registeredField;
-  name = nameFromProps || name;
-  onChange = onChangeFromProps || onChange;
+  if (register) {
+    registeredField = register(name, {
+      ...options,
+      validate: async (value) => await validateFunc(value),
+    });
 
-  const handleFieldChange = (e) => {
-    !isFieldDirty && setIsFieldDirty(true);
-    e && onChange(e);
-  };
+    const { name: nameFromProps, onChange: onChangeFromProps } =
+      registeredField;
+    name = nameFromProps || name;
+    onChange = onChangeFromProps || onChange;
+  }
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -52,11 +48,9 @@ export default function Input({
                 : type
             }
             className={`form-control ${
-              isFieldDirty || errorMessage
-                ? errorMessage
-                  ? "is-invalid input-error"
-                  : "input-success"
-                : ""
+              errorMessage
+                ? "is-invalid input-error"
+                : isDirty && "input-success"
             }`}
             id={name}
             name={name}
@@ -67,9 +61,9 @@ export default function Input({
             }
             autoComplete={autoComplete}
             autoFocus={autoFocus}
-            {...registeredField}
             value={value}
             onChange={onChange}
+            {...registeredField}
           />
           {name && (
             <label htmlFor={name} className="form-label">
@@ -81,7 +75,7 @@ export default function Input({
           <span
             className={`input-group-text password-toggle-icon
               rounded-end ${
-                isFieldDirty || errorMessage
+                isDirty || errorMessage
                   ? errorMessage
                     ? "password-error text-danger"
                     : "password-success"
@@ -121,4 +115,5 @@ Input.propTypes = {
   isValidated: PropTypes.bool,
   onChange: PropTypes.func,
   type: PropTypes.string.isRequired,
+  isDirty: PropTypes.bool,
 };

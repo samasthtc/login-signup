@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -12,17 +12,20 @@ import LoggedInUserContext from "../../context/loggedInUser/LoggedInUserContext"
 import UsersListContext from "../../context/usersList/UsersListContext";
 import { useDebouncePromise } from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
+import LoadingSpinner from "../common/LoadingSpinner";
 import Input from "../inputFields/Input";
 
 export default function LoginRegisterForm({ type, submit }) {
   const navigate = useNavigate();
   const { usersList, setUsersList } = useContext(UsersListContext);
   const { setLoggedInUser } = useContext(LoggedInUserContext);
+  const [manualDirtyFields, setManualDirtyFields] = useState({});
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    setError,
   } = useForm({
     defaultValues: {
       name: "",
@@ -31,9 +34,7 @@ export default function LoginRegisterForm({ type, submit }) {
     },
     mode: "onChange",
   });
-
-  // const onSubmit = (data) => console.log(data);
-
+  
   const handleFieldValidation = (field, value) => {
     const { isValid, errorMessage } = validateField(
       value,
@@ -43,161 +44,23 @@ export default function LoginRegisterForm({ type, submit }) {
         ? validateEmail
         : validatePassword
     );
+
+    if (!manualDirtyFields[field]) {
+      setManualDirtyFields((prev) => ({ ...prev, [field]: true }));
+    }
+
     return isValid || errorMessage || true;
   };
 
   const debouncedValidation = useDebouncePromise(handleFieldValidation);
 
   const validateFieldWithDebounce = async (field, value) => {
-    return debouncedValidation(field, value).then((result) => result);
+    return await debouncedValidation(field, value).then((result) => result);
   };
 
-  // const [form, setForm] = useState({
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  // });
-  // const [errors, setErrors] = useState({
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  // });
-
-  // const initialValidationState = {
-  //   isNameValidated: false,
-  //   isNameValid: false,
-  //   isEmailValidated: false,
-  //   isEmailValid: false,
-  //   isPasswordValidated: false,
-  //   isPasswordValid: false,
-  // };
-
-  // function validationReducer(state, action) {
-  //   switch (action.type) {
-  //     case "VALIDATE_FIELD":
-  //       return {
-  //         ...state,
-  //         [`is${action.field}Validated`]: true,
-  //         [`is${action.field}Valid`]: action.isValid,
-  //       };
-  //     case "SET_CREDENTIALS_VALIDITY":
-  //       return {
-  //         ...state,
-  //         isEmailValidated: true,
-  //         isEmailValid: action.isValid,
-  //         isPasswordValidated: true,
-  //         isPasswordValid: action.isValid,
-  //       };
-  //     default:
-  //       return state;
-  //   }
-  // }
-
-  // const [validationState, dispatch] = useReducer(
-  //   validationReducer,
-  //   initialValidationState
-  // );
-
-  // const allFieldsNotEmpty =
-  //   (type !== "login" ? !!form.name : true) && !!form.email && !!form.password;
-  // const isValid =
-  //   (type !== "login" ? validationState.isNameValid : true) &&
-  //   validationState.isEmailValid &&
-  //   validationState.isPasswordValid &&
-  //   allFieldsNotEmpty;
-
-  // const handleFieldChange = (e, field) => {
-  //   setForm({ ...form, [field]: e.target.value });
-  //   !(type === "login") &&
-  //     debouncedValidation?.debouncedCallback(e.target.value, field);
-  // };
-
-  // const handleFieldValidation = (value, field) => {
-  //   const { isValid, errorMessage } = validateField(
-  //     value,
-  //     field === "name"
-  //       ? validateName
-  //       : field === "email"
-  //       ? validateEmail
-  //       : validatePassword
-  //   );
-
-  //   setErrors((prevErrors) => ({
-  //     ...prevErrors,
-  //     [field]: isValid
-  //       ? ""
-  //       : type !== "login"
-  //       ? errorMessage
-  //       : field === "email"
-  //       ? " "
-  //       : field === "password"
-  //       ? "Invalid credentials."
-  //       : errorMessage,
-  //   }));
-
-  //   // @ts-ignore
-  //   dispatch({
-  //     type: "VALIDATE_FIELD",
-  //     field: field.charAt(0).toUpperCase() + field.slice(1),
-  //     isValid,
-  //   });
-  // };
-
-  // const debouncedValidation = useDebounce((value, field) =>
-  //   handleFieldValidation(value, field)
-  // );
-
-  // const onSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   if (type !== "login") {
-  //     handleFieldValidation(form.name, "name");
-  //     handleFieldValidation(form.email, "email");
-  //     handleFieldValidation(form.password, "password");
-
-  //     if (!isValid) return;
-
-  //     if (isValid) {
-  //       if (type === "register" || type === "add") {
-  //         const result = onSubmit(form, usersList);
-  //         if (result.isValid) {
-  //           setUsersList(result.updatedList);
-  //           type === "register" && navigate("/login");
-  //           emptyFields();
-  //         } else {
-  //           setErrors({ ...errors, email: result.message });
-  //           // @ts-ignore
-  //           dispatch({
-  //             type: "VALIDATE_FIELD",
-  //             field: "Email",
-  //             isValid: false,
-  //           });
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     if (!allFieldsNotEmpty) return;
-
-  //     const result = submit(form, usersList);
-
-  //     if (result.isValid) {
-  //       setLoggedInUser(result.user);
-  //       navigate("/");
-  //     } else {
-  //       setErrors({ ...errors, email: " ", password: result.message });
-  //     }
-
-  //     // @ts-ignore
-  //     dispatch({
-  //       type: "SET_CREDENTIALS_VALIDITY",
-  //       isValid: result.isValid,
-  //     });
-  //   }
-  // };
-
   const onSubmit = (data) => {
-    // TODO: Add indicator that form is submitting
     const result = submit(data, usersList);
+
     if (result.isValid) {
       if (type === "register" || type === "add") {
         setUsersList(result.updatedList);
@@ -207,13 +70,19 @@ export default function LoginRegisterForm({ type, submit }) {
         setLoggedInUser(result.user);
         navigate("/");
       }
+    } else {
+      setError(
+        "email",
+        {
+          type: "manual",
+          message: type === "register" || type === "add" ? result.message : " ",
+        },
+        { shouldFocus: true }
+      );
+      type === "login" &&
+        setError("password", { type: "manual", message: result.message });
     }
   };
-
-  // const emptyFields = () => {
-  //   setForm({ name: "", email: "", password: "" });
-  //   setErrors({ name: "", email: "", password: "" });
-  // };
 
   const nameInput = (
     <Input
@@ -224,10 +93,12 @@ export default function LoginRegisterForm({ type, submit }) {
         register: register,
         options: {
           required: "This field is required",
-          validate: (value) => validateFieldWithDebounce("name", value),
+          validate: async (value) =>
+            await validateFieldWithDebounce("name", value),
         },
       }}
       errorMessage={errors.name?.message}
+      isDirty={manualDirtyFields["name"] ?? false}
     />
   );
 
@@ -284,10 +155,16 @@ export default function LoginRegisterForm({ type, submit }) {
             register: register,
             options: {
               required: "This field is required",
-              validate: (value) => validateFieldWithDebounce("email", value),
+              validate: (value) =>
+                type === "login"
+                  ? true
+                  : validateFieldWithDebounce("email", value),
             },
           }}
           errorMessage={errors.email?.message}
+          isDirty={
+            type === "login" ? false : manualDirtyFields["email"] ?? false
+          }
         />
 
         <Input
@@ -298,10 +175,16 @@ export default function LoginRegisterForm({ type, submit }) {
             register: register,
             options: {
               required: "This field is required",
-              validate: (value) => validateFieldWithDebounce("password", value),
+              validate: (value) =>
+                type === "login"
+                  ? true
+                  : validateFieldWithDebounce("password", value),
             },
           }}
           errorMessage={errors.password?.message}
+          isDirty={
+            type === "login" ? false : manualDirtyFields["password"] ?? false
+          }
         />
 
         <button
@@ -315,6 +198,12 @@ export default function LoginRegisterForm({ type, submit }) {
 
         {bottomParagraph}
       </form>
+
+      {isSubmitting && (
+        <div className="col-12 text-center">
+          <LoadingSpinner />
+        </div>
+      )}
     </CardContainer>
   );
 }

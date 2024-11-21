@@ -25,9 +25,6 @@ export default function LoggedInUserProvider({ children }) {
       "loggedInUserId",
       JSON.stringify(loggedInUser?.id ?? -1)
     );
-    if (!loggedInUser) {
-      navigate("/login");
-    }
   }, [loggedInUser, navigate]);
 
   return (
