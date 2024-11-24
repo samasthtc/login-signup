@@ -1,20 +1,25 @@
 import PropTypes from "prop-types";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/AuthProvider";
 import { deleteUser } from "../../auth/AuthService.jsx";
 import { UsersListContext } from "../../context/usersList/UsersListProvider.jsx";
 import Modal from "../common/Modal.jsx";
 
 export default function UserRow({ user }) {
   const { usersList, setUsersList } = useContext(UsersListContext);
+  const { loggedInUser, logout } = useAuth();
   const { id, name, email } = user;
   const navigate = useNavigate();
+  const userisLoggedIn = loggedInUser.id === id;
 
   const handleEdit = () => {
     navigate("/profile?current=false&id=" + id);
   };
 
   const handleDelete = () => {
+    userisLoggedIn && logout();
+
     const updatedUsersList = deleteUser(id, usersList);
     setUsersList(updatedUsersList);
   };
@@ -49,7 +54,9 @@ export default function UserRow({ user }) {
         <Modal
           key={id}
           id={`dlt-usr-${id}-modal`}
-          title={`Delete User (${name})?`}
+          title={`Delete user (${name})?\n${
+            userisLoggedIn ? "You will be logged out." : ""
+          }`}
           cancelText="Cancel"
           confirmText="Delete"
           onConfirm={handleDelete}
