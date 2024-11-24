@@ -13,7 +13,7 @@ import { UsersListContext } from "../context/usersList/UsersListProvider";
 import { useDebouncePromise } from "../utils/debounce";
 import CardContainer from "./common/CardContainer";
 import LoadingSpinner from "./common/LoadingSpinner";
-import EditableInput from "./inputFields/EditableInput";
+import Input from "./inputFields/Input";
 
 export default function EditForm({ userId, isCurrent, submit }) {
   const { loggedInUser, login } = useAuth();
@@ -194,7 +194,7 @@ export default function EditForm({ userId, isCurrent, submit }) {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <EditableInput
+        <Input
           type="text"
           name="name"
           autoComplete="off"
@@ -210,7 +210,7 @@ export default function EditForm({ userId, isCurrent, submit }) {
           isDirty={manualDirtyFields["name"] ?? false}
         />
 
-        <EditableInput
+        <Input
           type="email"
           name="email"
           autoComplete="email"
@@ -225,7 +225,7 @@ export default function EditForm({ userId, isCurrent, submit }) {
           isDirty={manualDirtyFields["email"] ?? false}
         />
 
-        <EditableInput
+        <Input
           type="password"
           name="password"
           autoComplete="new-password"

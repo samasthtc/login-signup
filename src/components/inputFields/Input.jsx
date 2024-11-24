@@ -13,25 +13,15 @@ export default function Input({
   isDirty,
 }) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const { register, options } = registerProps || {};
-  const validateFunc = options?.validate;
-  let registeredField;
-
-  if (register) {
-    registeredField = register(name, {
-      ...options,
-      validate: async (value) => await validateFunc(value),
-    });
-
-    const { name: nameFromProps, onChange: onChangeFromProps } =
-      registeredField;
-    name = nameFromProps || name;
-    onChange = onChangeFromProps || onChange;
-  }
-
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+
+  const { register, options } = registerProps || {};
+  const validateFunc = options?.validate;
+
+  const inputType =
+    type === "password" ? (isPasswordVisible ? "text" : "password") : type;
 
   return (
     <>
@@ -40,20 +30,25 @@ export default function Input({
           className={`form-floating ${type === "password" ? "" : `mt-${my}`} `}
         >
           <input
-            type={
-              type === "password"
-                ? isPasswordVisible
-                  ? "text"
-                  : "password"
-                : type
-            }
+            {...(registerProps
+              ? {
+                  ...register(name, {
+                    ...options,
+                    validate: async (value) => await validateFunc(value),
+                  }),
+                }
+              : {
+                  name: name,
+                  onChange: onChange,
+                  value: value,
+                })}
+            type={inputType}
             className={`form-control ${
               errorMessage
                 ? "is-invalid input-error"
                 : isDirty && "input-success"
             }`}
             id={name}
-            name={name}
             placeholder={
               name !== "search"
                 ? `Enter your ${name}...`
@@ -61,15 +56,10 @@ export default function Input({
             }
             autoComplete={autoComplete}
             autoFocus={autoFocus}
-            value={value}
-            onChange={onChange}
-            {...registeredField}
           />
-          {name && (
-            <label htmlFor={name} className="form-label">
-              {name[0]?.toUpperCase() + name?.slice(1)}
-            </label>
-          )}
+          <label htmlFor={name} className="form-label">
+            {name[0]?.toUpperCase() + name?.slice(1)}
+          </label>
         </div>
         {type === "password" && (
           <span
@@ -90,6 +80,7 @@ export default function Input({
             ></i>
           </span>
         )}
+
         {errorMessage && (
           <p
             className={`error-text invalid-feedback mt-1 show ${
@@ -111,8 +102,7 @@ Input.propTypes = {
   name: PropTypes.string,
   registerProps: PropTypes.object,
   value: PropTypes.any,
-  errorMessage: PropTypes.string,
-  isValidated: PropTypes.bool,
+  errorMessage: PropTypes.any,
   onChange: PropTypes.func,
   type: PropTypes.string.isRequired,
   isDirty: PropTypes.bool,
