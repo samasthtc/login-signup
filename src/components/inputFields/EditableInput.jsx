@@ -17,19 +17,6 @@ export default function EditableInput({
 
   const { register, options } = registerProps || {};
   const validateFunc = options?.validate;
-  let registeredField;
-
-  if (register) {
-    registeredField = register(name, {
-      ...options,
-      validate: async (value) => await validateFunc(value),
-    });
-
-    const { name: nameFromProps, onChange: onChangeFromProps } =
-      registeredField;
-    name = nameFromProps || name;
-    onChange = onChangeFromProps || onChange;
-  }
 
   // const buttons =
   //   type === "password" ? (
@@ -67,6 +54,18 @@ export default function EditableInput({
       <div className="input-group mt-3">
         <div className="form-floating">
           <input
+            {...(registerProps
+              ? {
+                  ...register(name, {
+                    ...options,
+                    validate: async (value) => await validateFunc(value),
+                  }),
+                }
+              : {
+                  name: name,
+                  onChange: onChange,
+                  value: value,
+                })}
             type={inputType}
             className={`form-control ${
               errorMessage
@@ -74,13 +73,8 @@ export default function EditableInput({
                 : isDirty && "input-success"
             }`}
             id={name}
-            name={name}
             placeholder={`Enter your ${name}...`}
             autoComplete={autoComplete}
-            // disabled={!editingState}
-            value={value}
-            onChange={onChange}
-            {...registeredField}
           />
           <label htmlFor="name" className="form-label">
             {name[0].toUpperCase() + name.slice(1)}

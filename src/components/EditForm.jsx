@@ -28,22 +28,29 @@ export default function EditForm({ userId, isCurrent, submit }) {
   });
   const [manualDirtyFields, setManualDirtyFields] = useState({});
 
+  const defaults = {
+    name: user?.name || "",
+    email: user?.email || "",
+    password: user?.password || "",
+  };
+
   const {
     register,
     handleSubmit,
     formState,
-    formState: { errors, isSubmitting, isSubmitSuccessful, isDirty },
+    reset,
+    setValue,
+    formState: { errors, isSubmitting, dirtyFields },
   } = useForm({
-    defaultValues: {
-      name: user.name,
-      email: user.email,
-      password: user.password,
-    },
+    defaultValues: defaults,
     mode: "onChange",
   });
 
-  const [successMessage, setSuccessMessage] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
+  const [alert, setAlert] = useState({
+    show: false,
+    success: false,
+    message: "",
+  });
 
   useEffect(() => {
     if (isCurrent === "true") {
@@ -66,6 +73,16 @@ export default function EditForm({ userId, isCurrent, submit }) {
 
     if (!manualDirtyFields[field]) {
       setManualDirtyFields((prev) => ({ ...prev, [field]: true }));
+    } else {
+      for (const field in manualDirtyFields) {
+        if (!dirtyFields[field]) {
+          setManualDirtyFields((prev) => {
+            const newState = { ...prev };
+            delete newState[field];
+            return newState;
+          });
+        }
+      }
     }
 
     return isValid || errorMessage || true;
@@ -74,23 +91,48 @@ export default function EditForm({ userId, isCurrent, submit }) {
   const debouncedValidation = useDebouncePromise(handleFieldValidation);
 
   const validateFieldWithDebounce = async (field, value) => {
-    return await debouncedValidation(field, value).then((result) => result);
+    setValue(field, value, { shouldDirty: true });
+    return await debouncedValidation(field, value);
   };
 
   const onSubmit = (data) => {
-    const result = submit(user.id, data, usersList);
+    try {
+      const result = submit(user.id, data, usersList);
 
-    if (result.isValid) {
-      login(result.updatedUser);
-      setUsersList(result.updatedList);
-      setSuccessMessage("Profile updated successfully!");
-      setShowAlert(isSubmitSuccessful);
+      if (result.isValid) {
+        isCurrent === "true" && login(result.updatedUser);
+        setUsersList(result.updatedList);
+        setAlert({
+          show: true,
+          success: true,
+          message: "Profile updated successfully!",
+        });
+        reset(data, { keepDirty: false });
+        setManualDirtyFields({});
+      } else {
+        setAlert({
+          show: true,
+          success: false,
+          message: result.message ?? "An error occured! Profile update failed!",
+        });
+      }
       setTimeout(() => {
-        setSuccessMessage("");
-        setShowAlert(false);
+        setAlert({ show: false, success: false, message: "" });
+      }, 3000);
+    } catch (error) {
+      console.error(error);
+      setAlert({
+        show: true,
+        success: false,
+        message: "An error occured! Profile update failed!",
+      });
+      setTimeout(() => {
+        setAlert({ show: false, success: false, message: "" });
       }, 3000);
     }
   };
+
+  const noChanges = Object.keys(manualDirtyFields).length <= 0;
 
   const tooltipRef = useRef();
 
@@ -99,7 +141,7 @@ export default function EditForm({ userId, isCurrent, submit }) {
     let hideTimeout;
 
     const showTooltip = () => {
-      if (tooltipRef.current && !isDirty) {
+      if (tooltipRef.current && noChanges) {
         tooltipInstance = new window.bootstrap.Tooltip(tooltipRef.current, {
           title: "No changes were made",
           placement: "bottom",
@@ -139,7 +181,12 @@ export default function EditForm({ userId, isCurrent, submit }) {
       }
       tooltipInstance?.dispose();
     };
-  }, [formState, isDirty]);
+  }, [formState, noChanges]);
+
+  useEffect(() => {
+    reset(defaults);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reset]);
 
   return (
     <CardContainer>
@@ -200,15 +247,14 @@ export default function EditForm({ userId, isCurrent, submit }) {
 
         <div
           className="position-relative d-inline-block"
-          ref={!isDirty ? tooltipRef : null}
-          data-bs-toggle={!isDirty ? tooltipRef : null}
+          ref={noChanges ? tooltipRef : null}
+          data-bs-toggle={noChanges ? tooltipRef : null}
         >
           <button
             type="submit"
             className="btn border-2 rounded-pill btn-outline-primary
              mt-3 mb-1 text-semibold me-2"
-            // TODO: check why it doesnt get disaled when entering fast inputs
-            disabled={!isDirty}
+            disabled={noChanges}
           >
             Save Changes
           </button>
@@ -231,15 +277,17 @@ export default function EditForm({ userId, isCurrent, submit }) {
         </div>
       )}
 
-      {showAlert && (
+      {alert.show && (
         <div
-          className={"alert alert-success text-center fade-in-out"}
+          className={`alert ${
+            alert.success ? "alert-success" : "alert-danger"
+          } text-center fade-in-out`}
           role="alert"
           onAnimationEnd={() => {
-            setShowAlert(false);
+            setAlert({ show: false, success: false, message: "" });
           }}
         >
-          {successMessage}
+          {alert.message}
         </div>
       )}
     </CardContainer>

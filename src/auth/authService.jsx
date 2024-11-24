@@ -85,12 +85,29 @@ export function register({ name, email, password }, usersList) {
 // }
 
 export function saveProfile(id, { name, email, password }, usersList) {
+  //check if new email already exists for ANOTHER user
+  if (
+    usersList.some(
+      (user) =>
+        user.email.toLowerCase() === email.toLowerCase() && user.id !== id
+    )
+  ) {
+    return {
+      isValid: false,
+      message: "Email already exists on another account!",
+    };
+  }
+
   const updatedList = usersList.map((user) => {
     if (user.id === id) {
       return { id, name, email, password };
     }
     return user;
   });
+  //throw error
+  // let shouldThrowError = false;
+  // if (shouldThrowError) throw new Error("Error while saving profile");
+
   localStorage.setItem("usersList", JSON.stringify(updatedList));
   const user = updatedList.find((u) => u.id === id);
   return { isValid: true, updatedList, updatedUser: user };
