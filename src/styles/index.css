@@ -12013,13 +12013,13 @@ tr {
   vertical-align: middle;
 }
 
-a.delete {
+button.delete {
   background-color: hsl(355, 66%, 80%);
 }
-a.delete:hover {
+button.delete:hover {
   background-color: hsl(355, 60%, 65%);
 }
-a.delete:active {
+button.delete:active {
   background-color: hsl(355, 75%, 45%);
 }
 

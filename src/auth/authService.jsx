@@ -112,3 +112,9 @@ export function saveProfile(id, { name, email, password }, usersList) {
   const user = updatedList.find((u) => u.id === id);
   return { isValid: true, updatedList, updatedUser: user };
 }
+
+export function deleteUser(userId, usersList) {
+  const updatedList = usersList.filter((u) => u.id !== userId);
+  localStorage.setItem("usersList", JSON.stringify(updatedList));
+  return updatedList;
+}

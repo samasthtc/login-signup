@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { deleteUser } from "../../auth/AuthService.jsx";
 import { UsersListContext } from "../../context/usersList/UsersListProvider.jsx";
+import Modal from "../common/Modal.jsx";
 
 export default function UserRow({ user }) {
   const { usersList, setUsersList } = useContext(UsersListContext);
@@ -13,12 +15,8 @@ export default function UserRow({ user }) {
   };
 
   const handleDelete = () => {
-    if (confirm("Are you sure you want to delete this user?")) {
-      const updatedUsersList = usersList.filter((u) => u.id !== user.id);
-      // @ts-ignore
-      setUsersList(updatedUsersList);
-      localStorage.setItem("usersList", JSON.stringify(updatedUsersList));
-    }
+    const updatedUsersList = deleteUser(id, usersList);
+    setUsersList(updatedUsersList);
   };
 
   return (
@@ -34,13 +32,28 @@ export default function UserRow({ user }) {
           </button>
           <ul className="dropdown-menu">
             <li onClick={handleEdit}>
-              <a className="dropdown-item edit">Edit</a>
+              <button className="dropdown-item edit">Edit</button>
             </li>
-            <li onClick={handleDelete}>
-              <a className="dropdown-item delete">Delete</a>
+            <li>
+              <button
+                type="button"
+                className="dropdown-item delete"
+                data-bs-toggle="modal"
+                data-bs-target={`#dlt-usr-${id}-modal`}
+              >
+                Delete
+              </button>
             </li>
           </ul>
         </div>
+        <Modal
+          key={id}
+          id={`dlt-usr-${id}-modal`}
+          title={`Delete User (${name})?`}
+          cancelText="Cancel"
+          confirmText="Delete"
+          onConfirm={handleDelete}
+        />
       </td>
       <td className="user-info-md">
         <strong>{name}</strong>

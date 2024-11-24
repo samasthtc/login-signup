@@ -26,25 +26,23 @@ export default function EditForm({ userId, isCurrent, submit }) {
       return foundUser ? { ...foundUser } : null;
     }
   });
-  const [manualDirtyFields, setManualDirtyFields] = useState({});
 
   const defaults = {
     name: user?.name || "",
     email: user?.email || "",
     password: user?.password || "",
   };
-
   const {
     register,
     handleSubmit,
     formState,
     reset,
-    setValue,
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm({
     defaultValues: defaults,
     mode: "onChange",
   });
+  const [manualDirtyFields, setManualDirtyFields] = useState({});
 
   const [alert, setAlert] = useState({
     show: false,
@@ -74,14 +72,12 @@ export default function EditForm({ userId, isCurrent, submit }) {
     if (!manualDirtyFields[field]) {
       setManualDirtyFields((prev) => ({ ...prev, [field]: true }));
     } else {
-      for (const field in manualDirtyFields) {
-        if (!dirtyFields[field]) {
-          setManualDirtyFields((prev) => {
-            const newState = { ...prev };
-            delete newState[field];
-            return newState;
-          });
-        }
+      if (!dirtyFields[field]) {
+        setManualDirtyFields((prev) => {
+          const newState = { ...prev };
+          delete newState[field];
+          return newState;
+        });
       }
     }
 
@@ -91,7 +87,7 @@ export default function EditForm({ userId, isCurrent, submit }) {
   const debouncedValidation = useDebouncePromise(handleFieldValidation);
 
   const validateFieldWithDebounce = async (field, value) => {
-    setValue(field, value, { shouldDirty: true });
+    // setValue(field, value, { shouldDirty: true });
     return await debouncedValidation(field, value);
   };
 
@@ -116,23 +112,22 @@ export default function EditForm({ userId, isCurrent, submit }) {
           message: result.message ?? "An error occured! Profile update failed!",
         });
       }
-      setTimeout(() => {
-        setAlert({ show: false, success: false, message: "" });
-      }, 3000);
     } catch (error) {
       console.error(error);
-      setAlert({
-        show: true,
-        success: false,
-        message: "An error occured! Profile update failed!",
-      });
+      // setAlert({
+      //   show: true,
+      //   success: false,
+      //   message: "An error occured! Profile update failed!",
+      // });
+    }
+
+    alert.show &&
       setTimeout(() => {
         setAlert({ show: false, success: false, message: "" });
       }, 3000);
-    }
   };
 
-  const noChanges = Object.keys(manualDirtyFields).length <= 0;
+  const noChanges = Object.keys(manualDirtyFields).length < 1;
 
   const tooltipRef = useRef();
 
@@ -185,7 +180,7 @@ export default function EditForm({ userId, isCurrent, submit }) {
 
   useEffect(() => {
     reset(defaults);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reset]);
 
   return (
