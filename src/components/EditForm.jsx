@@ -183,6 +183,32 @@ export default function EditForm({ userId, isCurrent, submit }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reset]);
 
+  const fieldNames = ["name", "email", "password"];
+  const inputs = fieldNames.map((field) => (
+    <Input
+      key={field}
+      type={field === "name" ? "text" : field}
+      name={field}
+      autoComplete={
+        field === "email"
+          ? "email"
+          : field === "password"
+          ? "new-password"
+          : "off"
+      }
+      registerProps={{
+        register: register,
+        options: {
+          required: "This field is required",
+          validate: async (value) =>
+            await validateFieldWithDebounce(field, value),
+        },
+      }}
+      errorMessage={errors[field]?.message}
+      isDirty={manualDirtyFields[field] ?? false}
+    />
+  ));
+
   return (
     <CardContainer>
       <h1 className="title text-center ">Edit Profile</h1>
@@ -194,51 +220,7 @@ export default function EditForm({ userId, isCurrent, submit }) {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <Input
-          type="text"
-          name="name"
-          autoComplete="off"
-          registerProps={{
-            register: register,
-            options: {
-              required: "This field is required",
-              validate: async (value) =>
-                await validateFieldWithDebounce("name", value),
-            },
-          }}
-          errorMessage={errors.name?.message}
-          isDirty={manualDirtyFields["name"] ?? false}
-        />
-
-        <Input
-          type="email"
-          name="email"
-          autoComplete="email"
-          registerProps={{
-            register: register,
-            options: {
-              required: "This field is required",
-              validate: (value) => validateFieldWithDebounce("email", value),
-            },
-          }}
-          errorMessage={errors.email?.message}
-          isDirty={manualDirtyFields["email"] ?? false}
-        />
-
-        <Input
-          type="password"
-          name="password"
-          autoComplete="new-password"
-          registerProps={{
-            register: register,
-            options: {
-              required: "This field is required",
-              validate: (value) => validateFieldWithDebounce("password", value),
-            },
-          }}
-          errorMessage={errors.password?.message}
-          isDirty={manualDirtyFields["password"] ?? false}
-        />
+        {inputs}
 
         <div
           className="position-relative d-inline-block"

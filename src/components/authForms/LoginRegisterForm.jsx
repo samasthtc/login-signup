@@ -145,6 +145,33 @@ export default function LoginRegisterForm({ type, submit }) {
 
   const cardPosition = type === "add" ? "left" : "";
 
+  const fieldNames = ["email", "password"];
+  const inputs = fieldNames.map((field) => (
+    <Input
+      key={field}
+      type={field}
+      name={field}
+      autoComplete={
+        field === "email"
+          ? "email"
+          : field === "password"
+          ? autoCompletePassword
+          : "off"
+      }
+      autoFocus={type === "login" && field === "email"}
+      registerProps={{
+        register: register,
+        options: {
+          required: "This field is required",
+          validate: (value) =>
+            type === "login" ? true : validateFieldWithDebounce(field, value),
+        },
+      }}
+      errorMessage={errors[field]?.message}
+      isDirty={type === "login" ? false : manualDirtyFields[field] ?? false}
+    />
+  ));
+
   return (
     <CardContainer position={cardPosition} type={type}>
       <h1 className="title text-center ">{title}</h1>
@@ -158,46 +185,7 @@ export default function LoginRegisterForm({ type, submit }) {
       >
         {(type === "register" || type === "add") && nameInput}
 
-        <Input
-          type="email"
-          name="email"
-          autoComplete="email"
-          autoFocus={type === "login"}
-          registerProps={{
-            register: register,
-            options: {
-              required: "This field is required",
-              validate: (value) =>
-                type === "login"
-                  ? true
-                  : validateFieldWithDebounce("email", value),
-            },
-          }}
-          errorMessage={errors.email?.message}
-          isDirty={
-            type === "login" ? false : manualDirtyFields["email"] ?? false
-          }
-        />
-
-        <Input
-          type="password"
-          name="password"
-          autoComplete={autoCompletePassword}
-          registerProps={{
-            register: register,
-            options: {
-              required: "This field is required",
-              validate: (value) =>
-                type === "login"
-                  ? true
-                  : validateFieldWithDebounce("password", value),
-            },
-          }}
-          errorMessage={errors.password?.message}
-          isDirty={
-            type === "login" ? false : manualDirtyFields["password"] ?? false
-          }
-        />
+        {inputs}
 
         <button
           type="submit"
