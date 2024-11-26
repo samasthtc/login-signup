@@ -19,6 +19,11 @@ export default function LoginRegisterForm({ type, submit }) {
   const { usersList, setUsersList } = useContext(UsersListContext);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [alert, setAlert] = useState({
+    show: false,
+    success: false,
+    message: "",
+  });
 
   const defaults = {
     name: "",
@@ -39,6 +44,11 @@ export default function LoginRegisterForm({ type, submit }) {
     mode: "onChange",
   });
   const [manualDirtyFields, setManualDirtyFields] = useState({});
+
+  const resetFields = () => {
+    reset(defaults);
+    setManualDirtyFields({});
+  };
 
   const handleDirtyFields = (field, value) => {
     if (!manualDirtyFields[field]) {
@@ -94,7 +104,14 @@ export default function LoginRegisterForm({ type, submit }) {
       if (type === "register" || type === "add") {
         setUsersList(result.updatedList);
         type === "register" && navigate("/login");
-        // emptyFields();
+        if (type === "add") {
+          resetFields();
+          setAlert({
+            show: true,
+            success: true,
+            message: result.message,
+          });
+        }
       } else if (type === "login") {
         login(result.user);
         // navigate("/");
@@ -110,12 +127,22 @@ export default function LoginRegisterForm({ type, submit }) {
       );
       type === "login" &&
         setError("password", { type: "manual", message: result.message });
+      setAlert({
+        show: true,
+        success: false,
+        message: result.message ?? "An error occured!",
+      });
     }
+
+    alert.show &&
+      setTimeout(() => {
+        setAlert({ show: false, success: false, message: "" });
+      }, 3000);
   };
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset(defaults);
+      resetFields();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formState, reset, isSubmitSuccessful, type]);
@@ -128,7 +155,6 @@ export default function LoginRegisterForm({ type, submit }) {
       registerProps={{
         register: register,
         options: {
-          // required: "This field is required",
           validate: async (value) =>
             await validateFieldWithDebounce("name", value),
         },
@@ -187,7 +213,6 @@ export default function LoginRegisterForm({ type, submit }) {
       registerProps={{
         register: register,
         options: {
-          // required: "This field is required",
           validate: (value) =>
             type === "login"
               ? handleDirtyFields(field, value)
@@ -230,6 +255,20 @@ export default function LoginRegisterForm({ type, submit }) {
       {isSubmitting && (
         <div className="col-12 text-center">
           <LoadingSpinner />
+        </div>
+      )}
+
+      {alert.show && (
+        <div
+          className={`alert ${
+            alert.success ? "alert-success" : "alert-danger"
+          } text-center fade-in-out`}
+          role="alert"
+          onAnimationEnd={() => {
+            setAlert({ show: false, success: false, message: "" });
+          }}
+        >
+          {alert.message}
         </div>
       )}
     </CardContainer>

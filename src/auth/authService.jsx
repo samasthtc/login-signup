@@ -77,6 +77,7 @@ export function register({ name, email, password }, usersList) {
     isValid: true,
     newUser: newUser,
     updatedList: updatedList,
+    message: "User added successfully!"
   };
 }
 
