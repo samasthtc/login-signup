@@ -26,8 +26,8 @@ export default function UserRow({ user }) {
 
   return (
     <tr id={id} className="user-row">
-      <td>
-        <div className="dropdown">
+      <td className="fit-content">
+        <div className="dropdown fit-content">
           <button
             className="btn btn-link dropdown-toggle p-0"
             data-bs-toggle="dropdown"
@@ -63,12 +63,12 @@ export default function UserRow({ user }) {
           showButtons={true}
         />
       </td>
-      <td className="user-info-md" role="button" onClick={handleEdit}>
+      {/* <td className="user-info-md" role="button" onClick={handleEdit}>
         <strong>{name}</strong>
       </td>
       <td className="user-info-md" role="button" onClick={handleEdit}>
         {email}
-      </td>
+      </td> */}
       <td className="user-info" role="button" onClick={handleEdit}>
         <div className="user-details">
           <strong>{name}</strong>

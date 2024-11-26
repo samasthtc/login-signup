@@ -41,7 +41,7 @@ export default function UsersTable() {
         setFilter={setFilter}
       />
       <div
-        className="table-responsive  rounded rounded-3
+        className="table-responsive  rounded rounded-4
       border border-2 border-primary"
       >
         <table
@@ -50,10 +50,10 @@ export default function UsersTable() {
         >
           <thead>
             <tr>
-              <th className="table-primary"></th>
+              <th className="table-primary fit-content th-actions"></th>
               <th className="table-primary user-header">User</th>
-              <th className="table-primary name-header">Name</th>
-              <th className="table-primary email-header">Email</th>
+              {/* <th className="table-primary name-header">Name</th>
+              <th className="table-primary email-header">Email</th> */}
             </tr>
           </thead>
           <tbody>{userRows}</tbody>
