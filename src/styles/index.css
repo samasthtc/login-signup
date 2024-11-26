@@ -12087,9 +12087,17 @@ span.input-group-text:active {
   transition: all 0.05s ease-in-out;
 }
 
-.user-header,
-.user-info {
-  display: none;
+.user-details {
+  display: block;
+  text-align: left;
+}
+.user-details strong {
+  display: block;
+  font-size: 1rem;
+}
+.user-details .user-email {
+  font-size: 0.875rem;
+  color: gray;
 }
 
 .vr-hr {
@@ -12149,6 +12157,15 @@ span.input-group-text:active {
   --bs-modal-footer-border-color: transparent;
 }
 
+.modal.fade .modal-dialog {
+  transition: transform 0.3s ease-in-out;
+  transform: translate(0, -50px);
+}
+
+.modal.show .modal-dialog {
+  transform: none;
+}
+
 @keyframes floatBtn {
   0% {
     transform: translateY(0);
@@ -12169,7 +12186,16 @@ span.input-group-text:active {
   background-color: #7198a2 !important;
 }
 
-@media (max-width: 767px) {
+.fit-content {
+  width: -moz-fit-content !important;
+  width: fit-content !important;
+}
+
+.th-actions {
+  width: 10px !important;
+}
+
+@media screen and (max-width: 767px) {
   .vr-hr {
     display: block;
     box-sizing: border-box;
@@ -12179,7 +12205,7 @@ span.input-group-text:active {
     margin: 0 auto;
   }
 }
-@media (max-width: 575px) {
+@media screen and (max-width: 575px) {
   .email-header,
   .name-header,
   .user-info-md {
@@ -12188,17 +12214,5 @@ span.input-group-text:active {
   .user-header,
   .user-info {
     display: table-cell;
-  }
-  .user-details {
-    display: block;
-    text-align: left;
-  }
-  .user-details strong {
-    display: block;
-    font-size: 1rem;
-  }
-  .user-details .user-email {
-    font-size: 0.875rem;
-    color: gray;
   }
 }
