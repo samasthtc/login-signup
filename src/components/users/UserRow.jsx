@@ -60,12 +60,15 @@ export default function UserRow({ user }) {
           cancelText="Cancel"
           confirmText="Delete"
           onConfirm={handleDelete}
+          showButtons={true}
         />
       </td>
-      <td className="user-info-md">
+      <td className="user-info-md" role="button" onClick={handleEdit}>
         <strong>{name}</strong>
       </td>
-      <td className="user-info-md">{email}</td>
+      <td className="user-info-md" role="button" onClick={handleEdit}>
+        {email}
+      </td>
       <td className="user-info" role="button" onClick={handleEdit}>
         <div className="user-details">
           <strong>{name}</strong>

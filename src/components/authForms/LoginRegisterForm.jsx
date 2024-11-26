@@ -89,6 +89,7 @@ export default function LoginRegisterForm({ type, submit }) {
     let isEmpty = false;
     for (const field in data) {
       if (!data[field] || data[field] === defaults[field]) {
+        // @ts-ignore
         setError(field, {
           type: "manual",
           message: "This field is required",
@@ -232,7 +233,8 @@ export default function LoginRegisterForm({ type, submit }) {
       <form
         id={formId}
         action="#"
-        className="w-100"
+        className="w-100 d-flex justify-content-center 
+          flex-column"
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
@@ -242,8 +244,8 @@ export default function LoginRegisterForm({ type, submit }) {
 
         <button
           type="submit"
-          className="btn border-2 border rounded-pill btn-outline-primary
-          mt-3 mb-1 text-semibold"
+          className="btn btn-submit-primary border-2 border border-primary rounded-pill btn-outline-primary
+          mt-3 mb-1 fw-bold align-self-end bg-primary-subtle hover-bg-primary w-100"
           // disabled={!isValid}
         >
           {submitBtnText}
@@ -253,7 +255,7 @@ export default function LoginRegisterForm({ type, submit }) {
       </form>
 
       {isSubmitting && (
-        <div className="col-12 text-center">
+        <div className="col-12 text-center mt-2">
           <LoadingSpinner />
         </div>
       )}

@@ -6,13 +6,14 @@ export default function Modal({
   cancelText,
   confirmText,
   onConfirm,
+  showButtons,
 }) {
   return (
     <div className="modal fade" id={id} tabIndex={-1}>
-      <div className="modal-dialog modal-dialog-centered modal-sm">
+      <div className="modal-dialog modal-dialog-centered modal-md">
         <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title overflow-auto">{title}</h5>
+          <div className="modal-header text-center">
+            <h2 className="modal-title overflow-auto text-center fw-bold">{title}</h2>
             <button
               type="button"
               className="btn-close"
@@ -21,29 +22,27 @@ export default function Modal({
             ></button>
           </div>
 
-          {body && (
-            <div className="modal-body">
-              <p>{body}</p>
+          {body && <div className="modal-body">{body}</div>}
+
+          {showButtons && (
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                {cancelText}
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger text-semibold"
+                onClick={onConfirm}
+                data-bs-dismiss="modal"
+              >
+                {confirmText}
+              </button>
             </div>
           )}
-
-          <div className="modal-footer">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              {cancelText}
-            </button>
-            <button
-              type="button"
-              className="btn btn-danger text-semibold"
-              onClick={onConfirm}
-              data-bs-dismiss="modal"
-            >
-              {confirmText}
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -51,10 +50,11 @@ export default function Modal({
 }
 
 Modal.propTypes = {
-  body: PropTypes.string,
+  body: PropTypes.any,
   id: PropTypes.string,
   onConfirm: PropTypes.func,
   title: PropTypes.string,
   confirmText: PropTypes.string,
   cancelText: PropTypes.string,
+  showButtons: PropTypes.bool,
 };

@@ -12133,6 +12133,42 @@ span.input-group-text:active {
   animation: fadeInOut 3s ease-in forwards;
 }
 
+.modal-title {
+  flex: 1;
+}
+
+.modal-content {
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.75), rgba(236, 236, 236, 0.65));
+  box-shadow: 0 8px 32px 0 rgba(31, 31, 31, 0.31);
+  --blur: 1.5px;
+  backdrop-filter: blur(var(--blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  --bs-modal-header-border-color: transparent;
+  --bs-modal-footer-border-color: transparent;
+}
+
+@keyframes floatBtn {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+.floating-btn {
+  box-shadow: 0 4px 8px 2px rgba(31, 31, 31, 0.31);
+  animation: floatBtn 2s ease-in-out both infinite;
+}
+
+.btn-submit-primary:hover {
+  background-color: #7198a2 !important;
+}
+
 @media (max-width: 767px) {
   .vr-hr {
     display: block;
@@ -12143,7 +12179,7 @@ span.input-group-text:active {
     margin: 0 auto;
   }
 }
-@media (max-width: 576px) {
+@media (max-width: 575px) {
   .email-header,
   .name-header,
   .user-info-md {
