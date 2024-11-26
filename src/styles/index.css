@@ -12133,7 +12133,7 @@ span.input-group-text:active {
   animation: fadeInOut 3s ease-in forwards;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .vr-hr {
     display: block;
     box-sizing: border-box;
