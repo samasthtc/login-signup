@@ -10,7 +10,7 @@
 
 import { useCallback, useRef } from "react";
 
-export default function useDebounce(callback, delay = 600) {
+export default function useDebounce(callback, delay = 300) {
   const timerRef = useRef(null);
 
   const debouncedCallback = useCallback(
@@ -28,7 +28,7 @@ export default function useDebounce(callback, delay = 600) {
   return debouncedCallback;
 }
 
-export function useDebouncePromise(callback, delay = 600) {
+export function useDebouncePromise(callback, delay = 300) {
   const timerRefs = useRef({});
 
   const debouncedCallback = useCallback(
