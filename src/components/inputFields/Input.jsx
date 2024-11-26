@@ -11,6 +11,7 @@ export default function Input({
   onChange,
   registerProps,
   isDirty,
+  showSuccess,
 }) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const togglePasswordVisibility = () => {
@@ -22,7 +23,6 @@ export default function Input({
 
   const inputType =
     type === "password" ? (isPasswordVisible ? "text" : "password") : type;
-
   return (
     <>
       <div className={`${type === "password" ? "input-group mt-3" : ""}`}>
@@ -44,9 +44,10 @@ export default function Input({
                 })}
             type={inputType}
             className={`form-control ${
-              errorMessage
+              isDirty &&
+              (errorMessage
                 ? "is-invalid input-error"
-                : isDirty && "input-success"
+                : showSuccess && "input-success")
             }`}
             id={name}
             placeholder={
@@ -65,11 +66,10 @@ export default function Input({
           <span
             className={`input-group-text password-toggle-icon
               rounded-end ${
-                isDirty || errorMessage
-                  ? errorMessage
-                    ? "password-error text-danger"
-                    : "password-success"
-                  : ""
+                isDirty &&
+                (errorMessage
+                  ? "password-error text-danger"
+                  : showSuccess && "password-success")
               }`}
             onClick={togglePasswordVisibility}
           >
@@ -81,7 +81,7 @@ export default function Input({
           </span>
         )}
 
-        {errorMessage && (
+        {errorMessage && isDirty && (
           <p
             className={`error-text invalid-feedback mt-1 show ${
               type === "password" ? "mb-0" : ""
@@ -106,4 +106,5 @@ Input.propTypes = {
   onChange: PropTypes.func,
   type: PropTypes.string.isRequired,
   isDirty: PropTypes.bool,
+  showSuccess: PropTypes.bool,
 };

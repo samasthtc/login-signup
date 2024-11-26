@@ -16,10 +16,16 @@ import LoadingSpinner from "../common/LoadingSpinner";
 import Input from "../inputFields/Input";
 
 export default function LoginRegisterForm({ type, submit }) {
-  const navigate = useNavigate();
   const { usersList, setUsersList } = useContext(UsersListContext);
   const { login } = useAuth();
-  const [manualDirtyFields, setManualDirtyFields] = useState({});
+  const navigate = useNavigate();
+
+  const defaults = {
+    name: "",
+    email: "",
+    password: "",
+  };
+  type === "login" && delete defaults.name;
 
   const {
     register,
@@ -29,14 +35,22 @@ export default function LoginRegisterForm({ type, submit }) {
     setError,
     reset,
   } = useForm({
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-    },
+    defaultValues: defaults,
     mode: "onChange",
   });
+  const [manualDirtyFields, setManualDirtyFields] = useState({});
 
+  const handleDirtyFields = (field, value) => {
+    if (!manualDirtyFields[field]) {
+      setManualDirtyFields((prev) => ({ ...prev, [field]: true }));
+    } else if (value === defaults[field]) {
+      setManualDirtyFields((prev) => {
+        const newState = { ...prev };
+        delete newState[field];
+        return newState;
+      });
+    }
+  };
   const handleFieldValidation = (field, value) => {
     const { isValid, errorMessage } = validateField(
       value,
@@ -46,21 +60,34 @@ export default function LoginRegisterForm({ type, submit }) {
         ? validateEmail
         : validatePassword
     );
-
-    if (!manualDirtyFields[field]) {
-      setManualDirtyFields((prev) => ({ ...prev, [field]: true }));
-    }
-
-    return isValid || errorMessage || true;
+    handleDirtyFields(field, value);
+    return isValid || errorMessage;
   };
 
   const debouncedValidation = useDebouncePromise(handleFieldValidation);
 
   const validateFieldWithDebounce = async (field, value) => {
+    if (type === "login") {
+      handleDirtyFields(field, value);
+      return;
+    }
+
     return await debouncedValidation(field, value).then((result) => result);
   };
 
   const onSubmit = (data) => {
+    let isEmpty = false;
+    for (const field in data) {
+      if (!data[field] || data[field] === defaults[field]) {
+        setError(field, {
+          type: "manual",
+          message: "This field is required",
+        });
+        isEmpty = true;
+      }
+    }
+    if (isEmpty) return;
+
     const result = submit(data, usersList);
 
     if (result.isValid) {
@@ -88,13 +115,10 @@ export default function LoginRegisterForm({ type, submit }) {
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset({
-        name: "",
-        email: "",
-        password: "",
-      });
+      reset(defaults);
     }
-  }, [formState, reset, isSubmitSuccessful]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formState, reset, isSubmitSuccessful, type]);
 
   const nameInput = (
     <Input
@@ -104,13 +128,14 @@ export default function LoginRegisterForm({ type, submit }) {
       registerProps={{
         register: register,
         options: {
-          required: "This field is required",
+          // required: "This field is required",
           validate: async (value) =>
             await validateFieldWithDebounce("name", value),
         },
       }}
       errorMessage={errors.name?.message}
       isDirty={manualDirtyFields["name"] ?? false}
+      showSuccess={type !== "login"}
     />
   );
 
@@ -162,13 +187,16 @@ export default function LoginRegisterForm({ type, submit }) {
       registerProps={{
         register: register,
         options: {
-          required: "This field is required",
+          // required: "This field is required",
           validate: (value) =>
-            type === "login" ? true : validateFieldWithDebounce(field, value),
+            type === "login"
+              ? handleDirtyFields(field, value)
+              : validateFieldWithDebounce(field, value),
         },
       }}
       errorMessage={errors[field]?.message}
-      isDirty={type === "login" ? false : manualDirtyFields[field] ?? false}
+      isDirty={manualDirtyFields[field] ?? false}
+      showSuccess={type !== "login"}
     />
   ));
 
