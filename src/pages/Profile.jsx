@@ -20,6 +20,7 @@ export default function Profile() {
       setQueries(newQueries);
     }
   }, [location, queries]);
+  
 
   return (
     <main
@@ -32,8 +33,7 @@ export default function Profile() {
       >
         {!!queries.userId && (
           <EditForm
-            userId={queries.userId}
-            isCurrent={queries.isCurrent}
+          queries={queries}
             submit={saveProfile}
           />
         )}

@@ -15,7 +15,8 @@ import CardContainer from "./common/CardContainer";
 import LoadingSpinner from "./common/LoadingSpinner";
 import Input from "./inputFields/Input";
 
-export default function EditForm({ userId, isCurrent, submit }) {
+export default function EditForm({ queries, submit }) {
+  const { userId, isCurrent } = queries;
   const { loggedInUser, login } = useAuth();
   const { usersList, setUsersList } = useContext(UsersListContext);
   const [user, setUser] = useState(() => {
@@ -57,7 +58,7 @@ export default function EditForm({ userId, isCurrent, submit }) {
       const foundUser = usersList.find((u) => u.id === Number(userId));
       setUser(foundUser ? { ...foundUser } : null);
     }
-  }, [isCurrent, loggedInUser, userId, usersList]);
+  }, [isCurrent, loggedInUser, userId, usersList, queries]);
 
   const handleFieldValidation = (field, value) => {
     const { isValid, errorMessage } = validateField(
@@ -181,7 +182,7 @@ export default function EditForm({ userId, isCurrent, submit }) {
   useEffect(() => {
     reset(defaults);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reset]);
+  }, [reset, user]);
 
   const fieldNames = ["name", "email", "password"];
   const inputs = fieldNames.map((field) => (
@@ -272,7 +273,9 @@ export default function EditForm({ userId, isCurrent, submit }) {
 }
 
 EditForm.propTypes = {
-  isCurrent: PropTypes.string.isRequired,
+  queries: PropTypes.shape({
+    isCurrent: PropTypes.string,
+    userId: PropTypes.any,
+  }),
   submit: PropTypes.func.isRequired,
-  userId: PropTypes.any.isRequired,
 };
