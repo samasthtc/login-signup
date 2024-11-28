@@ -1,4 +1,4 @@
-import Navbar from "@/components/common/Navbar";
+import Sidebar from "@/components/common/Sidebar";
 import PropTypes from "prop-types";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
@@ -12,8 +12,11 @@ export default function PrivateLayout({ children }) {
 
   return (
     <>
-      <Navbar />
-      {children}
+      <div className="col-auto m-0 p-0 ">
+        <Sidebar />
+      </div>
+      {/* <Navbar /> */}
+      <div className="col m-0 p-0">{children}</div>
     </>
   );
 }

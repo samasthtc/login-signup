@@ -5,7 +5,8 @@ import { register } from "../auth/AuthService";
 
 export default function Home() {
   return (
-    <main className="container-fluid mt-2 mb-3">
+    <main className="container-fluid
+    d-flex justify-content-center align-items-center vh-100">
       <Modal
         id="add-usr-modal"
         title="Add User"
@@ -17,7 +18,7 @@ export default function Home() {
       <div
         className="row mx-md-4 mx-lg-5 mx-auto 
          rounded-5 border border-primary border-2 
-           pb-3 px-md-0 "
+           pb-3 px-md-0 flex-grow-1"
       >
         <UsersTable />
       </div>

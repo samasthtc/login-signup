@@ -12,7 +12,7 @@ export default function Modal({
     <div className="modal fade" id={id} tabIndex={-1}>
       <div className="modal-dialog modal-dialog-centered modal-md">
         <div className="modal-content">
-          <div className="modal-header text-center">
+          <div className="modal-header text-center pb-0">
             <h2 className="modal-title overflow-auto text-center fw-bold">{title}</h2>
             <button
               type="button"

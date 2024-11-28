@@ -1,15 +1,9 @@
-import PropTypes from "prop-types"
-import Navbar from "@/components/common/Navbar";
+import PropTypes from "prop-types";
 
 export default function GeneralLayout({ children }) {
-  return (
-    <>
-      <Navbar />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }
 
 GeneralLayout.propTypes = {
-  children: PropTypes.any
-}
+  children: PropTypes.any,
+};

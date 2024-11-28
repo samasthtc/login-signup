@@ -153,6 +153,8 @@ export default function LoginRegisterForm({ type, submit }) {
       type="text"
       name="name"
       autoFocus={true}
+      my={0}
+
       registerProps={{
         register: register,
         options: {

@@ -2,7 +2,6 @@ import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./auth/AuthProvider.jsx";
 import LoadingSpinner from "./components/common/LoadingSpinner.jsx";
-import Sidebar from "./components/common/Sidebar.jsx";
 import UsersListProvider from "./context/usersList/UsersListProvider";
 import GeneralLayout from "./layouts/GeneralLayout.jsx";
 import PrivateLayout from "./layouts/PrivateLayout.jsx";
@@ -28,45 +27,40 @@ function App() {
         <UsersListProvider>
           <AuthProvider>
             <Suspense fallback={loadingSpinner}>
-              <div className="col-auto m-0 p-0 ">
-                <Sidebar />
-              </div>
-              <div className="col m-0 p-0">
-                <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      <PrivateLayout>
-                        <Home />
-                      </PrivateLayout>
-                    }
-                  />
-                  <Route
-                    path="/login"
-                    element={
-                      <GeneralLayout>
-                        <Login />
-                      </GeneralLayout>
-                    }
-                  />
-                  <Route
-                    path="/register"
-                    element={
-                      <GeneralLayout>
-                        <Register />
-                      </GeneralLayout>
-                    }
-                  />
-                  <Route
-                    path="/profile"
-                    element={
-                      <PrivateLayout>
-                        <Profile />
-                      </PrivateLayout>
-                    }
-                  />
-                </Routes>
-              </div>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <PrivateLayout>
+                      <Home />
+                    </PrivateLayout>
+                  }
+                />
+                <Route
+                  path="/login"
+                  element={
+                    <GeneralLayout>
+                      <Login />
+                    </GeneralLayout>
+                  }
+                />
+                <Route
+                  path="/register"
+                  element={
+                    <GeneralLayout>
+                      <Register />
+                    </GeneralLayout>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <PrivateLayout>
+                      <Profile />
+                    </PrivateLayout>
+                  }
+                />
+              </Routes>
             </Suspense>
           </AuthProvider>
         </UsersListProvider>

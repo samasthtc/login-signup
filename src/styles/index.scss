@@ -3,6 +3,7 @@ $bg-1: hsl(195, 25%, 97%);
 $primary: #7198a2;
 $secondary: #a9b2c7;
 $accent: #8e91d1;
+$accent-1: #c3c5f7;
 $info: $accent;
 $dangerous: hsl(355, 66%, 80%);
 $dangerous-dark: hsl(355, 60%, 65%);
@@ -272,6 +273,100 @@ span.input-group-text {
 
 .th-actions {
   width: 10px !important;
+}
+
+.side-btn {
+  position: absolute;
+  right: -10px;
+  top: calc(50vh - 16px);
+  z-index: 1000;
+  width: 32px;
+  height: 32px;
+  background-color: $accent;
+  -webkit-transition: transform 0.2s ease;
+  -moz-transition: transform 0.2s ease;
+  -ms-transition: transform 0.2s ease;
+  -o-transition: transform 0.2s ease;
+  transition: transform 0.2s ease;
+}
+
+.side-btn {
+  &:hover {
+    background-color: $accent;
+    color: hsl(189, 4%, 33%);
+  }
+
+  &:active {
+    background-color: $secondary !important;
+    color: hsl(187, 4%, 51%) !important;
+  }
+}
+
+.side-btn.to-left {
+  transform: rotate(180deg) !important;
+}
+
+.sidebar-header {
+  height: 24px !important;
+  &.active {
+    background-color: unset !important;
+    color: $bg-1 !important;
+
+    &:hover {
+      // background-color: $accent-1;
+      color: $text !important;
+    }
+  }
+}
+
+span.hidden {
+  display: none;
+}
+
+aside.sidebar {
+  transition: all 0.3s ease;
+  &.collapse {
+    width: 84px !important;
+    transition: all 0.3s ease;
+  }
+  .nav-link {
+    transition: color 0.2s ease, background-color 0.2s ease;
+
+    &:hover {
+      // background-color: $accent-1;
+      color: $bg-1 !important;
+    }
+  }
+  li.nav-item {
+    .nav-link {
+      color: $text;
+
+      &.active {
+        background-color: $bg-1;
+        color: $primary;
+
+        &:hover {
+          // background-color: $accent-1;
+          color: $text !important;
+        }
+      }
+
+      i {
+        font-size: 1.25em !important;
+      }
+    }
+  }
+}
+
+.dropdown {
+}
+
+.w-16px {
+  width: 35px !important;
+}
+
+.p-25 {
+  padding: 0.75rem !important;
 }
 
 @media screen and (max-width: 767px) {

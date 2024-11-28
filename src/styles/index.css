@@ -12195,6 +12195,80 @@ span.input-group-text:active {
   width: 10px !important;
 }
 
+.side-btn {
+  position: absolute;
+  right: -10px;
+  top: calc(50vh - 16px);
+  z-index: 1000;
+  width: 32px;
+  height: 32px;
+  background-color: #8e91d1;
+  transition: transform 0.2s ease;
+}
+
+.side-btn:hover {
+  background-color: #8e91d1;
+  color: hsl(189, 4%, 33%);
+}
+.side-btn:active {
+  background-color: #a9b2c7 !important;
+  color: hsl(187, 4%, 51%) !important;
+}
+
+.side-btn.to-left {
+  transform: rotate(180deg) !important;
+}
+
+.sidebar-header {
+  height: 24px !important;
+}
+.sidebar-header.active {
+  background-color: unset !important;
+  color: hsl(195, 25%, 97%) !important;
+}
+.sidebar-header.active:hover {
+  color: hsl(192, 20%, 5%) !important;
+}
+
+span.hidden {
+  display: none;
+}
+
+aside.sidebar {
+  transition: all 0.3s ease;
+}
+aside.sidebar.collapse {
+  width: 84px !important;
+  transition: all 0.3s ease;
+}
+aside.sidebar .nav-link {
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+aside.sidebar .nav-link:hover {
+  color: hsl(195, 25%, 97%) !important;
+}
+aside.sidebar li.nav-item .nav-link {
+  color: hsl(192, 20%, 5%);
+}
+aside.sidebar li.nav-item .nav-link.active {
+  background-color: hsl(195, 25%, 97%);
+  color: #7198a2;
+}
+aside.sidebar li.nav-item .nav-link.active:hover {
+  color: hsl(192, 20%, 5%) !important;
+}
+aside.sidebar li.nav-item .nav-link i {
+  font-size: 1.25em !important;
+}
+
+.w-16px {
+  width: 35px !important;
+}
+
+.p-25 {
+  padding: 0.75rem !important;
+}
+
 @media screen and (max-width: 767px) {
   .vr-hr {
     display: block;

@@ -7,7 +7,7 @@ export default function CardContainer({ type = "", position = "", children }) {
       : 
         (position === "right"
           ? " col-12 rounded-4 px-4 mx-auto "
-          : " col-md-5 col-12 border border-3 border-secondary rounded-5 p-4");
+          : " col-md-6 col-12 border border-3 border-secondary rounded-5 p-4");
 
   return <div className={classes}>{children}</div>;
 }
