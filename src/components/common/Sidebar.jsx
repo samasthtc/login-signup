@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
 
-// TODO: make it responsive for smaller screens
+// TODO: make it responsive for xs screens
 export default function Sidebar() {
   const { loggedInUser, logout } = useAuth();
   const location = useLocation();
@@ -54,7 +54,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`d-flex flex-column flex-shrink-0 p-3 bg-secondary text-white
+      className={`col-12 col-md-auto m-0 d-flex flex-column flex-shrink-0 p-3 bg-secondary text-white
        rounded-end-4 position-relative sidebar ${isExpanded ? "" : "collapse"}`}
       style={{ maxWidth: "180px", height: "100vh", width: "170px" }}
     >

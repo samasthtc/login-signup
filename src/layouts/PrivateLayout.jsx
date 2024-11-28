@@ -12,9 +12,7 @@ export default function PrivateLayout({ children }) {
 
   return (
     <>
-      <div className="col-auto m-0 p-0 ">
-        <Sidebar />
-      </div>
+      <Sidebar />
       {/* <Navbar /> */}
       <div className="col m-0 p-0">{children}</div>
     </>
