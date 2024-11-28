@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
 
+// TODO: make it responsive for smaller screens
 export default function Sidebar() {
   const { loggedInUser, logout } = useAuth();
   const location = useLocation();
@@ -14,6 +15,42 @@ export default function Sidebar() {
       location.pathname + location.search ===
       `/profile?current=true&id=${loggedInUser?.id}`,
   };
+
+  const tooltipRefs = {
+    profile: useRef(null),
+    home: useRef(null),
+    logOut: useRef(null),
+  };
+
+  const tooltipMap = {
+    profile: "Go to Profile",
+    home: "Go to Home",
+    logOut: "Sign Out",
+  };
+
+  useEffect(() => {
+    const tooltipInstances = [];
+
+    for (const key in tooltipRefs) {
+      if (tooltipRefs[key].current) {
+        const tooltipInstance = new window.bootstrap.Tooltip(
+          tooltipRefs[key].current,
+          {
+            title: tooltipMap[key],
+            placement: "top",
+            trigger: "hover",
+            fallbackPlacements: ["bottom", "right"],
+          }
+        );
+        tooltipInstances.push(tooltipInstance);
+      }
+    }
+
+    return () => {
+      tooltipInstances.forEach((instance) => instance.dispose());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <aside
@@ -31,6 +68,8 @@ export default function Sidebar() {
 
       <ul className="nav nav-pills flex-column">
         <li
+          ref={tooltipRefs.profile}
+          data-bs-toggle={tooltipRefs.profile}
           className={`d-flex   ${
             isExpanded ? "justify-content-start" : "justify-content-center"
           }`}
@@ -61,7 +100,11 @@ export default function Sidebar() {
           isExpanded ? "align-content-start" : "align-content-center"
         }`}
       >
-        <li className={`nav-item ${isExpanded ? "" : "fit-content"}`}>
+        <li
+          ref={tooltipRefs.home}
+          data-bs-toggle={tooltipRefs.home}
+          className={`nav-item ${isExpanded ? "" : "fit-content"}`}
+        >
           <Link
             to="/"
             className={`nav-link ${
@@ -90,7 +133,12 @@ export default function Sidebar() {
 
       <hr />
       <ul className="nav nav-pills flex-column">
-        <li className="nav-item" onClick={logout}>
+        <li
+          ref={tooltipRefs.logOut}
+          data-bs-toggle={tooltipRefs.logOut}
+          className="nav-item"
+          onClick={logout}
+        >
           <Link
             to="/login"
             className="nav-link link-dark gap-2 d-flex align-items-center fw-semibold"
