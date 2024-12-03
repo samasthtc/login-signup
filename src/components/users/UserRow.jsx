@@ -7,7 +7,7 @@ import { UsersListContext } from "../../context/usersList/UsersListProvider.jsx"
 import Modal from "../common/Modal.jsx";
 
 export default function UserRow({ user }) {
-  const { usersList, setUsersList, fetchUsers } = useContext(UsersListContext);
+  const { usersList, setUsersList } = useContext(UsersListContext);
   const { loggedInUser, logout } = useAuth();
   const { id, name, email } = user;
   const navigate = useNavigate();
