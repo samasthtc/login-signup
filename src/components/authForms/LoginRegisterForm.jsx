@@ -85,7 +85,7 @@ export default function LoginRegisterForm({ type, submit }) {
     return await debouncedValidation(field, value).then((result) => result);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     let isEmpty = false;
     for (const field in data) {
       if (!data[field] || data[field] === defaults[field]) {
@@ -99,22 +99,31 @@ export default function LoginRegisterForm({ type, submit }) {
     }
     if (isEmpty) return;
 
-    const result = submit(data, usersList);
+    let success, resData, message;
+    try {
+      ({ success, data: resData, message } = await submit(data));
+    } catch (error) {
+      message = error.message || "An error occured!";
+      success = false;
+    }
 
-    if (result.isValid) {
+    if (success) {
       if (type === "register" || type === "add") {
-        setUsersList(result.updatedList);
+        // fetchUsers();
+
+        const newUser = resData;
+        setUsersList([...usersList, newUser]);
         type === "register" && navigate("/login");
         if (type === "add") {
           resetFields();
           setAlert({
             show: true,
             success: true,
-            message: result.message,
+            message: message,
           });
         }
       } else if (type === "login") {
-        login(result.user);
+        login(resData);
         // navigate("/");
       }
     } else {
@@ -122,16 +131,16 @@ export default function LoginRegisterForm({ type, submit }) {
         "email",
         {
           type: "manual",
-          message: type === "register" || type === "add" ? result.message : " ",
+          message: type === "register" || type === "add" ? message : " ",
         },
         { shouldFocus: true }
       );
       type === "login" &&
-        setError("password", { type: "manual", message: result.message });
+        setError("password", { type: "manual", message: message });
       setAlert({
         show: true,
         success: false,
-        message: result.message ?? "An error occured!",
+        message: message ?? "An error occured!",
       });
     }
 
@@ -154,7 +163,6 @@ export default function LoginRegisterForm({ type, submit }) {
       name="name"
       autoFocus={true}
       my={0}
-
       registerProps={{
         register: register,
         options: {

@@ -15,9 +15,11 @@ export const handleGetUsers = async (req, res) => {
   try {
     const users = getUsersList();
     if (users.length === 0) {
-      return res.json({ success: true, data: [], message: "No users found" });
+      return res
+        .status(201)
+        .json({ success: true, data: [], message: "No users found" });
     } else {
-      return res.json({
+      return res.status(201).json({
         success: true,
         data: users,
         message: "Users fetched successfully",
@@ -34,9 +36,20 @@ export const handleGetUsers = async (req, res) => {
 
 export const handleLogin = async (req, res) => {
   const userData = req.body;
+  const { email, password } = userData;
+
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Missing email or password",
+    });
+  }
+
   try {
     const user = await login(userData);
-    res.json({ success: true, data: user, message: "Login successful" });
+    res
+      .status(201)
+      .json({ success: true, data: user, message: "Login successful" });
   } catch (error) {
     res.status(401).json({ success: false, message: error.message });
   }
@@ -64,10 +77,12 @@ export const handleRegister = async (req, res) => {
   }
 
   try {
-    await register(userData);
-    res
-      .status(201)
-      .json({ success: true, message: "User registered successfully!" });
+    const user = await register(userData);
+    res.status(201).json({
+      success: true,
+      data: user,
+      message: "User registered successfully!",
+    });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

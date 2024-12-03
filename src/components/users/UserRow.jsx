@@ -1,13 +1,13 @@
 import PropTypes from "prop-types";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { deleteUser } from "../../api/api";
 import { useAuth } from "../../auth/AuthProvider";
-import { deleteUser } from "../../auth/AuthService.jsx";
 import { UsersListContext } from "../../context/usersList/UsersListProvider.jsx";
 import Modal from "../common/Modal.jsx";
 
 export default function UserRow({ user }) {
-  const { usersList, setUsersList } = useContext(UsersListContext);
+  const { usersList, setUsersList, fetchUsers } = useContext(UsersListContext);
   const { loggedInUser, logout } = useAuth();
   const { id, name, email } = user;
   const navigate = useNavigate();
@@ -18,10 +18,14 @@ export default function UserRow({ user }) {
   };
 
   const handleDelete = () => {
-    userisLoggedIn && logout();
-
-    const updatedUsersList = deleteUser(id, usersList);
+    const updatedUsersList = usersList.filter((user) => user.id !== id);
     setUsersList(updatedUsersList);
+
+    if (userisLoggedIn) {
+      logout();
+    }
+
+    deleteUser(id);
   };
 
   return (

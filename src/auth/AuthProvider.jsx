@@ -10,20 +10,8 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const { usersList } = useContext(UsersListContext);
-  const [loggedInUser, setLoggedInUser] = useState(() => {
-    const storedLoggedInUser = localStorage.getItem("loggedInUserId");
-    let currentUser;
-
-    if (storedLoggedInUser !== "-1" && storedLoggedInUser !== "undefined") {
-      currentUser = usersList.find(
-        (user) => user.id == JSON.parse(storedLoggedInUser)
-      );
-    } else {
-      currentUser = null;
-    }
-    return currentUser;
-  });
+  const { usersList, isLoading } = useContext(UsersListContext);
+  const [loggedInUser, setLoggedInUser] = useState(null);
 
   const login = (user) => {
     setLoggedInUser(user);
@@ -32,6 +20,25 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setLoggedInUser(null);
   };
+
+  useEffect(() => {
+    if (!isLoading) {
+      const storedLoggedInUser = localStorage.getItem("loggedInUserId");
+      let currentUser;
+
+      console.log("storedLoggedInUser:", storedLoggedInUser);
+
+      console.log("usersList", usersList);
+      if (storedLoggedInUser !== "-1" && storedLoggedInUser !== "undefined") {
+        currentUser = usersList.find(
+          (user) => user.id == JSON.parse(storedLoggedInUser)
+        );
+      } else {
+        currentUser = null;
+      }
+      setLoggedInUser(currentUser);
+    }
+  }, [usersList, isLoading]);
 
   useEffect(() => {
     localStorage.setItem("loggedInUserId", loggedInUser?.id ?? -1);

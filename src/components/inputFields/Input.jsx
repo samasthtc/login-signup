@@ -82,11 +82,7 @@ export default function Input({
         )}
 
         {errorMessage && isDirty && (
-          <p
-            className={`error-text invalid-feedback mt-1 show ${
-              type === "password" ? "mb-0" : ""
-            }`}
-          >
+          <p className={`error-text invalid-feedback mt-1 show mb-0 `}>
             {errorMessage}
           </p>
         )}

@@ -1,12 +1,14 @@
 import LoginRegisterForm from "@/components/authForms/LoginRegisterForm";
 import Modal from "@/components/common/Modal";
 import UsersTable from "@/components/users/UsersTable";
-import { register } from "../auth/AuthService";
+import { register } from "../api/api";
 
 export default function Home() {
   return (
-    <main className="container-fluid
-    d-flex justify-content-center align-items-center vh-100">
+    <main
+      className="container-fluid
+    d-flex justify-content-center align-items-center vh-100"
+    >
       <Modal
         id="add-usr-modal"
         title="Add User"

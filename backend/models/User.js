@@ -13,6 +13,7 @@ class User {
 export const addUser = (userData) => {
   const newUser = new User(userData);
   users.push(newUser);
+  return newUser;
 };
 
 export const findUserByEmail = (email) => {

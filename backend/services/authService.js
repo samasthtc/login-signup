@@ -8,7 +8,22 @@ import {
   updateUser,
 } from "../models/User.js";
 
-export const getUsersList = () => getUsers();
+export const getUsersList = () => {
+  const list = getUsers();
+  return list.map((user) => {
+    // eslint-disable-next-line no-unused-vars
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
+  });
+};
+
+export const getUserById = (id) => {
+  const user = findUserById(id);
+  if (!user) throw new Error("User not found!");
+  // eslint-disable-next-line no-unused-vars
+  const { password, ...userWithoutPassword } = user;
+  return userWithoutPassword;
+};
 
 export const login = async ({ email, password }) => {
   const user = findUserByEmail(email);
@@ -28,8 +43,12 @@ export const register = async ({ name, email, password, role }) => {
   if (findUserByEmail(email)) throw new Error("User already exists!");
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = { name, email, password: hashedPassword, role };
-  addUser(newUser);
+  let newUser = { name, email, password: hashedPassword, role };
+  newUser = addUser(newUser);
+
+  // eslint-disable-next-line no-unused-vars
+  const { password: _, ...userWithoutPassword } = newUser;
+  return userWithoutPassword;
 };
 
 export const saveProfile = async (updatedUser) => {

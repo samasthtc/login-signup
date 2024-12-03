@@ -2,14 +2,26 @@ import { useContext, useMemo, useState } from "react";
 import { UsersListContext } from "../../context/usersList/UsersListProvider";
 import useDebounce from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
+import LoadingSpinner from "../common/LoadingSpinner";
 import SearchField from "../inputFields/SearchField";
 import UserRow from "./UserRow";
 
 export default function UsersTable() {
-  const { usersList } = useContext(UsersListContext);
+  const { usersList, isLoading } = useContext(UsersListContext);
+
+  // const [usersList, setUsersList] = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("name");
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await fetchUsers();
+  //     // setIsLoading(false);
+  //   };
+  //   fetchData();
+  // }, []);
 
   const debouncedSearchChange = useDebounce((value) => {
     setSearchTerm(value);
@@ -31,6 +43,10 @@ export default function UsersTable() {
   const userRows = filteredList.map((user) => {
     return <UserRow key={user.id} user={user} />;
   });
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <CardContainer position="right">

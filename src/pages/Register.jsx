@@ -1,7 +1,7 @@
 import LoginRegisterForm from "@/components/authForms/LoginRegisterForm";
 import { Navigate } from "react-router-dom";
+import { register } from "../api/api";
 import { useAuth } from "../auth/AuthProvider";
-import { register } from "../auth/AuthService";
 
 export default function Register() {
   const { loggedInUser } = useAuth();
