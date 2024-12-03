@@ -6,13 +6,14 @@ import {
   handleRegister,
   handleSaveProfile,
 } from "../controllers/authController.js";
+// import { requireRole } from "../middleware/roleMiddleware.js";
 
 const router = express.Router();
 
 router.post("/login", handleLogin);
 router.post("/register", handleRegister);
-router.put("/profile", handleSaveProfile);
-router.delete("/delete", handleDeleteUser);
+router.put("/profile/:id", handleSaveProfile);
+router.delete("/delete/:id", handleDeleteUser);
 router.get("/", handleGetUsers);
 
 export default router;

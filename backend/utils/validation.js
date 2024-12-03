@@ -4,17 +4,17 @@ export function validateField(value, validationCallback) {
 
 export function validateName(value) {
   return value.length > 2
-    ? { isValid: true, errorMessage: "" }
+    ? { isValid: true, message: "" }
     : {
         isValid: false,
-        errorMessage: "Name must have more than 2 characters.",
+        message: "Name must have more than 2 characters.",
       };
 }
 
 export function validateEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-    ? { isValid: true, errorMessage: "" }
-    : { isValid: false, errorMessage: "Invalid email." };
+    ? { isValid: true, message: "" }
+    : { isValid: false, message: "Invalid email." };
 }
 
 export function validatePassword(password) {
@@ -33,6 +33,6 @@ export function validatePassword(password) {
     errorText = "Password must contain at least one uppercase letter.";
 
   return errorText
-    ? { isValid: false, errorMessage: errorText }
-    : { isValid: true, errorMessage: "" };
+    ? { isValid: false, message: errorText }
+    : { isValid: true, message: "" };
 }

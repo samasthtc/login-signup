@@ -3,60 +3,54 @@ import {
   addUser,
   deleteUser,
   findUserByEmail,
-  findUserByEmailAndId,
+  findUserById,
   getUsers,
   updateUser,
 } from "../models/User.js";
 
-// let users = [];
-
 export const getUsersList = () => getUsers();
 
 export const login = async ({ email, password }) => {
-  //TODO: Continue from here
-
   const user = findUserByEmail(email);
-  if (!user) {
-    return { success: false, message: "Invalid credentials" };
-  }
+  if (!user) throw new Error("Invalid credentials");
 
   const isMatch = await bcrypt.compare(password, user.password);
-  console.log(isMatch);
-  
-  if (!isMatch) {
-    return { success: false, message: "Invalid credentials" };
-  }
+  if (!isMatch) throw new Error("Invalid credentials");
 
   // const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  return { success: true, message: "Login successful", user }; //res.json({ message: 'Login successful', token });
+
+  // eslint-disable-next-line no-unused-vars
+  const { password: _, ...userWithoutPassword } = user;
+  return userWithoutPassword;
 };
 
 export const register = async ({ name, email, password, role }) => {
-  if (findUserByEmail(email)) {
-    return { success: false, message: "User already exists!" };
-  }
+  if (findUserByEmail(email)) throw new Error("User already exists!");
+
   const hashedPassword = await bcrypt.hash(password, 10);
-
   const newUser = { name, email, password: hashedPassword, role };
-  // users.push(newUser);
   addUser(newUser);
-  return {
-    success: true,
-    message: "User registered successfully!",
-  };
 };
 
-export const saveProfile = (updatedUser) => {
-  if (!findUserByEmailAndId(updatedUser.email, updatedUser.id)) {
-    if (findUserByEmail(updatedUser.email))
-      return { success: false, message: "Email already exists!" };
+export const saveProfile = async (updatedUser) => {
+  const existingUser = findUserById(updatedUser.id);
+  if (!existingUser) throw new Error("User not found!");
+
+  if (
+    updatedUser.email !== existingUser.email &&
+    findUserByEmail(updatedUser.email)
+  ) {
+    throw new Error("Email already exists!");
   }
 
-  updateUser(updatedUser.email, updatedUser);
-  return { success: true, message: "Profile updated successfully!" };
+  if (updatedUser.password) {
+    updatedUser.password = await bcrypt.hash(updatedUser.password, 10);
+  }
+
+  await updateUser(updatedUser.id, { ...existingUser, ...updatedUser });
 };
 
-export const deleteProfile = (email) => {
-  deleteUser(email);
-  return { success: true, message: "User deleted successfully!" };
+export const deleteProfile = async (id) => {
+  const status = await deleteUser({ id });
+  if (status === -1) throw new Error("User not found!");
 };
