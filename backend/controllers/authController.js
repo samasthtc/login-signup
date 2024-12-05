@@ -1,7 +1,6 @@
 import {
-  changePassword,
   deleteProfile,
-  getUsersList,
+  getUsers,
   login,
   register,
   saveProfile,
@@ -12,30 +11,26 @@ import {
   validatePassword,
 } from "../utils/validation.js";
 
-export const handleGetUsers = async (req, res) => {
+export const handleGetUsers = async (req, res, next) => {
   try {
-    const users = getUsersList();
+    const users = await getUsers();
     if (users.length === 0) {
       return res
         .status(201)
         .json({ success: true, data: [], message: "No users found" });
     } else {
-      return res.status(201).json({
+      return res.status(200).json({
         success: true,
         data: users,
         message: "Users fetched successfully",
       });
     }
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch users",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-export const handleLogin = async (req, res) => {
+export const handleLogin = async (req, res, next) => {
   const userData = req.body;
   const { email, password } = userData;
 
@@ -47,16 +42,16 @@ export const handleLogin = async (req, res) => {
   }
 
   try {
-    const user = await login(userData);
+    const [user, token] = await login(userData);
     res
-      .status(201)
-      .json({ success: true, data: user, message: "Login successful" });
+      .status(200)
+      .json({ success: true, data: user, message: "Login successful", token });
   } catch (error) {
-    res.status(401).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-export const handleRegister = async (req, res) => {
+export const handleRegister = async (req, res, next) => {
   const userData = req.body;
 
   const nameValidation = validateName(userData.name);
@@ -85,40 +80,64 @@ export const handleRegister = async (req, res) => {
       message: "User registered successfully!",
     });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-export const handleDeleteUser = async (req, res) => {
+export const handleDeleteUser = async (req, res, next) => {
   const { id } = req.params;
   try {
     await deleteProfile(Number(id));
     res.json({ success: true, message: "User deleted successfully!" });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-export const handleSaveProfile = async (req, res) => {
+export const handleSaveProfile = async (req, res, next) => {
   const { id } = req.params;
   const changedData = req.body;
+
+  const validationFields = ["name", "email", "New Password"];
+  for (const field in validationFields) {
+    if (changedData[field]) {
+      const result =
+        field === "name"
+          ? validateName(changedData[field])
+          : field === "email"
+          ? validateEmail(changedData[field])
+          : validatePassword(changedData[field]);
+
+      if (!result.isValid) {
+        return res.status(400).json({
+          success: false,
+          message: { [field]: result.message },
+        });
+      }
+    }
+  }
+
   const updatedUser = { id: Number(id), ...changedData };
   try {
-    await saveProfile(updatedUser);
-    res.json({ success: true, message: "Profile updated successfully!" });
+    const updatedProfile = await saveProfile(updatedUser);
+    res.json({
+      success: true,
+      data: updatedProfile,
+      message: "Profile updated successfully!",
+    });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-export const handleChangePassword = async (req, res) => {
-  const { id } = req.params;
-  const passwords = req.body;
-  
-  try {
-    await changePassword(id, passwords);
-    res.json({ success: true, message: "Password updated successfully!" });
-  } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
+// export const handleChangePassword = async (req, res) => {
+//   const { id } = req.params;
+//   const passwords = req.body;
+
+//   try {
+//     await changePassword(id, passwords);
+//     res.json({ success: true, message: "Password updated successfully!" });
+//   } catch (error) {
+//     res.status(400).json({ success: false, message: error.message });
+//   }
+// };
