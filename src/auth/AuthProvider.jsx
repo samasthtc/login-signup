@@ -21,24 +21,24 @@ export const AuthProvider = ({ children }) => {
     setLoggedInUser(null);
   };
 
-  useEffect(() => {
-    if (!isLoading) {
-      const storedLoggedInUser = localStorage.getItem("loggedInUserId");
-      let currentUser;
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     const storedLoggedInUser = localStorage.getItem("loggedInUserId");
+  //     let currentUser;
 
-      console.log("storedLoggedInUser:", storedLoggedInUser);
+  //     console.log("storedLoggedInUser:", storedLoggedInUser);
 
-      console.log("usersList", usersList);
-      if (storedLoggedInUser !== "-1" && storedLoggedInUser !== "undefined") {
-        currentUser = usersList.find(
-          (user) => user.id == JSON.parse(storedLoggedInUser)
-        );
-      } else {
-        currentUser = null;
-      }
-      setLoggedInUser(currentUser);
-    }
-  }, [usersList, isLoading]);
+  //     console.log("usersList", usersList);
+  //     if (storedLoggedInUser !== "-1" && storedLoggedInUser !== "undefined") {
+  //       currentUser = usersList.find(
+  //         (user) => user.id == JSON.parse(storedLoggedInUser)
+  //       );
+  //     } else {
+  //       currentUser = null;
+  //     }
+  //     setLoggedInUser(currentUser);
+  //   }
+  // }, [usersList, isLoading]);
 
   useEffect(() => {
     localStorage.setItem("loggedInUserId", loggedInUser?.id ?? -1);

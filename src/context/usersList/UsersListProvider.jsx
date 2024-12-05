@@ -13,19 +13,23 @@ export default function UsersListProvider({ children }) {
     try {
       const { success, data } = await getUsers();
       if (success) {
-        if (data.length < 0) {
-          const storedUsers = JSON.parse(
-            localStorage.getItem("usersList") || "[]"
-          );
-          setUsers(storedUsers);
-        } else setUsers(data);
+        // if (data.length < 0) {
+        //   const storedUsers = JSON.parse(
+        //     localStorage.getItem("usersList") || "[]"
+        //   );
+        //   for (user in storedUsers){
+        //     addUser
+        //   }
+        //   setUsers(storedUsers);
+        // } else
+         setUsers(data);
       } else {
         console.error("Failed to fetch users");
       }
     } catch (error) {
       console.error("Error fetching users", error);
-      const storedUsers = JSON.parse(localStorage.getItem("usersList") || "[]");
-      setUsers(storedUsers);
+      // const storedUsers = JSON.parse(localStorage.getItem("usersList") || "[]");
+      // setUsers(storedUsers);
     } finally {
       setIsLoading(false);
     }
@@ -35,13 +39,11 @@ export default function UsersListProvider({ children }) {
     fetchUsers();
   }, []);
 
-  useEffect(() => {
-    if (users.length > 0) {
-      localStorage.setItem("usersList", JSON.stringify(users));
-    }
-  }, [users]);
-
-  console.log(users);
+  // useEffect(() => {
+  //   if (users.length > 0) {
+  //     localStorage.setItem("usersList", JSON.stringify(users));
+  //   }
+  // }, [users]);
 
   return (
     <UsersListContext.Provider

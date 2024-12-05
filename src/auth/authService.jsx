@@ -72,7 +72,6 @@ export function register({ name, email, password }, usersList) {
   }
   const newUser = { id: Date.now(), name, email, password };
   const updatedList = [...usersList, newUser];
-  localStorage.setItem("usersList", JSON.stringify(usersList));
   return {
     isValid: true,
     newUser: newUser,
@@ -81,12 +80,7 @@ export function register({ name, email, password }, usersList) {
   };
 }
 
-// export function logout() {
-//   localStorage.setItem("loggedInUserId", "-1");
-// }
-
 export function saveProfile(id, { name, email, password }, usersList) {
-  //check if new email already exists for ANOTHER user
   if (
     usersList.some(
       (user) =>
@@ -109,13 +103,11 @@ export function saveProfile(id, { name, email, password }, usersList) {
   // let shouldThrowError = false;
   // if (shouldThrowError) throw new Error("Error while saving profile");
 
-  localStorage.setItem("usersList", JSON.stringify(updatedList));
   const user = updatedList.find((u) => u.id === id);
   return { isValid: true, updatedList, updatedUser: user };
 }
 
 export function deleteUser(userId, usersList) {
   const updatedList = usersList.filter((u) => u.id !== userId);
-  localStorage.setItem("usersList", JSON.stringify(updatedList));
   return updatedList;
 }

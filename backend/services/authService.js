@@ -66,7 +66,36 @@ export const saveProfile = async (updatedUser) => {
     updatedUser.password = await bcrypt.hash(updatedUser.password, 10);
   }
 
-  await updateUser(updatedUser.id, { ...existingUser, ...updatedUser });
+  await updateUser({ ...existingUser, ...updatedUser });
+
+  // eslint-disable-next-line no-unused-vars
+  const { password, ...userWithoutPassword } = findUserById(updatedUser.id);
+  return userWithoutPassword;
+};
+
+export const changePassword = async (id, passwords) => {
+  const user = findUserById(id);
+
+  if (!user) throw new Error("User not found!");
+
+  const isMatch = await bcrypt.compare(
+    passwords["Old Password"],
+    user.password
+  );
+  if (!isMatch) throw new Error("Old Password is Incorrect!");
+
+  const isNewMatch = await bcrypt.compare(
+    passwords["New Password"],
+    user.password
+  );
+  if (isNewMatch) throw new Error("New Password is the same as the old one!");
+
+  const hashedPassword = await bcrypt.hash(passwords["New Password"], 10);
+  await updateUser({ ...user, password: hashedPassword });
+
+  // eslint-disable-next-line no-unused-vars
+  const { password, ...userWithoutPassword } = findUserById(id);
+  return userWithoutPassword;
 };
 
 export const deleteProfile = async (id) => {

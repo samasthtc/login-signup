@@ -21,7 +21,7 @@ export const findUserByEmail = (email) => {
 };
 
 export const findUserById = (id) => {
-  return users.find((user) => user.id === id);
+  return users.find((user) => user.id === Number(id));
 };
 
 export const findUserByEmailAndId = (email, id) => {
@@ -35,7 +35,7 @@ export const deleteUser = ({ id }) => {
   users = users.filter((user) => user.id !== id);
 };
 
-export const updateUser = (id, updatedUserData) => {
+export const updateUser = (updatedUserData) => {
   const updatedUser = new User(updatedUserData);
-  users = users.map((user) => (user.id === id ? updatedUser : user));
+  users = users.map((user) => (user.id === updatedUser.id ? updatedUser : user));
 };

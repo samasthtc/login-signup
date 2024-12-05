@@ -1,7 +1,6 @@
-import EditForm from "@/components/EditForm";
+import EditForm from "@/components/editForms/EditForm";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { saveProfile } from "../api/api";
 
 export default function Profile() {
   const location = useLocation();
@@ -20,7 +19,6 @@ export default function Profile() {
       setQueries(newQueries);
     }
   }, [location, queries]);
-  
 
   return (
     <main
@@ -31,12 +29,7 @@ export default function Profile() {
         className="row d-flex justify-content-center
      align-items-center align-content-center w-100"
       >
-        {!!queries.userId && (
-          <EditForm
-          queries={queries}
-            submit={saveProfile}
-          />
-        )}
+        {!!queries.userId && <EditForm queries={queries} />}
       </div>
     </main>
   );

@@ -19,7 +19,6 @@ export default function Input({
   };
 
   const { register, options } = registerProps || {};
-  const validateFunc = options?.validate;
 
   const inputType =
     type === "password" ? (isPasswordVisible ? "text" : "password") : type;
@@ -34,7 +33,6 @@ export default function Input({
               ? {
                   ...register(name, {
                     ...options,
-                    validate: async (value) => await validateFunc(value),
                   }),
                 }
               : {

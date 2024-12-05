@@ -1,4 +1,5 @@
 import {
+  changePassword,
   deleteProfile,
   getUsersList,
   login,
@@ -105,6 +106,18 @@ export const handleSaveProfile = async (req, res) => {
   try {
     await saveProfile(updatedUser);
     res.json({ success: true, message: "Profile updated successfully!" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const handleChangePassword = async (req, res) => {
+  const { id } = req.params;
+  const passwords = req.body;
+  
+  try {
+    await changePassword(id, passwords);
+    res.json({ success: true, message: "Password updated successfully!" });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

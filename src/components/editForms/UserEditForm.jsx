@@ -1,38 +1,33 @@
 import PropTypes from "prop-types";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { useAuth } from "../auth/AuthProvider";
+import { useAuth } from "../../auth/AuthProvider";
 import {
   validateEmail,
   validateField,
   validateName,
   validatePassword,
-} from "../auth/AuthService";
-import { UsersListContext } from "../context/usersList/UsersListProvider";
-import { useDebouncePromise } from "../utils/debounce";
-import CardContainer from "./common/CardContainer";
-import LoadingSpinner from "./common/LoadingSpinner";
-import Input from "./inputFields/Input";
+} from "../../auth/AuthService";
+import { UsersListContext } from "../../context/usersList/UsersListProvider";
+import { useDebouncePromise } from "../../utils/debounce";
+import LoadingSpinner from "../common/LoadingSpinner";
+import Input from "../inputFields/Input";
 
-export default function EditForm({ queries, submit }) {
-  const { userId, isCurrent } = queries;
-  const { loggedInUser, login } = useAuth();
-  const { usersList, setUsersList } = useContext(UsersListContext);
-  const [user, setUser] = useState(() => {
-    if (isCurrent === "true") {
-      return { ...loggedInUser };
-    } else {
-      const foundUser = usersList.find((u) => u.id === Number(userId));
-      return foundUser ? { ...foundUser } : null;
-    }
-  });
+export default function UserEditForm({
+  user,
+  isCurrent,
+  handleGoBack,
+  submit,
+  toggleEditPassword,
+}) {
+  const { login } = useAuth();
+  const { usersList, setUsersList, fetchUsers } = useContext(UsersListContext);
 
   const defaults = {
     name: user?.name || "",
     email: user?.email || "",
-    password: user?.password || "",
   };
+
   const {
     register,
     handleSubmit,
@@ -50,15 +45,6 @@ export default function EditForm({ queries, submit }) {
     success: false,
     message: "",
   });
-
-  useEffect(() => {
-    if (isCurrent === "true") {
-      setUser({ ...loggedInUser });
-    } else {
-      const foundUser = usersList.find((u) => u.id === Number(userId));
-      setUser(foundUser ? { ...foundUser } : null);
-    }
-  }, [isCurrent, loggedInUser, userId, usersList, queries]);
 
   const handleFieldValidation = (field, value) => {
     const { isValid, errorMessage } = validateField(
@@ -92,13 +78,20 @@ export default function EditForm({ queries, submit }) {
     return await debouncedValidation(field, value);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     try {
-      const result = submit(user.id, data, usersList);
+      let success, resData, message;
+      try {
+        ({ success, data: resData, message } = await submit(user.id, data));
+      } catch (error) {
+        message = error.message || "An error occured!";
+        success = false;
+      }
 
-      if (result.isValid) {
-        isCurrent === "true" && login(result.updatedUser);
-        setUsersList(result.updatedList);
+      if (success) {
+        const newUser = resData;
+        isCurrent === "true" && login(newUser);
+        setUsersList([...usersList, newUser]);
         setAlert({
           show: true,
           success: true,
@@ -110,9 +103,11 @@ export default function EditForm({ queries, submit }) {
         setAlert({
           show: true,
           success: false,
-          message: result.message ?? "An error occured! Profile update failed!",
+          message: message ?? "An error occured! Profile update failed!",
         });
       }
+
+      fetchUsers();
     } catch (error) {
       console.error(error);
       // setAlert({
@@ -179,24 +174,18 @@ export default function EditForm({ queries, submit }) {
     };
   }, [formState, noChanges]);
 
-  useEffect(() => {
-    reset(defaults);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reset, user]);
+  // useEffect(() => {
+  //   reset(defaults);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [reset, user]);
 
-  const fieldNames = ["name", "email", "password"];
+  const fieldNames = ["name", "email"];
   const inputs = fieldNames.map((field) => (
     <Input
       key={field}
       type={field === "name" ? "text" : field}
       name={field}
-      autoComplete={
-        field === "email"
-          ? "email"
-          : field === "password"
-          ? "new-password"
-          : "off"
-      }
+      autoComplete={field === "email" ? "email" : "off"}
       registerProps={{
         register: register,
         options: {
@@ -211,9 +200,8 @@ export default function EditForm({ queries, submit }) {
   ));
 
   return (
-    <CardContainer>
+    <>
       <h1 className="title text-center ">Edit Profile</h1>
-
       <form
         id="edit-form"
         action="#"
@@ -231,30 +219,36 @@ export default function EditForm({ queries, submit }) {
           <button
             type="submit"
             className="btn border-2 rounded-pill btn-outline-primary
-             mt-3 mb-1 text-semibold me-2"
+       mt-3 mb-1 text-semibold me-2"
             disabled={noChanges}
           >
             Save Changes
           </button>
         </div>
 
-        <Link className=" text-decoration-none" to="/">
-          <button
-            type="button"
-            className="btn border-2 rounded-pill btn-outline-secondary mt-3 mb-1
-                text-semibold text-black-50"
-          >
-            Back
-          </button>
-        </Link>
-      </form>
+        <button
+          type="submit"
+          className="btn border-2 rounded-pill btn-outline-danger
+       mt-3 mb-1 text-semibold me-2"
+          onClick={toggleEditPassword}
+        >
+          Change Password
+        </button>
 
+        <button
+          type="button"
+          className="btn border-2 rounded-pill btn-outline-secondary mt-3 mb-1
+          text-semibold text-black-50"
+          onClick={handleGoBack}
+        >
+          Back
+        </button>
+      </form>
       {isSubmitting && (
         <div className="col-12 text-center">
           <LoadingSpinner />
         </div>
       )}
-
       {alert.show && (
         <div
           className={`alert ${
@@ -268,14 +262,21 @@ export default function EditForm({ queries, submit }) {
           {alert.message}
         </div>
       )}
-    </CardContainer>
+    </>
   );
 }
 
-EditForm.propTypes = {
-  queries: PropTypes.shape({
-    isCurrent: PropTypes.string,
-    userId: PropTypes.any,
+UserEditForm.propTypes = {
+  handleGoBack: PropTypes.any,
+  isCurrent: PropTypes.string,
+  login: PropTypes.func,
+  setUsersList: PropTypes.func,
+  submit: PropTypes.func,
+  toggleEditPassword: PropTypes.any,
+  user: PropTypes.shape({
+    email: PropTypes.string,
+    id: PropTypes.number,
+    name: PropTypes.string,
   }),
-  submit: PropTypes.func.isRequired,
+  usersList: PropTypes.any,
 };
