@@ -1,25 +1,28 @@
+import axios from "axios";
+
 const BASE_URL = "http://localhost:5000";
 
-const apiRequest = async (endpoint, method = "GET", body = null) => {
-  const config = {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
+const apiRequest = async (
+  endpoint,
+  method = "GET",
+  headers = {},
+  body = null
+) => {
+  try {
+    const response = await axios({
+      url: `${BASE_URL}${endpoint}`,
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...headers,
+      },
+      data: body,
+    });
 
-  if (body) {
-    config.body = JSON.stringify(body);
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error.response?.data?.message || error.message);
+    throw new Error(error.response?.data?.message || "Something went wrong");
   }
-
-  const response = await fetch(`${BASE_URL}${endpoint}`, config);
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.error("Error:", errorData.message);
-    throw new Error(errorData.message || "Something went wrong");
-  }
-
-  return response.json();
 };
 export default apiRequest;

@@ -99,9 +99,12 @@ export default function LoginRegisterForm({ type, submit }) {
     }
     if (isEmpty) return;
 
-    let success, resData, message;
+    let success, resData, message, token;
     try {
-      ({ success, data: resData, message } = await submit(data));
+      const response = await submit(data);
+      console.log(response);
+      
+      ({ success, data: resData, message, token } = response);
     } catch (error) {
       message = error.message || "An error occured!";
       success = false;
@@ -123,7 +126,7 @@ export default function LoginRegisterForm({ type, submit }) {
           });
         }
       } else if (type === "login") {
-        login(resData);
+        login(resData, token);
         // navigate("/");
       }
     } else {

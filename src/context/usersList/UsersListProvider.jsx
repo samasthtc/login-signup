@@ -1,43 +1,36 @@
 import PropTypes from "prop-types";
 import { createContext, useEffect, useState } from "react";
 import { getUsers } from "../../api/api";
+import { useAuth } from "../../auth/AuthProvider";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const UsersListContext = createContext(null);
 
 export default function UsersListProvider({ children }) {
   const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { token, isLoading, setIsLoading } = useAuth();
+
 
   const fetchUsers = async () => {
     try {
-      const { success, data } = await getUsers();
+      const { success, data } = await getUsers(token);
       if (success) {
-        // if (data.length < 0) {
-        //   const storedUsers = JSON.parse(
-        //     localStorage.getItem("usersList") || "[]"
-        //   );
-        //   for (user in storedUsers){
-        //     addUser
-        //   }
-        //   setUsers(storedUsers);
-        // } else
          setUsers(data);
       } else {
         console.error("Failed to fetch users");
       }
     } catch (error) {
       console.error("Error fetching users", error);
-      // const storedUsers = JSON.parse(localStorage.getItem("usersList") || "[]");
-      // setUsers(storedUsers);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
+    if (!isLoading) {
     fetchUsers();
-  }, []);
+    } 
+  }, [isLoading, token]);
 
   // useEffect(() => {
   //   if (users.length > 0) {

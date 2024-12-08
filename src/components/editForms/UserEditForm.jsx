@@ -23,10 +23,10 @@ export default function UserEditForm({
   const { login } = useAuth();
   const { usersList, setUsersList, fetchUsers } = useContext(UsersListContext);
 
-  const defaults = {
+  let defaults = useRef({
     name: user?.name || "",
     email: user?.email || "",
-  };
+  });
 
   const {
     register,
@@ -35,9 +35,18 @@ export default function UserEditForm({
     reset,
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm({
-    defaultValues: defaults,
+    defaultValues: defaults.current,
     mode: "onChange",
   });
+
+  useEffect(() => {
+    defaults.current = {
+      name: user?.name || "",
+      email: user?.email || "",
+    };
+    reset(defaults.current);
+  }, [user, reset]);
+
   const [manualDirtyFields, setManualDirtyFields] = useState({});
 
   const [alert, setAlert] = useState({
@@ -82,7 +91,7 @@ export default function UserEditForm({
     try {
       let success, resData, message;
       try {
-        ({ success, data: resData, message } = await submit(user.id, data));
+        ({ success, data: resData, message } = await submit(user._id, data));
       } catch (error) {
         message = error.message || "An error occured!";
         success = false;
@@ -275,7 +284,7 @@ UserEditForm.propTypes = {
   toggleEditPassword: PropTypes.any,
   user: PropTypes.shape({
     email: PropTypes.string,
-    id: PropTypes.number,
+    _id: PropTypes.number,
     name: PropTypes.string,
   }),
   usersList: PropTypes.any,

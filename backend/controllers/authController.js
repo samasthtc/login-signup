@@ -87,7 +87,7 @@ export const handleRegister = async (req, res, next) => {
 export const handleDeleteUser = async (req, res, next) => {
   const { id } = req.params;
   try {
-    await deleteProfile(Number(id));
+    await deleteProfile(id);
     res.json({ success: true, message: "User deleted successfully!" });
   } catch (error) {
     next(error);
@@ -117,7 +117,7 @@ export const handleSaveProfile = async (req, res, next) => {
     }
   }
 
-  const updatedUser = { id: Number(id), ...changedData };
+  const updatedUser = { _id: id, ...changedData };
   try {
     const updatedProfile = await saveProfile(updatedUser);
     res.json({

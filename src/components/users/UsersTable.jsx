@@ -34,20 +34,25 @@ export default function UsersTable() {
 
   const filteredList = useMemo(() => {
     return usersList.filter((user) => {
-      return filter === "name"
-        ? user.name.toLowerCase().includes(searchTerm.toLowerCase())
-        : user.email.toLowerCase().includes(searchTerm.toLowerCase());
+      const valueToCheck =
+        filter === "name" ? user.name.toLowerCase() : user.email.toLowerCase();
+      return valueToCheck.includes(searchTerm.toLowerCase());
     });
   }, [usersList, searchTerm, filter]);
 
-  const userRows = filteredList.map((user) => {
-    return <UserRow key={user.id} user={user} />;
-  });
+  // let userRows = filteredList.map((user) => {
+  //   return <UserRow key={user._id} user={user} />;
+  // });
+
+  // useEffect(() => {
+  //   userRows.current = filteredList.map((user) => {
+  //     return <UserRow key={user._id} user={user} />;
+  //   });
+  // }, [usersList]);
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
-
   return (
     <CardContainer position="right">
       <SearchField
@@ -72,7 +77,12 @@ export default function UsersTable() {
               <th className="table-primary email-header">Email</th> */}
             </tr>
           </thead>
-          <tbody>{userRows}</tbody>
+          <tbody>
+            {filteredList.map((user) => {
+              console.log(usersList, filteredList);
+              return <UserRow key={user._id} user={user} />;
+            })}
+          </tbody>
         </table>
       </div>
     </CardContainer>

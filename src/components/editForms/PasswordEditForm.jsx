@@ -79,7 +79,7 @@ export default function PasswordEditForm({
     try {
       let success, resData, message;
       try {
-        ({ success, data: resData, message } = await submit(user.id, data));
+        ({ success, data: resData, message } = await submit(user._id, data));
       } catch (error) {
         message = error.message || "An error occured!";
         success = false;
@@ -302,7 +302,7 @@ PasswordEditForm.propTypes = {
   toggleEditPassword: PropTypes.any,
   user: PropTypes.shape({
     email: PropTypes.string,
-    id: PropTypes.number,
+    _id: PropTypes.number,
     name: PropTypes.string,
   }),
   usersList: PropTypes.any,

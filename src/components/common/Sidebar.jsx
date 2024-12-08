@@ -13,7 +13,7 @@ export default function Sidebar() {
     home: location.pathname === "/",
     profile:
       location.pathname + location.search ===
-      `/profile?current=true&id=${loggedInUser?.id}`,
+      `/profile?current=true&id=${loggedInUser?._id}`,
   };
 
   const tooltipRefs = {
@@ -75,7 +75,7 @@ export default function Sidebar() {
           }`}
         >
           <Link
-            to={`/profile?current=true&id=${loggedInUser?.id}`}
+            to={`/profile?current=true&id=${loggedInUser?._id}`}
             className={`nav-link ${
               isCurrent.profile ? "active" : ""
             } d-flex align-items-center link-dark text-decoration-none

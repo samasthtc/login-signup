@@ -18,7 +18,7 @@ export default function EditForm({ queries }) {
     if (isCurrent === "true") {
       return { ...loggedInUser };
     } else {
-      const foundUser = usersList.find((u) => u.id === Number(userId));
+      const foundUser = usersList.find((u) => u._id === userId);
       return foundUser ? { ...foundUser } : null;
     }
   });
@@ -35,12 +35,15 @@ export default function EditForm({ queries }) {
   const toggleEditPassword = () => {
     setEditPassword((prev) => !prev);
   };
+  console.log(queries);
+  console.log(user);
+  
 
   useEffect(() => {
     if (isCurrent === "true") {
       setUser({ ...loggedInUser });
     } else {
-      const foundUser = usersList.find((u) => u.id === Number(userId));
+      const foundUser = usersList.find((u) => u._id === userId);
       setUser(foundUser ? { ...foundUser } : null);
     }
   }, [isCurrent, loggedInUser, userId, usersList, queries]);

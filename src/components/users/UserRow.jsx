@@ -9,27 +9,27 @@ import Modal from "../common/Modal.jsx";
 export default function UserRow({ user }) {
   const { usersList, setUsersList } = useContext(UsersListContext);
   const { loggedInUser, logout } = useAuth();
-  const { id, name, email } = user;
+  const { _id, name, email } = user;
   const navigate = useNavigate();
-  const userisLoggedIn = loggedInUser.id === id;
+  const userisLoggedIn = loggedInUser._id === _id;
 
   const handleEdit = () => {
-    navigate("/profile?current=false&id=" + id);
+    navigate(`/profile?current=${userisLoggedIn}&id=${_id}`);
   };
 
   const handleDelete = () => {
-    const updatedUsersList = usersList.filter((user) => user.id !== id);
+    const updatedUsersList = usersList.filter((user) => user._id !== _id);
     setUsersList(updatedUsersList);
 
     if (userisLoggedIn) {
       logout();
     }
 
-    deleteUser(id);
+    deleteUser(_id);
   };
 
   return (
-    <tr id={id} className="user-row">
+    <tr id={_id} className="user-row">
       <td className="fit-content">
         <div className="dropdown fit-content">
           <button
@@ -48,7 +48,7 @@ export default function UserRow({ user }) {
                 type="button"
                 className="dropdown-item delete"
                 data-bs-toggle="modal"
-                data-bs-target={`#dlt-usr-${id}-modal`}
+                data-bs-target={`#dlt-usr-${_id}-modal`}
               >
                 Delete
               </button>
@@ -56,8 +56,8 @@ export default function UserRow({ user }) {
           </ul>
         </div>
         <Modal
-          key={id}
-          id={`dlt-usr-${id}-modal`}
+          key={_id}
+          id={`dlt-usr-${_id}-modal`}
           title={`Delete user (${name})?\n${
             userisLoggedIn ? "You will be logged out." : ""
           }`}
@@ -86,7 +86,7 @@ export default function UserRow({ user }) {
 UserRow.propTypes = {
   user: PropTypes.shape({
     email: PropTypes.string.isRequired,
-    id: PropTypes.any.isRequired,
+    _id: PropTypes.any.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
 };

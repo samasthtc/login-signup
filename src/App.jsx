@@ -24,8 +24,8 @@ function App() {
   return (
     <div className="App container-fluid">
       <div className="row">
-        <UsersListProvider>
-          <AuthProvider>
+        <AuthProvider>
+          <UsersListProvider>
             <Suspense fallback={loadingSpinner}>
               <Routes>
                 <Route
@@ -62,8 +62,8 @@ function App() {
                 />
               </Routes>
             </Suspense>
-          </AuthProvider>
-        </UsersListProvider>
+          </UsersListProvider>
+        </AuthProvider>
       </div>
     </div>
   );

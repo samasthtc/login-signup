@@ -57,7 +57,7 @@ export const register = async ({ name, email, password, role }) => {
 export const saveProfile = async (updatedUser) => {
   let finalUpdatedUser = {};
 
-  const existingUser = await getFullUserById(updatedUser.id);
+  const existingUser = await getFullUserById(updatedUser._id);
   if (!existingUser) throw new Error("User not found!");
 
   if (
@@ -94,7 +94,7 @@ export const saveProfile = async (updatedUser) => {
     finalUpdatedUser.password = hashedPassword;
   }
 
-  updatedUser = await updateUserById(existingUser.id, finalUpdatedUser);
+  updatedUser = await updateUserById(existingUser._id, finalUpdatedUser);
   return updatedUser;
 };
 

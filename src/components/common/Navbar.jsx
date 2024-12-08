@@ -25,7 +25,7 @@ export default function Navbar() {
               {location.pathname === "/" && (
                 <li className="nav-item" id="navbar-profile">
                   <Link
-                    to={`/profile?current=true&id=${loggedInUser?.id}`}
+                    to={`/profile?current=true&id=${loggedInUser?._id}`}
                     className="nav-link"
                   >
                     <i className="fas fa-user text-primary"></i>
@@ -41,11 +41,7 @@ export default function Navbar() {
                 </li>
               )}
 
-              <li
-                className="nav-item"
-                id="navbar-logout"
-                onClick={logout}
-              >
+              <li className="nav-item" id="navbar-logout" onClick={logout}>
                 <Link to="/login" className="nav-link">
                   <i className="fas fa-sign-out text-primary"></i>
                 </Link>
