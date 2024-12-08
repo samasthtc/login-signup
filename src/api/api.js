@@ -11,10 +11,15 @@ export const getUsers = (token) =>
     Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
   });
 
-export const deleteUser = (id, token) =>
-  apiRequest(`/api/protected/delete/${id}`, "DELETE", {
-    Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
-  });
+export const deleteUser = (id, user, token) =>
+  apiRequest(
+    `/api/protected/delete/${id}`,
+    "DELETE",
+    {
+      Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
+    },
+    user
+  );
 
 export const saveProfile = (id, changedData, token) =>
   apiRequest(

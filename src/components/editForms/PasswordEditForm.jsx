@@ -15,8 +15,8 @@ export default function PasswordEditForm({
   submit,
   toggleEditPassword,
 }) {
-  const { login } = useAuth();
-  const { usersList, setUsersList, fetchUsers } = useContext(UsersListContext);
+  const { login, setTriggerFetch } = useAuth();
+  const { usersList, setUsersList } = useContext(UsersListContext);
 
   const defaults = {
     "Old Password": "",
@@ -104,7 +104,7 @@ export default function PasswordEditForm({
         });
       }
 
-      fetchUsers();
+      setTriggerFetch(true);
     } catch (error) {
       console.error(error);
       // setAlert({
@@ -302,7 +302,7 @@ PasswordEditForm.propTypes = {
   toggleEditPassword: PropTypes.any,
   user: PropTypes.shape({
     email: PropTypes.string,
-    _id: PropTypes.number,
+    _id: PropTypes.string,
     name: PropTypes.string,
   }),
   usersList: PropTypes.any,

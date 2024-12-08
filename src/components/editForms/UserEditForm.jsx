@@ -20,8 +20,8 @@ export default function UserEditForm({
   submit,
   toggleEditPassword,
 }) {
-  const { login } = useAuth();
-  const { usersList, setUsersList, fetchUsers } = useContext(UsersListContext);
+  const { login, setTriggerFetch } = useAuth();
+  const { usersList, setUsersList } = useContext(UsersListContext);
 
   let defaults = useRef({
     name: user?.name || "",
@@ -116,7 +116,7 @@ export default function UserEditForm({
         });
       }
 
-      fetchUsers();
+      setTriggerFetch(true);
     } catch (error) {
       console.error(error);
       // setAlert({
@@ -182,7 +182,6 @@ export default function UserEditForm({
       tooltipInstance?.dispose();
     };
   }, [formState, noChanges]);
-
 
   const fieldNames = ["name", "email"];
   const inputs = fieldNames.map((field) => (

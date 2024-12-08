@@ -16,10 +16,10 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [triggerFetch, setTriggerFetch] = useState(false);
   useEffect(() => {
-    if (token) {
+    if (token && loggedInUser) {
       fetchUsers(token);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const fetchUsers = async (token) => {
@@ -59,7 +59,16 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ loggedInUser, login, logout, token, isLoading, setIsLoading, triggerFetch, setTriggerFetch }}
+      value={{
+        loggedInUser,
+        login,
+        logout,
+        token,
+        isLoading,
+        setIsLoading,
+        triggerFetch,
+        setTriggerFetch,
+      }}
     >
       {children}
     </AuthContext.Provider>

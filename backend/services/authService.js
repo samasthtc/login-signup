@@ -57,6 +57,8 @@ export const saveProfile = async (updatedUser) => {
   let finalUpdatedUser = {};
 
   const existingUser = await getFullUserById(updatedUser._id);
+  console.log(updatedUser);
+  
   if (!existingUser) throw new Error("User not found!");
 
   if (
@@ -75,7 +77,7 @@ export const saveProfile = async (updatedUser) => {
       finalUpdatedUser[key] = updatedUser[key];
   }
 
-  if (updatedUser.password) {
+  if (updatedUser["Old Password"] && updatedUser["New Password"]) {
     const isMatch = await bcrypt.compare(
       updatedUser["Old Password"],
       existingUser.password

@@ -1,14 +1,12 @@
 import PropTypes from "prop-types";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../../api/api";
 import { useAuth } from "../../auth/AuthProvider";
-import { UsersListContext } from "../../context/usersList/UsersListProvider.jsx";
 import Modal from "../common/Modal.jsx";
 
 export default function UserRow({ user }) {
-  const { usersList, setUsersList } = useContext(UsersListContext);
-  const { loggedInUser, logout } = useAuth();
+  // const { usersList, setUsersList } = useContext(UsersListContext);
+  const { loggedInUser, logout, setTriggerFetch } = useAuth();
   const { _id, name, email } = user;
   const navigate = useNavigate();
   const userisLoggedIn = loggedInUser._id === _id;
@@ -17,15 +15,16 @@ export default function UserRow({ user }) {
     navigate(`/profile?current=${userisLoggedIn}&id=${_id}`);
   };
 
-  const handleDelete = () => {
-    const updatedUsersList = usersList.filter((user) => user._id !== _id);
-    setUsersList(updatedUsersList);
-
-    if (userisLoggedIn) {
-      logout();
+  const handleDelete = async () => {
+    try {
+      await deleteUser(_id, loggedInUser);
+      setTriggerFetch(true);
+      if (userisLoggedIn) {
+        logout();
+      }
+    } catch (error) {
+      console.log("Error deleting user", error);
     }
-
-    deleteUser(_id);
   };
 
   return (
