@@ -10,30 +10,26 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  // const { usersList, isLoading } = useContext(UsersListContext);
   const storedUserId = localStorage.getItem("loggedInUserId");
-  console.log("Stored User ID:", storedUserId);
   const [token, setToken] = useState(localStorage.getItem("token") ?? null);
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [users, setUsers] = useState([]);
-
+  const [triggerFetch, setTriggerFetch] = useState(false);
   useEffect(() => {
     if (token) {
       fetchUsers(token);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const fetchUsers = async (token) => {
     try {
       const { success, data } = await getUsers(token);
       if (success) {
-        setUsers(data);
         if (storedUserId) {
-          const loggedIn = data.find(user => user._id === storedUserId);
+          const loggedIn = data.find((user) => user._id === storedUserId);
           if (loggedIn) {
-            console.log("Logged-in user found:", loggedIn);
-            setLoggedInUser(loggedIn);
+            login(loggedIn, token);
           }
         }
       } else {
@@ -46,29 +42,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (users.length > 0) {
-  //     const storedUserId = localStorage.getItem("loggedInUserId");
-  //     if (storedUserId) {
-  //       const user = users.find((user) => {
-  //         console.log("Checking user:", user._id, storedUserId);
-  //         return user._id === storedUserId;
-  //       });
-  //       if (user) {
-  //         console.log("Logged-in user found:", user);
-  //         setLoggedInUser(user);
-  //       }
-  //     }
-  //   }
-  // }, [users]);
-
-  // const storedLoggedInUser = localStorage.getItem("loggedInUserId");
-
-  const login = (user, token) => {
+  const login = (user, userToken) => {
+    const finalToken = userToken || token;
     setLoggedInUser(user);
-    setToken(token);
+    setToken(finalToken);
     localStorage.setItem("loggedInUserId", user._id);
-    localStorage.setItem("token", token);
+    localStorage.setItem("token", finalToken);
   };
 
   const logout = () => {
@@ -78,28 +57,9 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
   };
 
-  
-
-  // useEffect(() => {
-  //   let currentUser;
-  //   if (storedLoggedInUser !== "-1" && storedLoggedInUser !== "undefined") {
-  //     currentUser = users.find(
-  //       (user) => user.id == JSON.parse(storedLoggedInUser)
-  //     );
-  //   } else {
-  //     currentUser = null;
-  //   }
-  //   setLoggedInUser(currentUser);
-  // }, [token]);
-
-  // useEffect(() => {
-  //   localStorage.setItem("loggedInUserId", loggedInUser?._id ?? -1);
-  //   localStorage.setItem("token", token);
-  // }, [loggedInUser, token]);
-
   return (
     <AuthContext.Provider
-      value={{ loggedInUser, login, logout, token, isLoading, setIsLoading }}
+      value={{ loggedInUser, login, logout, token, isLoading, setIsLoading, triggerFetch, setTriggerFetch }}
     >
       {children}
     </AuthContext.Provider>

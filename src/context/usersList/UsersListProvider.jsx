@@ -8,14 +8,14 @@ export const UsersListContext = createContext(null);
 
 export default function UsersListProvider({ children }) {
   const [users, setUsers] = useState([]);
-  const { token, isLoading, setIsLoading } = useAuth();
-
+  const { token, isLoading, setIsLoading, triggerFetch, setTriggerFetch } = useAuth();
 
   const fetchUsers = async () => {
     try {
+      
       const { success, data } = await getUsers(token);
       if (success) {
-         setUsers(data);
+        setUsers(data);
       } else {
         console.error("Failed to fetch users");
       }
@@ -23,20 +23,16 @@ export default function UsersListProvider({ children }) {
       console.error("Error fetching users", error);
     } finally {
       setIsLoading(false);
+      setTriggerFetch(false);
     }
   };
 
   useEffect(() => {
-    if (!isLoading) {
-    fetchUsers();
-    } 
-  }, [isLoading, token]);
-
-  // useEffect(() => {
-  //   if (users.length > 0) {
-  //     localStorage.setItem("usersList", JSON.stringify(users));
-  //   }
-  // }, [users]);
+    if (!isLoading || triggerFetch) {
+      fetchUsers();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, triggerFetch]);
 
   return (
     <UsersListContext.Provider

@@ -8,20 +8,9 @@ import UserRow from "./UserRow";
 
 export default function UsersTable() {
   const { usersList, isLoading } = useContext(UsersListContext);
-
-  // const [usersList, setUsersList] = useState([]);
-  // const [isLoading, setIsLoading] = useState(true);
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("name");
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     await fetchUsers();
-  //     // setIsLoading(false);
-  //   };
-  //   fetchData();
-  // }, []);
 
   const debouncedSearchChange = useDebounce((value) => {
     setSearchTerm(value);
@@ -39,16 +28,6 @@ export default function UsersTable() {
       return valueToCheck.includes(searchTerm.toLowerCase());
     });
   }, [usersList, searchTerm, filter]);
-
-  // let userRows = filteredList.map((user) => {
-  //   return <UserRow key={user._id} user={user} />;
-  // });
-
-  // useEffect(() => {
-  //   userRows.current = filteredList.map((user) => {
-  //     return <UserRow key={user._id} user={user} />;
-  //   });
-  // }, [usersList]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -78,10 +57,9 @@ export default function UsersTable() {
             </tr>
           </thead>
           <tbody>
-            {filteredList.map((user) => {
-              console.log(usersList, filteredList);
-              return <UserRow key={user._id} user={user} />;
-            })}
+            {filteredList.map((user) => (
+              <UserRow key={user._id} user={user} />
+            ))}
           </tbody>
         </table>
       </div>

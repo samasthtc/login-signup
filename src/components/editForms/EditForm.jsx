@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { changePassword, saveProfile } from "../../api/api";
+import { saveProfile } from "../../api/api";
 import { useAuth } from "../../auth/AuthProvider";
 import { UsersListContext } from "../../context/usersList/UsersListProvider";
 import CardContainer from "../common/CardContainer";
@@ -10,7 +10,7 @@ import UserEditForm from "./UserEditForm";
 
 export default function EditForm({ queries }) {
   const [editPassword, setEditPassword] = useState(false);
-  const submit = editPassword ? changePassword : saveProfile;
+  const submit = saveProfile;
   const { userId, isCurrent } = queries;
   const { loggedInUser, login } = useAuth();
   const { usersList, setUsersList } = useContext(UsersListContext);
@@ -35,9 +35,6 @@ export default function EditForm({ queries }) {
   const toggleEditPassword = () => {
     setEditPassword((prev) => !prev);
   };
-  console.log(queries);
-  console.log(user);
-  
 
   useEffect(() => {
     if (isCurrent === "true") {

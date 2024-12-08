@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
@@ -9,15 +9,13 @@ import {
   validateName,
   validatePassword,
 } from "../../auth/AuthService";
-import { UsersListContext } from "../../context/usersList/UsersListProvider";
 import { useDebouncePromise } from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Input from "../inputFields/Input";
 
 export default function LoginRegisterForm({ type, submit }) {
-  const { usersList, setUsersList } = useContext(UsersListContext);
-  const { login } = useAuth();
+  const { login, setTriggerFetch } = useAuth();
   const navigate = useNavigate();
   const [alert, setAlert] = useState({
     show: false,
@@ -102,8 +100,6 @@ export default function LoginRegisterForm({ type, submit }) {
     let success, resData, message, token;
     try {
       const response = await submit(data);
-      console.log(response);
-      
       ({ success, data: resData, message, token } = response);
     } catch (error) {
       message = error.message || "An error occured!";
@@ -112,10 +108,7 @@ export default function LoginRegisterForm({ type, submit }) {
 
     if (success) {
       if (type === "register" || type === "add") {
-        // fetchUsers();
-
-        const newUser = resData;
-        setUsersList([...usersList, newUser]);
+        setTriggerFetch(true);
         type === "register" && navigate("/login");
         if (type === "add") {
           resetFields();
@@ -127,7 +120,6 @@ export default function LoginRegisterForm({ type, submit }) {
         }
       } else if (type === "login") {
         login(resData, token);
-        // navigate("/");
       }
     } else {
       setError(
@@ -259,7 +251,6 @@ export default function LoginRegisterForm({ type, submit }) {
           type="submit"
           className="btn btn-submit-primary border-2 border border-primary rounded-pill btn-outline-primary
           mt-3 mb-1 fw-bold align-self-end bg-primary-subtle hover-bg-primary w-100"
-          // disabled={!isValid}
         >
           {submitBtnText}
         </button>

@@ -183,10 +183,6 @@ export default function UserEditForm({
     };
   }, [formState, noChanges]);
 
-  // useEffect(() => {
-  //   reset(defaults);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [reset, user]);
 
   const fieldNames = ["name", "email"];
   const inputs = fieldNames.map((field) => (
@@ -284,7 +280,7 @@ UserEditForm.propTypes = {
   toggleEditPassword: PropTypes.any,
   user: PropTypes.shape({
     email: PropTypes.string,
-    _id: PropTypes.number,
+    _id: PropTypes.string,
     name: PropTypes.string,
   }),
   usersList: PropTypes.any,

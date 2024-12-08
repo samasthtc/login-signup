@@ -99,9 +99,6 @@ export function saveProfile(id, { name, email, password }, usersList) {
     }
     return user;
   });
-  //throw error
-  // let shouldThrowError = false;
-  // if (shouldThrowError) throw new Error("Error while saving profile");
 
   const user = updatedList.find((u) => u.id === id);
   return { isValid: true, updatedList, updatedUser: user };

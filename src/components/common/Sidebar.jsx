@@ -136,16 +136,12 @@ export default function Sidebar() {
         <li
           ref={tooltipRefs.logOut}
           data-bs-toggle={tooltipRefs.logOut}
-          className="nav-item"
+          className="nav-item nav-link link-dark gap-2 d-flex align-items-center fw-semibold"
           onClick={logout}
+          role="button"
         >
-          <Link
-            to="/login"
-            className="nav-link link-dark gap-2 d-flex align-items-center fw-semibold"
-          >
             <i className="fa-solid fa-sign-out"></i>
             <span className={!isExpanded ? "hidden" : ""}>Sign Out</span>
-          </Link>
         </li>
       </ul>
     </aside>

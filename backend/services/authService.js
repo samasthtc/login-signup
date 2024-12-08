@@ -38,7 +38,6 @@ export const login = async ({ email, password }) => {
 };
 
 export const register = async ({ name, email, password, role }) => {
-  console.log(name, email, password, role);
   const existingUser = await getUserByEmail(email);
   if (existingUser) throw new Error("User already exists!");
 

@@ -13,7 +13,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 
 const loadingSpinner = (
   <div
-    className="d-flex justify-content-center align-items-center my-auto"
+    className="d-flex app justify-content-center align-items-center my-auto"
     style={{ height: "90vh" }}
   >
     <LoadingSpinner />
@@ -25,44 +25,46 @@ function App() {
     <div className="App container-fluid">
       <div className="row">
         <AuthProvider>
-          <UsersListProvider>
-            <Suspense fallback={loadingSpinner}>
-              <Routes>
-                <Route
-                  path="/"
-                  element={
+          <Suspense fallback={loadingSpinner}>
+            <Routes>
+              <Route
+                path="/login"
+                element={
+                  <GeneralLayout>
+                    <Login />
+                  </GeneralLayout>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <GeneralLayout>
+                    <Register />
+                  </GeneralLayout>
+                }
+              />
+              <Route
+                path="/"
+                element={
+                  <UsersListProvider>
                     <PrivateLayout>
                       <Home />
                     </PrivateLayout>
-                  }
-                />
-                <Route
-                  path="/login"
-                  element={
-                    <GeneralLayout>
-                      <Login />
-                    </GeneralLayout>
-                  }
-                />
-                <Route
-                  path="/register"
-                  element={
-                    <GeneralLayout>
-                      <Register />
-                    </GeneralLayout>
-                  }
-                />
-                <Route
-                  path="/profile"
-                  element={
+                  </UsersListProvider>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <UsersListProvider>
                     <PrivateLayout>
                       <Profile />
                     </PrivateLayout>
-                  }
-                />
-              </Routes>
-            </Suspense>
-          </UsersListProvider>
+                  </UsersListProvider>
+                }
+              />
+            </Routes>
+          </Suspense>
         </AuthProvider>
       </div>
     </div>
