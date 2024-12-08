@@ -3,6 +3,7 @@ import { useState } from "react";
 export default function Input({
   type,
   name = "",
+  id,
   autoComplete = "off",
   autoFocus = false,
   errorMessage,
@@ -47,7 +48,7 @@ export default function Input({
                 ? "is-invalid input-error"
                 : showSuccess && "input-success")
             }`}
-            id={name}
+            id={id ?? name}
             placeholder={
               name !== "search"
                 ? `Enter your ${name}...`
@@ -93,8 +94,9 @@ Input.propTypes = {
   autoComplete: PropTypes.string,
   autoFocus: PropTypes.bool,
   my: PropTypes.number,
-  name: PropTypes.string,
   registerProps: PropTypes.object,
+  name: PropTypes.string,
+  id: PropTypes.string,
   value: PropTypes.any,
   errorMessage: PropTypes.any,
   onChange: PropTypes.func,

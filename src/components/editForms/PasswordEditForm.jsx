@@ -75,7 +75,9 @@ export default function PasswordEditForm({
     return isValid || "Passwords do not match";
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, e) => {
+    e.preventDefault();
+
     try {
       let success, resData, message;
       try {
@@ -191,6 +193,7 @@ export default function PasswordEditForm({
         }}
         errorMessage={errors["Old Password"]?.message}
         isDirty={getValues("Old Password") !== defaults["Old Password"]}
+      
       />
       <Input
         type="password"
@@ -207,6 +210,8 @@ export default function PasswordEditForm({
         }}
         errorMessage={errors["New Password"]?.message}
         isDirty={getValues("New Password") !== defaults["New Password"]}
+      showSuccess={true}
+      
       />
       <Input
         type="password"
@@ -222,6 +227,8 @@ export default function PasswordEditForm({
         }}
         errorMessage={errors["Confirm Password"]?.message}
         isDirty={getValues("Confirm Password") !== defaults["Confirm Password"]}
+      showSuccess={true}
+      
       />
     </>
   );

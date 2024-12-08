@@ -87,7 +87,9 @@ export default function UserEditForm({
     return await debouncedValidation(field, value);
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, e) => {
+    e.preventDefault();
+
     try {
       let success, resData, message;
       try {
@@ -194,12 +196,12 @@ export default function UserEditForm({
         register: register,
         options: {
           required: "This field is required",
-          validate: async (value) =>
-            await validateFieldWithDebounce(field, value),
+          validate: (value) => validateFieldWithDebounce(field, value),
         },
       }}
       errorMessage={errors[field]?.message}
       isDirty={manualDirtyFields[field] ?? false}
+      showSuccess={true}
     />
   ));
 
@@ -214,6 +216,11 @@ export default function UserEditForm({
         noValidate
       >
         {inputs}
+
+        <p className="mt-2 ms-1 text-capitalize">
+          <strong className="me-2">Role:</strong>
+          {user.role}
+        </p>
 
         <div
           className="position-relative d-inline-block"
@@ -281,6 +288,7 @@ UserEditForm.propTypes = {
     email: PropTypes.string,
     _id: PropTypes.string,
     name: PropTypes.string,
+    role: PropTypes.string,
   }),
   usersList: PropTypes.any,
 };

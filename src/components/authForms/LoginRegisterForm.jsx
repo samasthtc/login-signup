@@ -13,10 +13,12 @@ import { useDebouncePromise } from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Input from "../inputFields/Input";
+import RadioButton from "../inputFields/RadioButton";
 
 export default function LoginRegisterForm({ type, submit }) {
   const { login, setTriggerFetch } = useAuth();
   const navigate = useNavigate();
+  const [selectedRole, setSelectedRole] = useState("user");
   const [alert, setAlert] = useState({
     show: false,
     success: false,
@@ -83,7 +85,9 @@ export default function LoginRegisterForm({ type, submit }) {
     return await debouncedValidation(field, value).then((result) => result);
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, e) => {
+    e.preventDefault();
+
     let isEmpty = false;
     for (const field in data) {
       if (!data[field] || data[field] === defaults[field]) {
@@ -96,6 +100,10 @@ export default function LoginRegisterForm({ type, submit }) {
       }
     }
     if (isEmpty) return;
+
+    if (type === "add") {
+      data.role = selectedRole;
+    }
 
     let success, resData, message, token;
     try {
@@ -169,6 +177,34 @@ export default function LoginRegisterForm({ type, submit }) {
       isDirty={manualDirtyFields["name"] ?? false}
       showSuccess={type !== "login"}
     />
+  );
+
+  const roleSelector = type === "add" && (
+    <div className="form-group mt-3 ms-1">
+      <h5 className="fw-bold">Role</h5>
+      <div className="d-flex gap-3">
+        <div>
+          <RadioButton
+            id="role-user"
+            name="role"
+            value="user"
+            checked={selectedRole === "user"}
+            onChange={(e) => setSelectedRole(e.target.value)}
+            label="User"
+          />
+        </div>
+        <div>
+          <RadioButton
+            id="role-admin"
+            name="role"
+            value="admin"
+            checked={selectedRole === "admin"}
+            onChange={(e) => setSelectedRole(e.target.value)}
+            label="Admin"
+          />
+        </div>
+      </div>
+    </div>
   );
 
   let title, submitBtnText, bottomParagraph, formId, autoCompletePassword;
@@ -246,6 +282,8 @@ export default function LoginRegisterForm({ type, submit }) {
         {(type === "register" || type === "add") && nameInput}
 
         {inputs}
+
+        {roleSelector}
 
         <button
           type="submit"
