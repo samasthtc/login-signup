@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  // handleChangePassword,
   handleDeleteUser,
   handleGetUsers,
   handleSaveProfile,
@@ -11,7 +10,6 @@ import authMiddleware from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.put("/profile/:id", authMiddleware, handleSaveProfile);
-// router.put("/profile/password/:id", authMiddleware, handleChangePassword);
 router.delete("/delete/:id", authMiddleware, requireRole("admin"), handleDeleteUser);
 router.get("/", authMiddleware, handleGetUsers);
 

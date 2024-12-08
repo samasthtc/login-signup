@@ -30,6 +30,3 @@ export const saveProfile = (id, changedData, token) =>
     },
     changedData
   );
-
-export const changePassword = (id, passwords) =>
-  apiRequest(`/api/auth/profile/password/${id}`, "PUT", {}, passwords);

@@ -129,15 +129,3 @@ export const handleSaveProfile = async (req, res, next) => {
     next(error);
   }
 };
-
-// export const handleChangePassword = async (req, res) => {
-//   const { id } = req.params;
-//   const passwords = req.body;
-
-//   try {
-//     await changePassword(id, passwords);
-//     res.json({ success: true, message: "Password updated successfully!" });
-//   } catch (error) {
-//     res.status(400).json({ success: false, message: error.message });
-//   }
-// };

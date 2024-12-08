@@ -7,13 +7,17 @@ export default function Modal({
   confirmText,
   onConfirm,
   showButtons,
+  reff,
+  size = "md",
 }) {
   return (
-    <div className="modal fade" id={id} tabIndex={-1}>
-      <div className="modal-dialog modal-dialog-centered modal-md">
+    <div className="modal fade" id={id} ref={reff} tabIndex={-1}>
+      <div className={`modal-dialog modal-dialog-centered modal-${size}`}>
         <div className="modal-content">
           <div className="modal-header text-center pb-0">
-            <h2 className="modal-title overflow-auto text-center fw-bold">{title}</h2>
+            <h2 className="modal-title overflow-auto text-center fw-bold">
+              {title}
+            </h2>
             <button
               type="button"
               className="btn-close"
@@ -51,10 +55,12 @@ export default function Modal({
 
 Modal.propTypes = {
   body: PropTypes.any,
+  cancelText: PropTypes.string,
+  confirmText: PropTypes.string,
   id: PropTypes.string,
   onConfirm: PropTypes.func,
-  title: PropTypes.string,
-  confirmText: PropTypes.string,
-  cancelText: PropTypes.string,
+  reff: PropTypes.any,
   showButtons: PropTypes.bool,
+  size: PropTypes.string,
+  title: PropTypes.string,
 };

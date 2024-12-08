@@ -57,8 +57,7 @@ export const saveProfile = async (updatedUser) => {
   let finalUpdatedUser = {};
 
   const existingUser = await getFullUserById(updatedUser._id);
-  console.log(updatedUser);
-  
+
   if (!existingUser) throw new Error("User not found!");
 
   if (
@@ -98,31 +97,6 @@ export const saveProfile = async (updatedUser) => {
   updatedUser = await updateUserById(existingUser._id, finalUpdatedUser);
   return updatedUser;
 };
-
-// export const changePassword = async (id, passwords) => {
-//   const user = getUserById(id);
-
-//   if (!user) throw new Error("User not found!");
-
-//   const isMatch = await bcrypt.compare(
-//     passwords["Old Password"],
-//     user.password
-//   );
-//   if (!isMatch) throw new Error("Old Password is Incorrect!");
-
-//   const isNewMatch = await bcrypt.compare(
-//     passwords["New Password"],
-//     user.password
-//   );
-//   if (isNewMatch) throw new Error("New Password is the same as the old one!");
-
-//   const hashedPassword = await bcrypt.hash(passwords["New Password"], 10);
-//   await updateUser({ ...user, password: hashedPassword });
-
-//   // eslint-disable-next-line no-unused-vars
-//   const { password, ...userWithoutPassword } = getUserById(id);
-//   return userWithoutPassword;
-// };
 
 export const deleteProfile = async (id) => {
   const deletedUser = await deleteUserById( id );

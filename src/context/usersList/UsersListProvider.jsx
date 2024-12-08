@@ -8,11 +8,11 @@ export const UsersListContext = createContext(null);
 
 export default function UsersListProvider({ children }) {
   const [users, setUsers] = useState([]);
-  const { token, isLoading, setIsLoading, triggerFetch, setTriggerFetch } = useAuth();
+  const { token, isLoading, setIsLoading, triggerFetch, setTriggerFetch } =
+    useAuth();
 
   const fetchUsers = async () => {
     try {
-      
       const { success, data } = await getUsers(token);
       if (success) {
         setUsers(data);
@@ -31,7 +31,7 @@ export default function UsersListProvider({ children }) {
     if (!isLoading || triggerFetch) {
       fetchUsers();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, triggerFetch]);
 
   return (

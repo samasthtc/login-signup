@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../../api/api";
 import { useAuth } from "../../auth/AuthProvider";
@@ -10,6 +11,7 @@ export default function UserRow({ user }) {
   const { _id, name, email } = user;
   const navigate = useNavigate();
   const userisLoggedIn = loggedInUser._id === _id;
+  const errorModalRef = useRef();
 
   const handleEdit = () => {
     navigate(`/profile?current=${userisLoggedIn}&id=${_id}`);
@@ -23,7 +25,11 @@ export default function UserRow({ user }) {
         logout();
       }
     } catch (error) {
-      console.log("Error deleting user", error);
+      console.log(error);
+
+      const errorModal = new window.bootstrap.Modal(errorModalRef.current);
+      errorModal.show();
+      setTimeout(() => errorModal.hide(), 3500);
     }
   };
 
@@ -64,6 +70,13 @@ export default function UserRow({ user }) {
           confirmText="Delete"
           onConfirm={handleDelete}
           showButtons={true}
+        />
+        <Modal
+          id="error-modal"
+          reff={errorModalRef}
+          title="Action Not Authorized"
+          body="You are not authorized to delete this user because you are not an admin."
+          showButtons={false} // No buttons for the error modal
         />
       </td>
       {/* <td className="user-info-md" role="button" onClick={handleEdit}>

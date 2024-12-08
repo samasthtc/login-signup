@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [triggerFetch, setTriggerFetch] = useState(false);
   useEffect(() => {
-    if (token && loggedInUser) {
+    if (token && storedUserId) {
       fetchUsers(token);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
