@@ -83,7 +83,6 @@ export default function UserEditForm({
   const debouncedValidation = useDebouncePromise(handleFieldValidation);
 
   const validateFieldWithDebounce = async (field, value) => {
-    // setValue(field, value, { shouldDirty: true });
     return await debouncedValidation(field, value);
   };
 
@@ -121,11 +120,6 @@ export default function UserEditForm({
       setTriggerFetch(true);
     } catch (error) {
       console.error(error);
-      // setAlert({
-      //   show: true,
-      //   success: false,
-      //   message: "An error occured! Profile update failed!",
-      // });
     }
 
     alert.show &&

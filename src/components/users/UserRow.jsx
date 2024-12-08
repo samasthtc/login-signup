@@ -75,7 +75,7 @@ export default function UserRow({ user }) {
           reff={errorModalRef}
           title="Action Not Authorized"
           body="You are not authorized to delete this user because you are not an admin."
-          showButtons={false} // No buttons for the error modal
+          showButtons={false}
         />
       </td>
       {/* <td className="user-info-md" role="button" onClick={handleEdit}>

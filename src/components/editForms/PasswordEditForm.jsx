@@ -109,11 +109,6 @@ export default function PasswordEditForm({
       setTriggerFetch(true);
     } catch (error) {
       console.error(error);
-      // setAlert({
-      //   show: true,
-      //   success: false,
-      //   message: "An error occured! Profile update failed!",
-      // });
     }
 
     alert.show &&
