@@ -6,7 +6,6 @@ import { useAuth } from "../../auth/AuthProvider";
 import Modal from "../common/Modal.jsx";
 
 export default function UserRow({ user }) {
-  // const { usersList, setUsersList } = useContext(UsersListContext);
   const { loggedInUser, logout, setTriggerFetch } = useAuth();
   const { _id, name, email } = user;
   const navigate = useNavigate();
