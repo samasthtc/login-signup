@@ -35,13 +35,21 @@ export default function UserRow({ user }) {
   return (
     <tr id={_id} className="user-row">
       <td className="fit-content">
-        <div className="dropdown fit-content">
+      <button
+                type="button"
+                className="dropdown-item delete"
+                data-bs-toggle="modal"
+                data-bs-target={`#dlt-usr-${_id}-modal`}
+              >
+                <i className="far fa-trash-can"></i>
+              </button>
+        {/* <div className="dropdown fit-content">
           <button
             className="btn btn-link dropdown-toggle p-0"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <i className="fas fa-ellipsis-v"></i>
+            <i className="far fa-trash-can text-danger"></i>
           </button>
           <ul className="dropdown-menu">
             <li onClick={handleEdit}>
@@ -58,7 +66,7 @@ export default function UserRow({ user }) {
               </button>
             </li>
           </ul>
-        </div>
+        </div> */}
         <Modal
           key={_id}
           id={`dlt-usr-${_id}-modal`}

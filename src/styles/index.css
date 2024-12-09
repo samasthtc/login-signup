@@ -9662,6 +9662,24 @@ textarea.form-control-lg {
     -moz-column-gap: 3rem !important;
          column-gap: 3rem !important;
   }
+  .fs-sm-1 {
+    font-size: calc(1.375rem + 1.5vw) !important;
+  }
+  .fs-sm-2 {
+    font-size: calc(1.325rem + 0.9vw) !important;
+  }
+  .fs-sm-3 {
+    font-size: calc(1.3rem + 0.6vw) !important;
+  }
+  .fs-sm-4 {
+    font-size: calc(1.275rem + 0.3vw) !important;
+  }
+  .fs-sm-5 {
+    font-size: 1.25rem !important;
+  }
+  .fs-sm-6 {
+    font-size: 1rem !important;
+  }
   .text-sm-start {
     text-align: left !important;
   }
@@ -10222,6 +10240,24 @@ textarea.form-control-lg {
   .column-gap-md-5 {
     -moz-column-gap: 3rem !important;
          column-gap: 3rem !important;
+  }
+  .fs-md-1 {
+    font-size: calc(1.375rem + 1.5vw) !important;
+  }
+  .fs-md-2 {
+    font-size: calc(1.325rem + 0.9vw) !important;
+  }
+  .fs-md-3 {
+    font-size: calc(1.3rem + 0.6vw) !important;
+  }
+  .fs-md-4 {
+    font-size: calc(1.275rem + 0.3vw) !important;
+  }
+  .fs-md-5 {
+    font-size: 1.25rem !important;
+  }
+  .fs-md-6 {
+    font-size: 1rem !important;
   }
   .text-md-start {
     text-align: left !important;
@@ -10784,6 +10820,24 @@ textarea.form-control-lg {
     -moz-column-gap: 3rem !important;
          column-gap: 3rem !important;
   }
+  .fs-lg-1 {
+    font-size: calc(1.375rem + 1.5vw) !important;
+  }
+  .fs-lg-2 {
+    font-size: calc(1.325rem + 0.9vw) !important;
+  }
+  .fs-lg-3 {
+    font-size: calc(1.3rem + 0.6vw) !important;
+  }
+  .fs-lg-4 {
+    font-size: calc(1.275rem + 0.3vw) !important;
+  }
+  .fs-lg-5 {
+    font-size: 1.25rem !important;
+  }
+  .fs-lg-6 {
+    font-size: 1rem !important;
+  }
   .text-lg-start {
     text-align: left !important;
   }
@@ -11344,6 +11398,24 @@ textarea.form-control-lg {
   .column-gap-xl-5 {
     -moz-column-gap: 3rem !important;
          column-gap: 3rem !important;
+  }
+  .fs-xl-1 {
+    font-size: calc(1.375rem + 1.5vw) !important;
+  }
+  .fs-xl-2 {
+    font-size: calc(1.325rem + 0.9vw) !important;
+  }
+  .fs-xl-3 {
+    font-size: calc(1.3rem + 0.6vw) !important;
+  }
+  .fs-xl-4 {
+    font-size: calc(1.275rem + 0.3vw) !important;
+  }
+  .fs-xl-5 {
+    font-size: 1.25rem !important;
+  }
+  .fs-xl-6 {
+    font-size: 1rem !important;
   }
   .text-xl-start {
     text-align: left !important;
@@ -11906,6 +11978,24 @@ textarea.form-control-lg {
     -moz-column-gap: 3rem !important;
          column-gap: 3rem !important;
   }
+  .fs-xxl-1 {
+    font-size: calc(1.375rem + 1.5vw) !important;
+  }
+  .fs-xxl-2 {
+    font-size: calc(1.325rem + 0.9vw) !important;
+  }
+  .fs-xxl-3 {
+    font-size: calc(1.3rem + 0.6vw) !important;
+  }
+  .fs-xxl-4 {
+    font-size: calc(1.275rem + 0.3vw) !important;
+  }
+  .fs-xxl-5 {
+    font-size: 1.25rem !important;
+  }
+  .fs-xxl-6 {
+    font-size: 1rem !important;
+  }
   .text-xxl-start {
     text-align: left !important;
   }
@@ -11927,6 +12017,42 @@ textarea.form-control-lg {
     font-size: 1.75rem !important;
   }
   .fs-4 {
+    font-size: 1.5rem !important;
+  }
+  .fs-sm-1 {
+    font-size: 2.5rem !important;
+  }
+  .fs-sm-2 {
+    font-size: 2rem !important;
+  }
+  .fs-sm-3 {
+    font-size: 1.75rem !important;
+  }
+  .fs-sm-4 {
+    font-size: 1.5rem !important;
+  }
+  .fs-md-1 {
+    font-size: 2.5rem !important;
+  }
+  .fs-md-2 {
+    font-size: 2rem !important;
+  }
+  .fs-md-3 {
+    font-size: 1.75rem !important;
+  }
+  .fs-md-4 {
+    font-size: 1.5rem !important;
+  }
+  .fs-lg-1 {
+    font-size: 2.5rem !important;
+  }
+  .fs-lg-2 {
+    font-size: 2rem !important;
+  }
+  .fs-lg-3 {
+    font-size: 1.75rem !important;
+  }
+  .fs-lg-4 {
     font-size: 1.5rem !important;
   }
 }
@@ -12014,13 +12140,13 @@ tr {
 }
 
 button.delete {
-  background-color: hsl(355, 66%, 80%);
+  color: hsl(355, 60%, 65%);
 }
 button.delete:hover {
-  background-color: hsl(355, 60%, 65%);
+  color: hsl(355, 75%, 45%);
 }
 button.delete:active {
-  background-color: hsl(355, 75%, 45%);
+  color: hsl(355, 66%, 80%);
 }
 
 h1.title, .title.h1 {
@@ -12197,7 +12323,7 @@ span.input-group-text:active {
 
 .side-btn {
   position: absolute;
-  right: -10px;
+  right: -16px;
   top: calc(50vh - 16px);
   z-index: 1000;
   width: 32px;
@@ -12220,7 +12346,9 @@ span.input-group-text:active {
 }
 
 .sidebar-header {
-  height: 24px !important;
+  height: -moz-fit-content !important;
+  height: fit-content !important;
+  max-height: 100px !important;
 }
 .sidebar-header.active {
   background-color: unset !important;
@@ -12234,13 +12362,6 @@ span.hidden {
   display: none;
 }
 
-aside.sidebar {
-  transition: all 0.3s ease;
-}
-aside.sidebar.collapse {
-  width: 84px !important;
-  transition: all 0.3s ease;
-}
 aside.sidebar .nav-link {
   transition: color 0.2s ease, background-color 0.2s ease;
 }
@@ -12265,6 +12386,10 @@ aside.sidebar li.nav-item .nav-link i {
   width: 35px !important;
 }
 
+.mw-75 {
+  max-width: 75% !important;
+}
+
 .p-25 {
   padding: 0.75rem !important;
 }
@@ -12279,7 +12404,7 @@ aside.sidebar li.nav-item .nav-link i {
     margin: 0 auto;
   }
 }
-@media screen and (max-width: 575px) {
+@media screen and (max-width: 576px) {
   .email-header,
   .name-header,
   .user-info-md {
@@ -12288,5 +12413,47 @@ aside.sidebar li.nav-item .nav-link i {
   .user-header,
   .user-info {
     display: table-cell;
+  }
+  .sidebar {
+    position: fixed;
+    z-index: 9999;
+    box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
+  }
+  .sidebar.collapsed {
+    box-shadow: unset;
+    left: -100%;
+  }
+  .sidebar.collapsed > *:not(.sidebar-btn) {
+    display: none;
+  }
+  .sidebar.collapsed .sidebar-btn {
+    position: fixed;
+    left: 0;
+    right: 0 !important;
+  }
+  .sidebar .side-btn {
+    display: none;
+  }
+  .sidebar-btn {
+    position: absolute;
+    right: 5px !important;
+    top: 5px;
+    z-index: 1000;
+    width: 32px;
+    height: 32px;
+    margin: 5px;
+    transition: transform 0.3s ease;
+  }
+  .sidebar-btn:hover {
+    background-color: #8e91d1;
+    color: hsl(189, 4%, 33%);
+  }
+  .sidebar-btn:active {
+    background-color: #a9b2c7 !important;
+    color: hsl(187, 4%, 51%) !important;
+  }
+  .w-0 {
+    width: 0 !important;
+    flex: unset !important;
   }
 }
