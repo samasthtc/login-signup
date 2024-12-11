@@ -72,10 +72,10 @@ export default function Sidebar() {
       <aside
         ref={sidebarRef}
         className={`m-0 me-sm-2 p-sm-3 py-4 px-4 d-flex flex-column flex-shrink-0 bg-secondary text-white
-       rounded-end-4 position-relative sidebar fs-4 fs-sm-6 ${
+       rounded-end-4 position-relative sidebar fs-5 fs-sm-6  ${
          isOpen
            ? "col-10 col-md-auto col-sm-3 "
-           : "collapsed col-10 col-sm-1 w-0 ps-0 pe-0"
+           : "collapsed col-10 col-sm-1 col-lg-05 col-xl-05 w-0 ps-0 pe-0"
        }`}
         style={{ height: "100vh" }}
       >

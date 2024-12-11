@@ -26,6 +26,20 @@ $radial-secondary-accent: radial-gradient($secondary, $accent);
   scroll-behavior: smooth;
 }
 
+@media (min-width: 992px) {
+  .col-lg-05 {
+    flex: 0 0 auto;
+    width: 5.5555555555%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .col-xl-05 {
+    flex: 0 0 auto;
+    width: 4.1666667%;
+  }
+}
+
 body {
   background-color: $bg-1;
 }
@@ -326,6 +340,7 @@ span.hidden {
 
 aside.sidebar {
   // transition: all 0.3s ease;
+  min-width: 62px;
 
   .nav-link {
     transition: color 0.2s ease, background-color 0.2s ease;

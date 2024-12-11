@@ -12095,6 +12095,18 @@ textarea.form-control-lg {
   scroll-behavior: smooth;
 }
 
+@media (min-width: 992px) {
+  .col-lg-05 {
+    flex: 0 0 auto;
+    width: 5.5555555555%;
+  }
+}
+@media (min-width: 1200px) {
+  .col-xl-05 {
+    flex: 0 0 auto;
+    width: 4.1666667%;
+  }
+}
 body {
   background-color: hsl(195, 25%, 97%);
 }
@@ -12362,6 +12374,9 @@ span.hidden {
   display: none;
 }
 
+aside.sidebar {
+  min-width: 62px;
+}
 aside.sidebar .nav-link {
   transition: color 0.2s ease, background-color 0.2s ease;
 }
