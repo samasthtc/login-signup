@@ -22,8 +22,8 @@ export default function Profile() {
 
   return (
     <main
-      className="container-fluid my-5 d-flex justify-content-center
-     align-items-center align-content-center"
+      className="container-fluid d-flex justify-content-center
+     align-items-center align-content-center vh-100"
     >
       <div
         className="row d-flex justify-content-center
