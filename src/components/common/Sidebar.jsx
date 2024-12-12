@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
 
-// TODO: make it responsive for xs screens
+
 export default function Sidebar() {
   const sidebarRef = useRef(null);
   const { loggedInUser, logout } = useAuth();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [isSmall, setIsSmall] = useState(window.innerWidth < 576);
   const toggleOpen = () => setIsOpen(!isOpen);
 
   const isCurrent = {
@@ -17,12 +18,24 @@ export default function Sidebar() {
       `/profile?current=true&id=${loggedInUser?._id}`,
   };
 
-  const isOpenAndSmall = isOpen && window.innerWidth < 576;
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmall(window.innerWidth < 576);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const isOpenAndSmall = isOpen && isSmall;
 
   useEffect(() => {
     const handleClick = (e) => {
       if (
-        window.innerWidth < 576 &&
+        isSmall &&
         sidebarRef.current &&
         !sidebarRef.current.contains(e.target)
       ) {
@@ -35,7 +48,7 @@ export default function Sidebar() {
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, []);
+  }, [isSmall]);
 
   const tooltipRefs = {
     profile: useRef(null),
@@ -98,11 +111,11 @@ export default function Sidebar() {
        m-0 p-0 border-0 ${isOpen ? "to-left" : ""}`}
           onClick={toggleOpen}
         >
-          <i className="fa-solid fa-circle-chevron-right fa-2xl m-0 p-0"></i>
+          <i className="fa-solid fa-chevron-right fa-lg m-0 p-0"></i>
         </button>
 
         <ul
-          className={`nav nav-pills flex-column d-flex  ${
+          className={`nav nav-pills flex-column d-flex ${isSmall ? "me-4" : ""} ${
             isOpen ? "align-content-start" : "align-content-center"
           }`}
         >
@@ -137,10 +150,10 @@ export default function Sidebar() {
           </li>
         </ul>
 
-        <hr className="text-secondary" />
+        <hr className={`text-secondary ${isSmall ? "me-4" : ""}`} />
 
         <ul
-          className={`nav nav-pills flex-column mb-auto d-flex gap-2 ${
+          className={`nav nav-pills flex-column mb-auto d-flex gap-2 ${isSmall ? "me-4" : ""} ${
             isOpen ? "align-content-start" : "align-content-center"
           }`}
         >
@@ -177,9 +190,10 @@ export default function Sidebar() {
           </li>
         </ul>
 
-        <hr className="text-secondary" />
+        <hr className={`text-secondary ${isSmall ? "me-4" : ""}`} />
 
-        <ul className="nav nav-pills flex-column">
+
+        <ul className={`nav nav-pills flex-column ${isSmall ? "me-4" : ""}`}>
           <li
             ref={tooltipRefs.logOut}
             data-bs-toggle={tooltipRefs.logOut}

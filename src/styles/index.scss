@@ -6,7 +6,7 @@ $primary: hsl(197, 84%, 54%);
 $primary-faded: hsl(197, 45%, 67%);
 $secondary: hsl(310, 83%, 74%);
 $accent: hsl(346, 83%, 63%);
-$accent-1: hsl(345, 117%, 81%); // +1, +34, +18
+$accent-1: hsl(345, 100%, 81%);
 $accent-faded: hsl(346, 24%, 88%);
 $info: $accent;
 $dangerous: hsl(355, 66%, 80%);
@@ -17,7 +17,7 @@ $warning-dark: hsl(45, 80%, 65%);
 $warning-darker: hsl(45, 90%, 45%);
 
 $linear-primary-secondary: linear-gradient($primary, $secondary);
-$linear-primary-accent: linear-gradient($primary, $accent);
+$linear-primary-accent: linear-gradient(to right, $accent, $accent-1); 
 $linear-secondary-accent: linear-gradient(125deg, $secondary, $accent);
 $radial-primary-secondary: radial-gradient($primary, $secondary);
 $radial-primary-accent: radial-gradient($primary, $accent);
@@ -304,6 +304,27 @@ span.input-group-text {
   }
 }
 
+.floating {
+  box-shadow: 0 3px 8px 0px hsla(197, 89%, 28%, 0.562);
+  animation: floatBtn 2s ease-in-out both infinite;
+}
+
+.go-to-profile {
+  &:hover {
+    background-color: hsl(197, 84%, 74%) !important;
+  }
+  &:active {
+    background-color: $primary !important;
+  }
+}
+
+.text-primary-accent {
+  background: $linear-primary-accent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .floating-btn {
   box-shadow: 0 4px 8px 2px rgba(31, 31, 31, 0.31);
   animation: floatBtn 2s ease-in-out both infinite;
@@ -321,10 +342,13 @@ span.input-group-text {
   &:active {
     background-color: hsl(210, 14%, 43%) !important;
   }
+  &:focus-visible {
+    background-color: hsl(210, 14%, 63%) !important;
+  }
 }
 
-.btn-submit-primary:hover {
-  background-color: $primary !important;
+.btn-submit-accent:hover {
+  background-color: $accent-1 !important;
 }
 
 .fit-content {
@@ -342,7 +366,8 @@ span.input-group-text {
   z-index: 1000;
   width: 32px;
   height: 32px;
-  background-color: $accent;
+  background-color: $bg-2;
+  color: $text !important;
   -webkit-transition: transform 0.2s ease;
   -moz-transition: transform 0.2s ease;
   -ms-transition: transform 0.2s ease;
@@ -352,13 +377,12 @@ span.input-group-text {
 
 .side-btn {
   &:hover {
-    background-color: $accent;
-    color: hsl(189, 4%, 33%);
+    background-color: hsl(195, 11%, 75%);
+    color: $text;
   }
 
   &:active {
-    background-color: $secondary !important;
-    color: hsl(187, 4%, 51%) !important;
+    background-color: hsl(195, 11%, 55%) !important;
   }
 }
 
@@ -533,6 +557,7 @@ select.form-select:focus {
     width: 32px;
     height: 32px;
     margin: 5px;
+    color: $accent;
     -webkit-transition: transform 0.3s ease;
     -moz-transition: transform 0.3s ease;
     -ms-transition: transform 0.3s ease;
@@ -542,11 +567,11 @@ select.form-select:focus {
 
   .sidebar-btn {
     &:hover {
-      color: hsl(189, 4%, 33%);
+      color: hsl(345, 60%, 61%);
     }
 
     &:active {
-      color: hsl(187, 4%, 51%) !important;
+      color: hsl(345, 60%, 41%) !important;
     }
   }
 

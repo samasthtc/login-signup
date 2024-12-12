@@ -130,15 +130,17 @@ export default function LoginRegisterForm({ type, submit }) {
         login(resData, token);
       }
     } else {
-      setError(
-        "email",
-        {
-          type: "manual",
-          message: type === "register" || type === "add" ? message : " ",
-        },
-        { shouldFocus: true }
-      );
+      message === "User already exists!" &&
+        setError(
+          "email",
+          {
+            type: "manual",
+            message: type === "register" || type === "add" ? message : " ",
+          },
+          { shouldFocus: true }
+        );
       type === "login" &&
+        message === "Invalid Credentials!" &&
         setError("password", { type: "manual", message: message });
       setAlert({
         show: true,
@@ -287,8 +289,8 @@ export default function LoginRegisterForm({ type, submit }) {
 
         <button
           type="submit"
-          className="btn btn-submit-primary border-2 border border-primary rounded-pill btn-outline-primary
-          mt-3 mb-1 fw-bold align-self-end bg-primary-subtle hover-bg-primary w-100"
+          className="btn btn-submit-accent border-2 border border-accent rounded-pill btn-outline-accent
+          mt-3 mb-1 fw-bold align-self-end bg-accent-subtle hover-bg-accent w-100"
         >
           {submitBtnText}
         </button>

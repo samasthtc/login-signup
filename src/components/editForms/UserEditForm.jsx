@@ -86,6 +86,13 @@ export default function UserEditForm({
     return await debouncedValidation(field, value);
   };
 
+  if (alert.show) {
+    setTimeout(() => {
+      setTriggerFetch(true);
+      setAlert({ show: false, success: false, message: "" });
+    }, 3000);
+  }
+
   const onSubmit = async (data, e) => {
     e.preventDefault();
 
@@ -108,24 +115,22 @@ export default function UserEditForm({
           message: "Profile updated successfully!",
         });
         reset(data, { keepDirty: false });
-        setManualDirtyFields({});
       } else {
         setAlert({
           show: true,
           success: false,
           message: message ?? "An error occured! Profile update failed!",
         });
+        //delay one second
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
       }
-
-      setTriggerFetch(true);
+      setManualDirtyFields({});
+      // setTriggerFetch(true);
     } catch (error) {
       console.error(error);
     }
 
-    alert.show &&
-      setTimeout(() => {
-        setAlert({ show: false, success: false, message: "" });
-      }, 3000);
+    
   };
 
   const noChanges = Object.keys(manualDirtyFields).length < 1;
@@ -211,8 +216,8 @@ export default function UserEditForm({
       >
         {inputs}
 
-        <p className="mt-2 ms-1 text-capitalize">
-          <strong className="me-2">Role:</strong>
+        <p className="mt-3 ms-1 mb-0 text-capitalize">
+          <strong className="me-2 ">Role:</strong>
           {user.role}
         </p>
 
@@ -242,7 +247,7 @@ export default function UserEditForm({
 
         <button
           type="button"
-          className="btn border-2 rounded-pill back-btn mt-3 mb-1
+          className="btn border-2 rounded-pill  back-btn mt-3 mb-1
           text-semibold "
           onClick={handleGoBack}
         >

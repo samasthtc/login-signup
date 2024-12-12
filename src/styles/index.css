@@ -12469,6 +12469,25 @@ span.input-group-text:active {
     transform: translateY(0);
   }
 }
+.floating {
+  box-shadow: 0 3px 8px 0px hsla(197, 89%, 28%, 0.562);
+  animation: floatBtn 2s ease-in-out both infinite;
+}
+
+.go-to-profile:hover {
+  background-color: hsl(197, 84%, 74%) !important;
+}
+.go-to-profile:active {
+  background-color: hsl(197, 84%, 54%) !important;
+}
+
+.text-primary-accent {
+  background: linear-gradient(to right, hsl(346, 83%, 63%), hsl(345, 100%, 81%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .floating-btn {
   box-shadow: 0 4px 8px 2px rgba(31, 31, 31, 0.31);
   animation: floatBtn 2s ease-in-out both infinite;
@@ -12487,9 +12506,12 @@ span.input-group-text:active {
 .back-btn:active {
   background-color: hsl(210, 14%, 43%) !important;
 }
+.back-btn:focus-visible {
+  background-color: hsl(210, 14%, 63%) !important;
+}
 
-.btn-submit-primary:hover {
-  background-color: hsl(197, 84%, 54%) !important;
+.btn-submit-accent:hover {
+  background-color: hsl(345, 100%, 81%) !important;
 }
 
 .fit-content {
@@ -12508,17 +12530,17 @@ span.input-group-text:active {
   z-index: 1000;
   width: 32px;
   height: 32px;
-  background-color: hsl(346, 83%, 63%);
+  background-color: hsl(195, 31%, 95%);
+  color: hsl(192, 83%, 7%) !important;
   transition: transform 0.2s ease;
 }
 
 .side-btn:hover {
-  background-color: hsl(346, 83%, 63%);
-  color: hsl(189, 4%, 33%);
+  background-color: hsl(195, 11%, 75%);
+  color: hsl(192, 83%, 7%);
 }
 .side-btn:active {
-  background-color: hsl(310, 83%, 74%) !important;
-  color: hsl(187, 4%, 51%) !important;
+  background-color: hsl(195, 11%, 55%) !important;
 }
 
 .side-btn.to-left {
@@ -12660,13 +12682,14 @@ select.form-select:focus {
     width: 32px;
     height: 32px;
     margin: 5px;
+    color: hsl(346, 83%, 63%);
     transition: transform 0.3s ease;
   }
   .sidebar-btn:hover {
-    color: hsl(189, 4%, 33%);
+    color: hsl(345, 60%, 61%);
   }
   .sidebar-btn:active {
-    color: hsl(187, 4%, 51%) !important;
+    color: hsl(345, 60%, 41%) !important;
   }
   .w-0 {
     width: 0 !important;

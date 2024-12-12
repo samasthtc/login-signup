@@ -1,6 +1,7 @@
 import LoginRegisterForm from "@/components/authForms/LoginRegisterForm";
 import Modal from "@/components/common/Modal";
 import UsersTable from "@/components/users/UsersTable";
+import { Link } from "react-router-dom";
 import { register } from "../api/api";
 import { useAuth } from "../auth/AuthProvider";
 
@@ -36,7 +37,25 @@ export default function Home() {
       </div>
     </div>
   ) : (
-    <h2>{`Welcome, ${loggedInUser?.name}`}</h2>
+    <div className="text-center">
+      <h1 className="text-info">
+        Welcome,{" "}
+        <span className="text-primary-accent">{loggedInUser?.name}!</span>
+      </h1>
+
+      <h3 className="text-muted">
+        You are logged in as{" "}
+        <span className="fst-italic">{loggedInUser?.role}</span>.
+        <br />
+        Would you like to visit your profile?
+      </h3>
+
+      <Link to={`/profile?current=true&id=${loggedInUser?._id}`}>
+        <button className="btn btn-lg btn-primary go-to-profile mt-4 floating rounded-pill">
+          Yes, go to profile
+        </button>
+      </Link>
+    </div>
   );
 
   return (
