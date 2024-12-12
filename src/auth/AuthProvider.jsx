@@ -10,13 +10,19 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const storedUserId = localStorage.getItem("loggedInUserId");
+  const storedUserId =
+    localStorage.getItem("loggedInUserId") === "undefined" ||
+    localStorage.getItem("loggedInUserId") === "-1"
+      ? null
+      : localStorage.getItem("loggedInUserId");
+
   const [token, setToken] = useState(localStorage.getItem("token") ?? null);
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [triggerFetch, setTriggerFetch] = useState(false);
   useEffect(() => {
     if (token && storedUserId) {
+      console.log("here");
       fetchUsers(token);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
