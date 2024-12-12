@@ -42,7 +42,7 @@ export default function UsersTable() {
       />
       <div
         className="table-responsive  rounded rounded-4
-      border border-2 border-primary"
+      border border-2 border-accent-shadow"
       >
         <table
           id="results-table"
@@ -50,8 +50,8 @@ export default function UsersTable() {
         >
           <thead>
             <tr>
-              <th className="table-primary fit-content th-actions"></th>
-              <th className="table-primary user-header">User</th>
+              <th className="table-primarybg fit-content th-actions"></th>
+              <th className="table-primarybg user-header">User</th>
               {/* <th className="table-primary name-header">Name</th>
               <th className="table-primary email-header">Email</th> */}
             </tr>

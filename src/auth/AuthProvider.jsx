@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }) => {
   const [triggerFetch, setTriggerFetch] = useState(false);
   useEffect(() => {
     if (token && storedUserId) {
-      console.log("here");
       fetchUsers(token);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

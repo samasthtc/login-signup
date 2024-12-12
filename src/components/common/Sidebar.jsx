@@ -21,7 +21,11 @@ export default function Sidebar() {
 
   useEffect(() => {
     const handleClick = (e) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
+      if (
+        window.innerWidth < 576 &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(e.target)
+      ) {
         setIsOpen(false);
       }
     };
@@ -73,7 +77,7 @@ export default function Sidebar() {
     <>
       <aside
         ref={sidebarRef}
-        className={`m-0 me-sm-2 p-sm-3 py-4 px-4 d-flex flex-column flex-shrink-0 bg-secondary text-white
+        className={`m-0 me-sm-2 p-sm-3 py-4 px-4 d-flex flex-column flex-shrink-0 bg-2 text-white
        rounded-end-4 position-relative sidebar fs-5 fs-sm-6  ${
          isOpen
            ? "col-10 col-md-auto col-sm-3 is-open"
@@ -98,15 +102,17 @@ export default function Sidebar() {
         </button>
 
         <ul
-          className={`nav nav-pills flex-column d-flex ${
+          className={`nav nav-pills flex-column d-flex  ${
             isOpen ? "align-content-start" : "align-content-center"
           }`}
         >
           <li
             ref={tooltipRefs.profile}
             data-bs-toggle={tooltipRefs.profile}
-            className={`d-flex  ${
-              isOpen ? "justify-content-start" : "justify-content-center"
+            className={`nav-item w-100 ${
+              isOpen
+                ? "justify-content-start"
+                : "fit-content justify-content-center"
             }`}
             onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
           >
@@ -114,25 +120,27 @@ export default function Sidebar() {
               to={`/profile?current=true&id=${loggedInUser?._id}`}
               className={`nav-link  ${
                 isCurrent.profile ? "active" : ""
-              } d-flex align-items-center link-dark text-decoration-none
-           dropdown-toggle sidebar-header px-0 py-3`}
+              } d-flex align-items-center ${
+                isOpen ? "" : "rounded-circle p-25 justify-content-center"
+              }
+               sidebar-header p-25 py-3 `}
             >
-              <i className="fa-regular fa-circle-user fa-2xl"></i>
+              <i className="fa-regular fa-circle-user fs-2"></i>
               <span
                 className={`fw-semibold text-wrap p-0 m-0 ms-2 ${
                   !isOpen ? "d-sm-none" : ""
                 }`}
               >
-                {loggedInUser.name} Shoora
+                {loggedInUser.name}
               </span>
             </Link>
           </li>
         </ul>
 
-        <hr />
+        <hr className="text-secondary" />
 
         <ul
-          className={`nav nav-pills flex-column mb-auto d-flex justify-content-center ${
+          className={`nav nav-pills flex-column mb-auto d-flex gap-2 ${
             isOpen ? "align-content-start" : "align-content-center"
           }`}
         >
@@ -151,30 +159,31 @@ export default function Sidebar() {
               }`}
               aria-current="page"
             >
-              <i className="fa-solid fa-house"></i>
+              <i className="fa-solid fa-house fs-5"></i>
               <span className={!isOpen ? "hidden" : ""}>Home</span>
             </Link>
           </li>
           <li className="nav-item">
             <Link
               to="#"
-              className={`nav-link link-dark gap-2 d-flex align-items-center ${
+              className={`nav-link  gap-2 d-flex align-items-center ${
                 isOpen ? "" : "rounded-circle p-25 justify-content-center"
               }`}
-            onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
+              onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
             >
-              <i className="fa-solid fa-chart-line "></i>
+              <i className="fa-solid fa-chart-line fs-5"></i>
               <span className={!isOpen ? "hidden" : ""}>Dashboard</span>
             </Link>
           </li>
         </ul>
 
-        <hr />
+        <hr className="text-secondary" />
+
         <ul className="nav nav-pills flex-column">
           <li
             ref={tooltipRefs.logOut}
             data-bs-toggle={tooltipRefs.logOut}
-            className="nav-item nav-link link-dark gap-2 px-0 d-flex align-items-center
+            className="nav-item nav-link  gap-2 px-0 d-flex align-items-center
           justify-content-center fw-semibold"
             onClick={logout}
             role="button"

@@ -1,9 +1,13 @@
-$text: hsl(192, 20%, 5%);
-$bg-1: hsl(195, 25%, 97%);
-$primary: #7198a2;
-$secondary: #a9b2c7;
-$accent: #8e91d1;
-$accent-1: #c3c5f7;
+$text: hsl(192, 83%, 7%);
+$text-grey: hsl(0, 0%, 36%);
+$bg-1: hsl(195, 80%, 98%);
+$bg-2: hsl(195, 31%, 95%);
+$primary: hsl(197, 84%, 54%);
+$primary-faded: hsl(197, 45%, 67%);
+$secondary: hsl(310, 83%, 74%);
+$accent: hsl(346, 83%, 63%);
+$accent-1: hsl(345, 117%, 81%); // +1, +34, +18
+$accent-faded: hsl(346, 24%, 88%);
 $info: $accent;
 $dangerous: hsl(355, 66%, 80%);
 $dangerous-dark: hsl(355, 60%, 65%);
@@ -60,6 +64,14 @@ body {
   background-color: $bg-1;
 }
 
+.bg-1 {
+  background-color: $bg-1;
+}
+
+.bg-2 {
+  background-color: $bg-2;
+}
+
 .show {
   display: block;
 }
@@ -92,6 +104,10 @@ body {
 .table-responsive {
   position: relative;
   overflow-x: auto;
+}
+
+th.table-primarybg {
+  background-color: $primary !important;
 }
 
 tr {
@@ -291,6 +307,20 @@ span.input-group-text {
 .floating-btn {
   box-shadow: 0 4px 8px 2px rgba(31, 31, 31, 0.31);
   animation: floatBtn 2s ease-in-out both infinite;
+  background-color: $primary-faded !important;
+  &:hover {
+    background-color: $primary !important;
+  }
+}
+
+.back-btn {
+  background-color: hsl(210, 14%, 83%);
+  &:hover {
+    background-color: hsl(210, 14%, 63%);
+  }
+  &:active {
+    background-color: hsl(210, 14%, 43%) !important;
+  }
 }
 
 .btn-submit-primary:hover {
@@ -340,12 +370,13 @@ span.input-group-text {
   height: fit-content !important;
   max-height: 100px !important;
   &.active {
-    background-color: unset !important;
-    color: $bg-1 !important;
+    background-color: $accent-faded !important;
+    color: $text !important;
+    opacity: 1 !important;
 
     &:hover {
       // background-color: $accent-1;
-      color: $text !important;
+      opacity: 1;
     }
   }
 }
@@ -354,34 +385,61 @@ span.hidden {
   display: none;
 }
 
+.text-accent {
+  color: $accent !important;
+}
+
 aside.sidebar {
   min-width: fit-content;
 
   .nav-link {
-    transition: color 0.2s ease, background-color 0.2s ease;
+    color: $text;
+    opacity: 0.7;
+    // transition: color 0.2s ease, background-color 0.2s ease;
+
+    i {
+      color: $accent;
+    }
 
     &:hover {
       // background-color: $accent-1;
-      color: $bg-1 !important;
+      color: $text !important;
+      opacity: 1;
     }
   }
   li.nav-item {
     .nav-link {
       color: $text;
 
+      i {
+        color: $accent;
+      }
+
+      &:hover {
+        // background-color: $accent-1;
+        box-shadow: 0 0 4px 0 $accent-1;
+        color: $text !important;
+        opacity: 1;
+      }
+
       &.active {
-        background-color: $bg-1;
-        color: $primary;
+        background-color: $accent-faded;
+        font-weight: 500;
+        opacity: 1;
 
         &:hover {
           // background-color: $accent-1;
-          color: $text !important;
+          color: $text-grey !important;
+
+          i {
+            opacity: 0.7;
+          }
         }
       }
 
-      i {
-        font-size: 1.25em !important;
-      }
+      // i {
+      //   font-size: 1.25em !important;
+      // }
     }
   }
 }
@@ -396,6 +454,19 @@ aside.sidebar {
 
 .p-25 {
   padding: 0.75rem !important;
+}
+
+.border-accent {
+  border-color: $accent-1 !important;
+}
+.border-accent-shadow {
+  border-color: $accent-faded !important;
+  box-shadow: 0 0 4px 0px $accent-faded;
+}
+
+select.form-select:focus {
+  border-color: $accent-1 !important;
+  box-shadow: 0 0 0 0.25rem hsla(345, 117%, 61%, 0.25) !important;
 }
 
 @media screen and (max-width: 767px) {

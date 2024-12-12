@@ -24,7 +24,7 @@ export default function SearchField({
         <div className="col-5 col-sm-4 col-md-3 col-lg-2">
           <div className="form-floating">
             <select
-              className="form-select border-secondary border-2"
+              className="form-select border-accent border-2"
               role="button"
               name="filter"
               id="filter"

@@ -266,8 +266,8 @@ export default function PasswordEditForm({
 
         <button
           type="button"
-          className="btn border-2 rounded-pill btn-outline-secondary mt-3 mb-1
-          text-semibold text-black-50"
+          className="btn border-2 rounded-pill back-btn mt-3 mb-1
+          text-semibold "
           onClick={handleGoBack}
         >
           Back
