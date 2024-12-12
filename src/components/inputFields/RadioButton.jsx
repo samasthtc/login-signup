@@ -1,15 +1,37 @@
 import PropTypes from "prop-types";
 
-export default function RadioButton({ id, name, value, checked, onChange, label }) {
+export default function RadioButton({
+  id,
+  name,
+  value,
+  checked,
+  onChange,
+  label,
+  registerProps,
+}) {
+  const attributes = {
+    id,
+    name,
+    value,
+    checked,
+    onChange,
+    ...registerProps,
+  };
+  console.log(attributes);
+
   return (
     <div className="form-check">
       <input
         type="radio"
-        id={id}
-        name={name}
-        value={value}
-        checked={checked}
-        onChange={onChange}
+        {...(registerProps
+          ? attributes
+          : {
+              id: id,
+              name: name,
+              value: value,
+              checked: checked,
+              onChange: onChange,
+            })}
         className="form-check-input"
       />
       <label htmlFor={id} className="form-check-label fw-medium">
@@ -20,10 +42,11 @@ export default function RadioButton({ id, name, value, checked, onChange, label 
 }
 
 RadioButton.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
   checked: PropTypes.bool.isRequired,
-  onChange: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  registerProps: PropTypes.any,
+  value: PropTypes.string.isRequired,
 };

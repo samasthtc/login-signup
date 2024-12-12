@@ -12,6 +12,7 @@ import { UsersListContext } from "../../context/usersList/UsersListProvider";
 import { useDebouncePromise } from "../../utils/debounce";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Input from "../inputFields/Input";
+import RadioButton from "../inputFields/RadioButton";
 
 export default function UserEditForm({
   user,
@@ -22,10 +23,12 @@ export default function UserEditForm({
 }) {
   const { login, setTriggerFetch } = useAuth();
   const { usersList, setUsersList } = useContext(UsersListContext);
+  // const [selectedRole, setSelectedRole] = useState(user.role);
 
   let defaults = useRef({
     name: user?.name || "",
     email: user?.email || "",
+    role: user?.role || "user",
   });
 
   const {
@@ -33,6 +36,7 @@ export default function UserEditForm({
     handleSubmit,
     formState,
     reset,
+    watch,
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm({
     defaultValues: defaults.current,
@@ -43,6 +47,7 @@ export default function UserEditForm({
     defaults.current = {
       name: user?.name || "",
       email: user?.email || "",
+      role: user?.role || "user",
     };
     reset(defaults.current);
   }, [user, reset]);
@@ -114,7 +119,6 @@ export default function UserEditForm({
           success: true,
           message: "Profile updated successfully!",
         });
-        reset(data, { keepDirty: false });
       } else {
         setAlert({
           show: true,
@@ -128,12 +132,13 @@ export default function UserEditForm({
       // setTriggerFetch(true);
     } catch (error) {
       console.error(error);
+    } finally {
+      reset(data, { keepDirty: false });
     }
-
-    
   };
 
-  const noChanges = Object.keys(manualDirtyFields).length < 1;
+  const noChanges =
+    Object.keys(manualDirtyFields).length < 1 && user.role === watch("role");
 
   const tooltipRef = useRef();
 
@@ -204,6 +209,34 @@ export default function UserEditForm({
     />
   ));
 
+  const roleSelector = (
+    <div className="form-group mt-3 ms-1">
+      <h5 className="fw-bold">Role</h5>
+      <div className="d-flex gap-3">
+        <div>
+          <RadioButton
+            id="role-user"
+            name="role"
+            value="user"
+            checked={watch("role") === "user"}
+            label="User"
+            registerProps={register("role")}
+          />
+        </div>
+        <div>
+          <RadioButton
+            id="role-admin"
+            name="role"
+            value="admin"
+            checked={watch("role") === "admin"}
+            label="Admin"
+            registerProps={register("role")}
+          />
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <h1 className="title text-center ">Edit Profile</h1>
@@ -216,10 +249,7 @@ export default function UserEditForm({
       >
         {inputs}
 
-        <p className="mt-3 ms-1 mb-0 text-capitalize">
-          <strong className="me-2 ">Role:</strong>
-          {user.role}
-        </p>
+        {roleSelector}
 
         <div
           className="position-relative d-inline-block"

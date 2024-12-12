@@ -50,8 +50,8 @@ export default function UsersTable() {
         >
           <thead>
             <tr>
-              <th className="table-primarybg fit-content th-actions"></th>
-              <th className="table-primarybg user-header">User</th>
+              <th className="table-primarybg user-header ps-3">User</th>
+              <th className="table-primarybg fit-content th-actions pe-3"></th>
               {/* <th className="table-primary name-header">Name</th>
               <th className="table-primary email-header">Email</th> */}
             </tr>

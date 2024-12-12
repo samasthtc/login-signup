@@ -12315,6 +12315,16 @@ button.delete:active {
   color: hsl(355, 66%, 80%);
 }
 
+button.edit {
+  color: hsl(45, 90%, 45%);
+}
+button.edit:hover {
+  color: hsl(45, 80%, 65%);
+}
+button.edit:active {
+  color: hsl(45, 90%, 45%);
+}
+
 h1.title, .title.h1 {
   font-weight: bolder !important;
   color: hsl(197, 84%, 54%);
@@ -12380,7 +12390,6 @@ span.input-group-text:active {
 }
 
 .user-details {
-  display: block;
   text-align: left;
 }
 .user-details strong {

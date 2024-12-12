@@ -34,15 +34,30 @@ export default function UserRow({ user }) {
 
   return (
     <tr id={_id} className="user-row">
-      <td className="fit-content">
-      <button
-                type="button"
-                className="dropdown-item delete"
-                data-bs-toggle="modal"
-                data-bs-target={`#dlt-usr-${_id}-modal`}
-              >
-                <i className="far fa-trash-can"></i>
-              </button>
+      <td className="user-info ps-3" role="button" onClick={handleEdit}>
+        <div className="user-details">
+          <strong>{name}</strong>
+          <p className="user-email mb-0">{email}</p>
+        </div>
+      </td>
+      <td className="fit-content pe-3">
+        <div className="d-flex gap-2 justify-content-between fs-2 fs-sm-4 fs-md-5">
+          <button
+            type="button"
+            className="dropdown-item delete"
+            data-bs-toggle="modal"
+            data-bs-target={`#dlt-usr-${_id}-modal`}
+          >
+            <i className="far fa-trash-can"></i>
+          </button>
+          <button
+            type="button"
+            className="dropdown-item edit"
+            onClick={handleEdit}
+          >
+            <i className="far fa-edit"></i>
+          </button>
+        </div>
         {/* <div className="dropdown fit-content">
           <button
             className="btn btn-link dropdown-toggle p-0"
@@ -92,12 +107,6 @@ export default function UserRow({ user }) {
       <td className="user-info-md" role="button" onClick={handleEdit}>
         {email}
       </td> */}
-      <td className="user-info" role="button" onClick={handleEdit}>
-        <div className="user-details">
-          <strong>{name}</strong>
-          <p className="user-email mb-0">{email}</p>
-        </div>
-      </td>
     </tr>
   );
 }

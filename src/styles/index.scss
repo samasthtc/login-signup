@@ -130,6 +130,17 @@ button.delete {
     color: $dangerous;
   }
 }
+button.edit {
+  color: $warning-darker;
+
+  &:hover {
+    color: $warning-dark;
+  }
+
+  &:active {
+    color: $warning-darker;
+  }
+}
 
 h1.title {
   font-weight: bolder !important;
@@ -203,7 +214,7 @@ span.input-group-text {
 // }
 
 .user-details {
-  display: block;
+  // display: block;
   text-align: left;
 
   strong {
