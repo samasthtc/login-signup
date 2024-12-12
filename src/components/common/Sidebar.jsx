@@ -17,6 +17,8 @@ export default function Sidebar() {
       `/profile?current=true&id=${loggedInUser?._id}`,
   };
 
+  const isOpenAndSmall = isOpen && window.innerWidth < 576;
+
   useEffect(() => {
     const handleClick = (e) => {
       if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
@@ -74,8 +76,8 @@ export default function Sidebar() {
         className={`m-0 me-sm-2 p-sm-3 py-4 px-4 d-flex flex-column flex-shrink-0 bg-secondary text-white
        rounded-end-4 position-relative sidebar fs-5 fs-sm-6  ${
          isOpen
-           ? "col-10 col-md-auto col-sm-3 "
-           : "collapsed col-10 col-sm-1 col-lg-05 col-xl-05 w-0 ps-0 pe-0"
+           ? "col-10 col-md-auto col-sm-3 is-open"
+           : "collapsed col-sm-1 col-lg-05 col-xl-05 w-0 min-w-sm-0 ps-0 pe-0"
        }`}
         style={{ height: "100vh" }}
       >
@@ -106,6 +108,7 @@ export default function Sidebar() {
             className={`d-flex  ${
               isOpen ? "justify-content-start" : "justify-content-center"
             }`}
+            onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
           >
             <Link
               to={`/profile?current=true&id=${loggedInUser?._id}`}
@@ -137,6 +140,7 @@ export default function Sidebar() {
             ref={tooltipRefs.home}
             data-bs-toggle={tooltipRefs.home}
             className={`nav-item w-100 ${isOpen ? "" : "fit-content"}`}
+            onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
           >
             <Link
               to="/"
@@ -157,6 +161,7 @@ export default function Sidebar() {
               className={`nav-link link-dark gap-2 d-flex align-items-center ${
                 isOpen ? "" : "rounded-circle p-25 justify-content-center"
               }`}
+            onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
             >
               <i className="fa-solid fa-chart-line "></i>
               <span className={!isOpen ? "hidden" : ""}>Dashboard</span>

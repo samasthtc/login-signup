@@ -12091,6 +12091,22 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+/*
+//  in bootstrap.scss after helpers and before utilities api:
+// $utilities: map-merge(
+//   $utilities,
+//   (
+//     "font-size":
+//       map-merge(
+//         map-get($utilities, "font-size"),
+//         (
+//           responsive: true,
+//         )
+//       ),
+//   )
+// );
+//
+*/
 * {
   scroll-behavior: smooth;
 }
@@ -12375,7 +12391,8 @@ span.hidden {
 }
 
 aside.sidebar {
-  min-width: 62px;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
 }
 aside.sidebar .nav-link {
   transition: color 0.2s ease, background-color 0.2s ease;
@@ -12429,24 +12446,25 @@ aside.sidebar li.nav-item .nav-link i {
   .user-info {
     display: table-cell;
   }
-  .sidebar {
+  aside.sidebar {
+    min-width: unset;
     position: fixed;
     z-index: 9999;
     box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
   }
-  .sidebar.collapsed {
+  aside.sidebar.collapsed {
     box-shadow: unset;
     left: -100%;
   }
-  .sidebar.collapsed > *:not(.sidebar-btn) {
+  aside.sidebar.collapsed > *:not(.sidebar-btn) {
     display: none;
   }
-  .sidebar.collapsed .sidebar-btn {
+  aside.sidebar.collapsed .sidebar-btn {
     position: fixed;
     left: 0;
     right: 0 !important;
   }
-  .sidebar .side-btn {
+  aside.sidebar .side-btn {
     display: none;
   }
   .sidebar-btn {
@@ -12460,11 +12478,9 @@ aside.sidebar li.nav-item .nav-link i {
     transition: transform 0.3s ease;
   }
   .sidebar-btn:hover {
-    background-color: #8e91d1;
     color: hsl(189, 4%, 33%);
   }
   .sidebar-btn:active {
-    background-color: #a9b2c7 !important;
     color: hsl(187, 4%, 51%) !important;
   }
   .w-0 {

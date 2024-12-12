@@ -20,6 +20,22 @@ $radial-primary-accent: radial-gradient($primary, $accent);
 $radial-secondary-accent: radial-gradient($secondary, $accent);
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
+/*
+//  in bootstrap.scss after helpers and before utilities api:
+// $utilities: map-merge(
+//   $utilities,
+//   (
+//     "font-size":
+//       map-merge(
+//         map-get($utilities, "font-size"),
+//         (
+//           responsive: true,
+//         )
+//       ),
+//   )
+// );
+//
+*/
 
 * {
   // font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -339,8 +355,7 @@ span.hidden {
 }
 
 aside.sidebar {
-  // transition: all 0.3s ease;
-  min-width: 62px;
+  min-width: fit-content;
 
   .nav-link {
     transition: color 0.2s ease, background-color 0.2s ease;
@@ -406,7 +421,8 @@ aside.sidebar {
     display: table-cell;
   }
 
-  .sidebar {
+  aside.sidebar {
+    min-width: unset;
     position: fixed;
     z-index: 9999;
     // transform: unset;
@@ -455,18 +471,12 @@ aside.sidebar {
 
   .sidebar-btn {
     &:hover {
-      background-color: $accent;
       color: hsl(189, 4%, 33%);
     }
 
     &:active {
-      background-color: $secondary !important;
       color: hsl(187, 4%, 51%) !important;
     }
-  }
-
-  .sidebar-btn.to-left {
-    // transform: translateX(255px) !important; // rotate(180deg) !important;
   }
 
   .w-0 {
