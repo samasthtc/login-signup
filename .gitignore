@@ -7,10 +7,23 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
 dist
 dist-ssr
 *.local
+node_modules/
+
+# Do not ignore the bootstrap SCSS folder
+!node_modules/bootstrap/scss/
+
+# Ignore everything else in the bootstrap SCSS folder
+node_modules/bootstrap/scss/*
+
+# Include the specific SCSS files you want to track
+!node_modules/bootstrap/scss/bootstrap.scss
+!node_modules/bootstrap/scss/_variables.scss
+!node_modules/bootstrap/scss/_variables-dark.scss
+!node_modules/bootstrap/scss/_utilities.scss
+!node_modules/bootstrap/scss/_tables.scss
 
 # Editor directories and files
 .vscode/*
