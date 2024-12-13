@@ -8,7 +8,7 @@ import {
   validateField,
   validateName,
   validatePassword,
-} from "../../auth/AuthService";
+} from "../../auth/authService";
 import { useDebouncePromise } from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
 import LoadingSpinner from "../common/LoadingSpinner";
@@ -289,7 +289,7 @@ export default function LoginRegisterForm({ type, submit }) {
 
         <button
           type="submit"
-          className="btn btn-submit-accent border-2 border border-accent rounded-pill btn-outline-accent
+          className="btn rounded-pill border-2 btn-outline-accent text-dark
           mt-3 mb-1 fw-bold align-self-end bg-accent-subtle hover-bg-accent w-100"
         >
           {submitBtnText}

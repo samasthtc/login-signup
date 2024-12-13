@@ -44,18 +44,18 @@ export default function UserRow({ user }) {
         <div className="d-flex gap-2 justify-content-between fs-2 fs-sm-4 fs-md-5">
           <button
             type="button"
-            className="dropdown-item delete"
-            data-bs-toggle="modal"
-            data-bs-target={`#dlt-usr-${_id}-modal`}
+            className="btn edit p-0 border-0"
+            onClick={handleEdit}
           >
-            <i className="far fa-trash-can"></i>
+            <i className="far fa-edit fa-xl"></i>
           </button>
           <button
             type="button"
-            className="dropdown-item edit"
-            onClick={handleEdit}
+            className="btn delete p-0 border-0"
+            data-bs-toggle="modal"
+            data-bs-target={`#dlt-usr-${_id}-modal`}
           >
-            <i className="far fa-edit"></i>
+            <i className="far fa-trash-can fa-xl"></i>
           </button>
         </div>
         {/* <div className="dropdown fit-content">

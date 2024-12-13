@@ -41,12 +41,12 @@ export default function UsersTable() {
         setFilter={setFilter}
       />
       <div
-        className="table-responsive  rounded rounded-4
-      border border-2 border-accent-shadow"
+        className="table-responsive rounded-4
+      border border-2 border-primary-shadow"
       >
         <table
           id="results-table"
-          className="table table-hover table-striped w-100"
+          className="table table-hover users-table  m-0 table-borderless w-100"
         >
           <thead>
             <tr>

@@ -4,11 +4,12 @@ $bg-1: hsl(195, 80%, 98%);
 $bg-2: hsl(195, 31%, 95%);
 $primary: hsl(197, 84%, 54%);
 $primary-faded: hsl(197, 45%, 67%);
+$primary-faded2: hsl(197, 25%, 77%);
 $secondary: hsl(310, 83%, 74%);
 $accent: hsl(346, 83%, 63%);
 $accent-1: hsl(345, 100%, 81%);
 $accent-faded: hsl(346, 24%, 88%);
-$info: $accent;
+// $info: $accent;
 $dangerous: hsl(355, 66%, 80%);
 $dangerous-dark: hsl(355, 60%, 65%);
 $dangerous-darker: hsl(355, 75%, 45%);
@@ -17,13 +18,13 @@ $warning-dark: hsl(45, 80%, 65%);
 $warning-darker: hsl(45, 90%, 45%);
 
 $linear-primary-secondary: linear-gradient($primary, $secondary);
-$linear-primary-accent: linear-gradient(to right, $accent, $accent-1); 
+$linear-primary-accent: linear-gradient(to right, $accent, $accent-1);
 $linear-secondary-accent: linear-gradient(125deg, $secondary, $accent);
 $radial-primary-secondary: radial-gradient($primary, $secondary);
 $radial-primary-accent: radial-gradient($primary, $accent);
 $radial-secondary-accent: radial-gradient($secondary, $accent);
 
-@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/bootstrap/scss/bootstrap"; 
 /*
 //  in bootstrap.scss after helpers and before utilities api:
 // $utilities: map-merge(
@@ -101,13 +102,21 @@ body {
   }
 }
 
+table.users-table {
+  background-color: $bg-1 !important;
+
+  td {
+    // background-color: $accent-faded !important;
+  }
+
+  tr:nth-of-type(odd) > td {
+    // background-color: $bg-2 !important;
+  }
+}
+
 .table-responsive {
   position: relative;
   overflow-x: auto;
-}
-
-th.table-primarybg {
-  background-color: $primary !important;
 }
 
 tr {
@@ -126,19 +135,25 @@ button.delete {
     color: $dangerous-darker;
   }
 
-  &:active {
-    color: $dangerous;
+  &:active,
+  &:focus-visible {
+    color: $dangerous !important;
+    padding: 0 !important;
+    outline: none !important;
   }
 }
 button.edit {
-  color: $warning-darker;
+  color: $info;
 
   &:hover {
-    color: $warning-dark;
+    color: hsl(190, 90%, 40%);
   }
 
-  &:active {
-    color: $warning-darker;
+  &:active,
+  &:focus-visible {
+    color: hsl(190, 65%, 55%) !important;
+    padding: 0 !important;
+    outline: none !important;
   }
 }
 
@@ -497,6 +512,13 @@ aside.sidebar {
 .border-accent-shadow {
   border-color: $accent-faded !important;
   box-shadow: 0 0 4px 0px $accent-faded;
+}
+.border-primary {
+  border-color: $primary-faded !important;
+}
+.border-primary-shadow {
+  border-color: $primary-faded2 !important;
+  box-shadow: 0 3px 8px 0px $primary-faded2;
 }
 
 select.form-select:focus {
