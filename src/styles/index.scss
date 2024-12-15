@@ -24,7 +24,7 @@ $radial-primary-secondary: radial-gradient($primary, $secondary);
 $radial-primary-accent: radial-gradient($primary, $accent);
 $radial-secondary-accent: radial-gradient($secondary, $accent);
 
-@import "../../node_modules/bootstrap/scss/bootstrap"; 
+@import "../../node_modules/bootstrap/scss/bootstrap";
 /*
 //  in bootstrap.scss after helpers and before utilities api:
 // $utilities: map-merge(
@@ -105,13 +105,13 @@ body {
 table.users-table {
   background-color: $bg-1 !important;
 
-  td {
-    // background-color: $accent-faded !important;
-  }
+  // td {
+  //   // background-color: $accent-faded !important;
+  // }
 
-  tr:nth-of-type(odd) > td {
-    // background-color: $bg-2 !important;
-  }
+  // tr:nth-of-type(odd) > td {
+  //   // background-color: $bg-2 !important;
+  // }
 }
 
 .table-responsive {
@@ -344,7 +344,8 @@ span.input-group-text {
   }
 }
 
-.text-primary-accent {
+.text-primary-accent::before,
+.text-primary-accent::before {
   background: $linear-primary-accent;
   background-clip: text;
   -webkit-background-clip: text;
@@ -512,6 +513,15 @@ aside.sidebar {
 .border-accent-shadow {
   border-color: $accent-faded !important;
   box-shadow: 0 0 4px 0px $accent-faded;
+  transition: all 0.2s ease;
+
+  &.hoverable {
+    &:hover {
+      border-color: $accent-faded !important;
+
+      box-shadow: 0 0 8px 0px $accent;
+    }
+  }
 }
 .border-primary {
   border-color: $primary-faded !important;
@@ -524,6 +534,14 @@ aside.sidebar {
 select.form-select:focus {
   border-color: $accent-1 !important;
   box-shadow: 0 0 0 0.25rem hsla(345, 117%, 61%, 0.25) !important;
+}
+
+.resize-none {
+  resize: none;
+}
+
+.outline-none{
+  outline: none !important;
 }
 
 @media screen and (max-width: 767px) {

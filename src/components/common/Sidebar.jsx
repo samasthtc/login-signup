@@ -1,13 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
 
-export default function Sidebar() {
+export default function Sidebar({
+  isOpen,
+  setIsOpen,
+  isSmall,
+  isOpenAndSmall,
+}) {
   const sidebarRef = useRef(null);
   const { loggedInUser, logout } = useAuth();
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSmall, setIsSmall] = useState(window.innerWidth < 576);
   const toggleOpen = () => setIsOpen(!isOpen);
 
   const isCurrent = {
@@ -17,20 +21,6 @@ export default function Sidebar() {
       `/profile?current=true&id=${loggedInUser?._id}`,
     users: location.pathname === "/users",
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmall(window.innerWidth < 576);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const isOpenAndSmall = isOpen && isSmall;
 
   useEffect(() => {
     const handleClick = (e) => {
@@ -48,6 +38,7 @@ export default function Sidebar() {
     return () => {
       document.removeEventListener("click", handleClick);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSmall]);
 
   const tooltipRefs = {
@@ -93,20 +84,20 @@ export default function Sidebar() {
       <aside
         ref={sidebarRef}
         className={`m-0 me-sm-2 p-sm-3 py-4 px-4 d-flex flex-column flex-shrink-0 bg-2 text-white
-       rounded-end-4 position-relative sidebar fs-5 fs-sm-6  ${
+       rounded-end-4 position-fixed sidebar fs-5 fs-sm-6  ${
          isOpen
            ? "col-10 col-md-auto col-sm-3 is-open"
            : "collapsed col-sm-1 col-lg-05 col-xl-05 w-0 min-w-sm-0 ps-0 pe-0"
        }`}
-        style={{ height: "100vh" }}
+        style={{ minHeight: "100vh" }}
       >
-        <button
+        {isSmall && <button
           className={`btn d-sm-none sidebar-btn bg-transparent rounded-circle
        p-0 border-0 ${isOpen ? "to-left" : ""}`}
           onClick={toggleOpen}
         >
           <i className="fas fa-bars fa-2xl m-0 p-0"></i>
-        </button>
+        </button>}
 
         <button
           className={`btn side-btn rounded-circle
@@ -166,11 +157,9 @@ export default function Sidebar() {
           >
             <Link
               to="/"
-              className={`nav-link d-flex align-items-center gap-2 ${isCurrent.home ? "active" : ""} ${
-                isOpen
-                  ? ""
-                  : "rounded-circle p-25 justify-content-center "
-              }`}
+              className={`nav-link d-flex align-items-center gap-2 ${
+                isCurrent.home ? "active" : ""
+              } ${isOpen ? "" : "rounded-circle p-25 justify-content-center "}`}
               onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
               style={{ minWidth: "49px", minHeight: "49px" }}
             >
@@ -189,11 +178,9 @@ export default function Sidebar() {
           >
             <Link
               to="/users"
-              className={`nav-link d-flex gap-2 align-items-center ${isCurrent.users ? "active" : ""}  ${
-                isOpen
-                  ? ""
-                  : "rounded-circle p-25 justify-content-center"
-              }`}
+              className={`nav-link d-flex gap-2 align-items-center ${
+                isCurrent.users ? "active" : ""
+              }  ${isOpen ? "" : "rounded-circle p-25 justify-content-center"}`}
               aria-current="page"
               style={{ minWidth: "49px", minHeight: "49px" }}
             >
@@ -209,9 +196,7 @@ export default function Sidebar() {
             <Link
               to="#"
               className={`nav-link d-flex gap-2 align-items-center ${
-                isOpen
-                  ? ""
-                  : "rounded-circle p-25 justify-content-center"
+                isOpen ? "" : "rounded-circle p-25 justify-content-center"
               }`}
               onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
               style={{ minWidth: "49px", minHeight: "49px" }}
@@ -244,3 +229,10 @@ export default function Sidebar() {
     </>
   );
 }
+
+Sidebar.propTypes = {
+  isOpen: PropTypes.bool,
+  isOpenAndSmall: PropTypes.bool,
+  isSmall: PropTypes.bool,
+  setIsOpen: PropTypes.func,
+};
