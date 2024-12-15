@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth/AuthProvider";
 
-
 export default function Sidebar() {
   const sidebarRef = useRef(null);
   const { loggedInUser, logout } = useAuth();
@@ -23,10 +22,10 @@ export default function Sidebar() {
       setIsSmall(window.innerWidth < 576);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -115,9 +114,9 @@ export default function Sidebar() {
         </button>
 
         <ul
-          className={`nav nav-pills flex-column d-flex ${isSmall ? "me-4" : ""} ${
-            isOpen ? "align-content-start" : "align-content-center"
-          }`}
+          className={`nav nav-pills flex-column d-flex ${
+            isSmall ? "me-4" : ""
+          } ${isOpen ? "align-content-start" : "align-content-center"}`}
         >
           <li
             ref={tooltipRefs.profile}
@@ -153,10 +152,24 @@ export default function Sidebar() {
         <hr className={`text-secondary ${isSmall ? "me-4" : ""}`} />
 
         <ul
-          className={`nav nav-pills flex-column mb-auto d-flex gap-2 ${isSmall ? "me-4" : ""} ${
-            isOpen ? "align-content-start" : "align-content-center"
-          }`}
+          className={`nav nav-pills flex-column mb-auto d-flex gap-2 ${
+            isSmall ? "me-4" : ""
+          } ${isOpen ? "align-content-start" : "align-content-center"}`}
         >
+          <li className="nav-item">
+            <Link
+              to="#"
+              className={`nav-link  gap-2 d-flex align-items-center ${
+                isOpen
+                  ? "gap-2 d-flex align-items-center"
+                  : "rounded-circle p-25 justify-content-center"
+              }`}
+              onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
+            >
+              <i className="fa-solid fa-house fs-5"></i>
+              <span className={!isOpen ? "hidden" : ""}>Home</span>
+            </Link>
+          </li>
           <li
             ref={tooltipRefs.home}
             data-bs-toggle={tooltipRefs.home}
@@ -165,22 +178,26 @@ export default function Sidebar() {
           >
             <Link
               to="/"
-              className={`nav-link ${
-                isCurrent.home ? "active" : ""
-              } gap-2 d-flex align-items-center ${
-                isOpen ? "" : "rounded-circle p-25 justify-content-center"
+              className={`nav-link ${isCurrent.home ? "active" : ""}  ${
+                isOpen
+                  ? "gap-2 d-flex align-items-center"
+                  : "rounded-circle p-25 justify-content-center"
               }`}
               aria-current="page"
+              style={{ width: "49px", height: "49px" }}
             >
-              <i className="fa-solid fa-house fs-5"></i>
-              <span className={!isOpen ? "hidden" : ""}>Home</span>
+              <i className="fa-solid fa-users-line fs-5"></i>
+              <span className={!isOpen ? "hidden" : ""}>Users</span>
             </Link>
           </li>
+
           <li className="nav-item">
             <Link
               to="#"
               className={`nav-link  gap-2 d-flex align-items-center ${
-                isOpen ? "" : "rounded-circle p-25 justify-content-center"
+                isOpen
+                  ? "gap-2 d-flex align-items-center"
+                  : "rounded-circle p-25 justify-content-center"
               }`}
               onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
             >
@@ -191,7 +208,6 @@ export default function Sidebar() {
         </ul>
 
         <hr className={`text-secondary ${isSmall ? "me-4" : ""}`} />
-
 
         <ul className={`nav nav-pills flex-column ${isSmall ? "me-4" : ""}`}>
           <li
