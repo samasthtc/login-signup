@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../auth/AuthProvider";
 import {
@@ -8,7 +8,6 @@ import {
   validateName,
   validatePassword,
 } from "../../auth/AuthService";
-import { UsersListContext } from "../../context/usersList/UsersListProvider";
 import { useDebouncePromise } from "../../utils/debounce";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Input from "../inputFields/Input";
@@ -21,8 +20,7 @@ export default function UserEditForm({
   submit,
   toggleEditPassword,
 }) {
-  const { login, setTriggerFetch } = useAuth();
-  const { usersList, setUsersList } = useContext(UsersListContext);
+  const { login, setTriggerFetch, loggedInUser } = useAuth();
 
   let defaults = useRef({
     name: user?.name || "",
@@ -92,7 +90,7 @@ export default function UserEditForm({
 
   if (alert.show) {
     setTimeout(() => {
-      setTriggerFetch(true);
+      // setTriggerFetch(true);
       setAlert({ show: false, success: false, message: "" });
     }, 3000);
   }
@@ -112,7 +110,6 @@ export default function UserEditForm({
       if (success) {
         const newUser = resData;
         isCurrent === "true" && login(newUser);
-        setUsersList([...usersList, newUser]);
         setAlert({
           show: true,
           success: true,
@@ -128,7 +125,7 @@ export default function UserEditForm({
         // await new Promise((resolve) => setTimeout(resolve, 1000));
       }
       setManualDirtyFields({});
-      // setTriggerFetch(true);
+      setTriggerFetch(true);
     } catch (error) {
       console.error(error);
     } finally {
@@ -246,7 +243,14 @@ export default function UserEditForm({
       >
         {inputs}
 
-        {roleSelector}
+        {loggedInUser.role === "admin" ? (
+          roleSelector
+        ) : (
+          <p className="mt-3 ms-1 mb-0 text-capitalize">
+            <strong className="me-2 ">Role:</strong>
+            {user.role}
+          </p>
+        )}
 
         <div
           className="position-relative d-inline-block"

@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../auth/AuthProvider";
 import { validatePassword } from "../../auth/AuthService";
-import { UsersListContext } from "../../context/usersList/UsersListProvider";
 import { useDebouncePromise } from "../../utils/debounce";
 import LoadingSpinner from "../common/LoadingSpinner";
 import Input from "../inputFields/Input";
@@ -16,7 +15,6 @@ export default function PasswordEditForm({
   toggleEditPassword,
 }) {
   const { login, setTriggerFetch } = useAuth();
-  const { usersList, setUsersList } = useContext(UsersListContext);
 
   const defaults = {
     "Old Password": "",
@@ -90,7 +88,6 @@ export default function PasswordEditForm({
       if (success) {
         const newUser = resData;
         isCurrent === "true" && login(newUser);
-        setUsersList([...usersList, newUser]);
         setAlert({
           show: true,
           success: true,
@@ -188,7 +185,6 @@ export default function PasswordEditForm({
         }}
         errorMessage={errors["Old Password"]?.message}
         isDirty={getValues("Old Password") !== defaults["Old Password"]}
-      
       />
       <Input
         type="password"
@@ -205,8 +201,7 @@ export default function PasswordEditForm({
         }}
         errorMessage={errors["New Password"]?.message}
         isDirty={getValues("New Password") !== defaults["New Password"]}
-      showSuccess={true}
-      
+        showSuccess={true}
       />
       <Input
         type="password"
@@ -222,8 +217,7 @@ export default function PasswordEditForm({
         }}
         errorMessage={errors["Confirm Password"]?.message}
         isDirty={getValues("Confirm Password") !== defaults["Confirm Password"]}
-      showSuccess={true}
-      
+        showSuccess={true}
       />
     </>
   );
