@@ -6,11 +6,11 @@ import { useAuth } from "../auth/AuthProvider";
 
 export default function PrivateLayout({ children }) {
   const { loggedInUser, token, isLoading } = useAuth();
-  
-  if (!loggedInUser || !token) {
-    return <Navigate to="/login" replace />;
-  }
+
   if (!isLoading) {
+    if (!loggedInUser || !token) {
+      return <Navigate to="/login" replace />;
+    }
 
     return (
       <>

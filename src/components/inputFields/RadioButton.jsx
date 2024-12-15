@@ -17,7 +17,6 @@ export default function RadioButton({
     onChange,
     ...registerProps,
   };
-  console.log(attributes);
 
   return (
     <div className="form-check">
@@ -42,7 +41,7 @@ export default function RadioButton({
 }
 
 RadioButton.propTypes = {
-  checked: PropTypes.bool.isRequired,
+  checked: PropTypes.bool,
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,

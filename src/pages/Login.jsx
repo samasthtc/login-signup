@@ -7,7 +7,7 @@ export default function Login() {
   const { loggedInUser } = useAuth();
 
   if (loggedInUser) {
-    return <Navigate to="/" />;
+    return <Navigate to="/users" />;
   }
 
   return (

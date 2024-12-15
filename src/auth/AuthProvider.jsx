@@ -42,6 +42,9 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error fetching users", error);
+      if (error.message === "Token is not valid") {
+        logout();
+      }
     } finally {
       setIsLoading(false);
     }

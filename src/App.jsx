@@ -6,7 +6,8 @@ import UsersListProvider from "./context/usersList/UsersListProvider";
 import GeneralLayout from "./layouts/GeneralLayout.jsx";
 import PrivateLayout from "./layouts/PrivateLayout.jsx";
 
-const Home = lazy(() => import("./pages/Home"));
+const Home = lazy(() => import("./pages/Home.jsx"));
+const Users = lazy(() => import("./pages/Users.jsx"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -49,6 +50,16 @@ function App() {
                   <UsersListProvider>
                     <PrivateLayout>
                       <Home />
+                    </PrivateLayout>
+                  </UsersListProvider>
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  <UsersListProvider>
+                    <PrivateLayout>
+                      <Users />
                     </PrivateLayout>
                   </UsersListProvider>
                 }

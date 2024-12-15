@@ -23,7 +23,6 @@ export default function UserEditForm({
 }) {
   const { login, setTriggerFetch } = useAuth();
   const { usersList, setUsersList } = useContext(UsersListContext);
-  // const [selectedRole, setSelectedRole] = useState(user.role);
 
   let defaults = useRef({
     name: user?.name || "",
@@ -218,7 +217,6 @@ export default function UserEditForm({
             id="role-user"
             name="role"
             value="user"
-            checked={watch("role") === "user"}
             label="User"
             registerProps={register("role")}
           />
@@ -228,7 +226,6 @@ export default function UserEditForm({
             id="role-admin"
             name="role"
             value="admin"
-            checked={watch("role") === "admin"}
             label="Admin"
             registerProps={register("role")}
           />

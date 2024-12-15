@@ -7,7 +7,7 @@ export const register = (userData) =>
   apiRequest("/api/auth/register", "POST", {}, userData);
 
 export const getUsers = (token) =>
-  apiRequest("/api/protected/", "GET", {
+  apiRequest("/api/protected/users", "GET", {
     Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
   });
 

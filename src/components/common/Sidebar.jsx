@@ -15,6 +15,7 @@ export default function Sidebar() {
     profile:
       location.pathname + location.search ===
       `/profile?current=true&id=${loggedInUser?._id}`,
+    users: location.pathname === "/users",
   };
 
   useEffect(() => {
@@ -52,12 +53,14 @@ export default function Sidebar() {
   const tooltipRefs = {
     profile: useRef(null),
     home: useRef(null),
+    users: useRef(null),
     logOut: useRef(null),
   };
 
   const tooltipMap = {
     profile: "Go to Profile",
     home: "Go to Home",
+    users: "Go to Users",
     logOut: "Sign Out",
   };
 
@@ -156,37 +159,48 @@ export default function Sidebar() {
             isSmall ? "me-4" : ""
           } ${isOpen ? "align-content-start" : "align-content-center"}`}
         >
-          <li className="nav-item">
+          <li
+            ref={tooltipRefs.home}
+            data-bs-toggle={tooltipRefs.home}
+            className="nav-item"
+          >
             <Link
-              to="#"
-              className={`nav-link  gap-2 d-flex align-items-center ${
+              to="/"
+              className={`nav-link d-flex ${isCurrent.home ? "active" : ""} ${
                 isOpen
-                  ? "gap-2 d-flex align-items-center"
+                  ? "gap-2 align-items-center"
                   : "rounded-circle p-25 justify-content-center"
               }`}
               onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
+              style={{ minWidth: "49px", minHeight: "49px" }}
             >
-              <i className="fa-solid fa-house fs-5"></i>
+              <i
+                className="fa-solid fa-house fs-5"
+                style={{ minWidth: "25px" }}
+              ></i>
               <span className={!isOpen ? "hidden" : ""}>Home</span>
             </Link>
           </li>
           <li
-            ref={tooltipRefs.home}
-            data-bs-toggle={tooltipRefs.home}
+            ref={tooltipRefs.users}
+            data-bs-toggle={tooltipRefs.users}
             className={`nav-item w-100 ${isOpen ? "" : "fit-content"}`}
             onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
           >
             <Link
-              to="/"
-              className={`nav-link ${isCurrent.home ? "active" : ""}  ${
+              to="/users"
+              className={`nav-link d-flex ${isCurrent.users ? "active" : ""}  ${
                 isOpen
-                  ? "gap-2 d-flex align-items-center"
+                  ? "gap-2  align-items-center"
                   : "rounded-circle p-25 justify-content-center"
               }`}
               aria-current="page"
-              style={{ width: "49px", height: "49px" }}
+              style={{ minWidth: "49px", minHeight: "49px" }}
             >
-              <i className="fa-solid fa-users-line fs-5"></i>
+              <i
+                className="fa-solid fa-users-line fs-5"
+                style={{ minWidth: "25px" }}
+              ></i>
               <span className={!isOpen ? "hidden" : ""}>Users</span>
             </Link>
           </li>
@@ -194,14 +208,18 @@ export default function Sidebar() {
           <li className="nav-item">
             <Link
               to="#"
-              className={`nav-link  gap-2 d-flex align-items-center ${
+              className={`nav-link d-flex  ${
                 isOpen
-                  ? "gap-2 d-flex align-items-center"
+                  ? "gap-2 align-items-center justify-content-between"
                   : "rounded-circle p-25 justify-content-center"
               }`}
               onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
+              style={{ minWidth: "49px", minHeight: "49px" }}
             >
-              <i className="fa-solid fa-chart-line fs-5"></i>
+              <i
+                className="fa-solid fa-chart-line fs-5"
+                style={{ minWidth: "25px" }}
+              ></i>
               <span className={!isOpen ? "hidden" : ""}>Dashboard</span>
             </Link>
           </li>

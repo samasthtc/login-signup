@@ -8,7 +8,7 @@ import {
   validateField,
   validateName,
   validatePassword,
-} from "../../auth/authService";
+} from "../../auth/AuthService";
 import { useDebouncePromise } from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
 import LoadingSpinner from "../common/LoadingSpinner";
