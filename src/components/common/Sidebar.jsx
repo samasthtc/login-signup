@@ -166,16 +166,16 @@ export default function Sidebar() {
           >
             <Link
               to="/"
-              className={`nav-link d-flex ${isCurrent.home ? "active" : ""} ${
+              className={`nav-link d-flex align-items-center gap-2 ${isCurrent.home ? "active" : ""} ${
                 isOpen
-                  ? "gap-2 align-items-center"
-                  : "rounded-circle p-25 justify-content-center"
+                  ? ""
+                  : "rounded-circle p-25 justify-content-center "
               }`}
               onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
               style={{ minWidth: "49px", minHeight: "49px" }}
             >
               <i
-                className="fa-solid fa-house fs-5"
+                className="fa-solid fa-house fs-5 d-flex justify-content-center"
                 style={{ minWidth: "25px" }}
               ></i>
               <span className={!isOpen ? "hidden" : ""}>Home</span>
@@ -189,16 +189,16 @@ export default function Sidebar() {
           >
             <Link
               to="/users"
-              className={`nav-link d-flex ${isCurrent.users ? "active" : ""}  ${
+              className={`nav-link d-flex gap-2 align-items-center ${isCurrent.users ? "active" : ""}  ${
                 isOpen
-                  ? "gap-2  align-items-center"
+                  ? ""
                   : "rounded-circle p-25 justify-content-center"
               }`}
               aria-current="page"
               style={{ minWidth: "49px", minHeight: "49px" }}
             >
               <i
-                className="fa-solid fa-users-line fs-5"
+                className="fa-solid fa-users-line fs-5 d-flex justify-content-center"
                 style={{ minWidth: "25px" }}
               ></i>
               <span className={!isOpen ? "hidden" : ""}>Users</span>
@@ -208,16 +208,16 @@ export default function Sidebar() {
           <li className="nav-item">
             <Link
               to="#"
-              className={`nav-link d-flex  ${
+              className={`nav-link d-flex gap-2 align-items-center ${
                 isOpen
-                  ? "gap-2 align-items-center justify-content-between"
+                  ? ""
                   : "rounded-circle p-25 justify-content-center"
               }`}
               onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
               style={{ minWidth: "49px", minHeight: "49px" }}
             >
               <i
-                className="fa-solid fa-chart-line fs-5"
+                className="fa-solid fa-chart-line fs-5 d-flex justify-content-center"
                 style={{ minWidth: "25px" }}
               ></i>
               <span className={!isOpen ? "hidden" : ""}>Dashboard</span>
