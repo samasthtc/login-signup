@@ -2,8 +2,10 @@ import Post from "../models/Post.js";
 
 // fetch all posts with pagination and sorting
 export const getAllPosts = async (page = 1, limit = 10, descending = true) => {
+  
   const skip = (page - 1) * limit;
   const order = descending ? -1 : 1;
+
   return await Post.find()
     .sort({ createdAt: order })
     .skip(skip)

@@ -16,7 +16,7 @@ export const handleGetAllPosts = async (req, res, next) => {
     const posts = await getAllPosts(
       Number(page),
       Number(limit),
-      descending == "true"
+      descending
     );
     res.status(200).json({
       success: true,

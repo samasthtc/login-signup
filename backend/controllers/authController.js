@@ -3,7 +3,7 @@ import {
   getUsers,
   login,
   register,
-  saveProfile,
+  updateUser,
 } from "../services/authService.js";
 import {
   validateEmail,
@@ -94,7 +94,7 @@ export const handleDeleteUser = async (req, res, next) => {
   }
 };
 
-export const handleSaveProfile = async (req, res, next) => {
+export const handleUpdateUser = async (req, res, next) => {
   const { id } = req.params;
   const changedData = req.body;
 
@@ -119,7 +119,7 @@ export const handleSaveProfile = async (req, res, next) => {
 
   const updatedUser = { _id: id, ...changedData };
   try {
-    const updatedProfile = await saveProfile(updatedUser);
+    const updatedProfile = await updateUser(updatedUser);
     res.json({
       success: true,
       data: updatedProfile,

@@ -38,7 +38,7 @@ export default function Home() {
     </div>
   ) : (
     <div className="text-center">
-      <h1 className="text-info">
+      <h1 className="text-accent">
         Welcome,{" "}
         <span className="text-primary-accent">{loggedInUser?.name}!</span>
       </h1>

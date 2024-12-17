@@ -9,12 +9,12 @@ import { debounce } from "../utils/debounce";
 export default function PrivateLayout({ children }) {
   const { loggedInUser, token, isLoading } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [isSmall, setIsSmall] = useState(window.innerWidth < 576);
+  const [isSmall, setIsSmall] = useState(window.innerWidth <= 577);
   const isOpenAndSmall = isOpen && isSmall;
 
   useEffect(() => {
     const handleResize = debounce(
-      () => setIsSmall(window.innerWidth < 576),
+      () => setIsSmall(window.innerWidth <= 577),
       150
     );
     window.addEventListener("resize", handleResize);
@@ -38,10 +38,10 @@ export default function PrivateLayout({ children }) {
         />
         {/* <Navbar /> */}
         <div
-          className="col  p-0"
+          className={`col ${isSmall ? "mt-3" : ""} p-0`}
           {...(isSmall
             ? {}
-            : { style: { marginLeft: `${isOpen ? "185px" : "100px"}` } })}
+            : { style: { marginLeft: `${isOpen ? "155px" : "100px"}` } })}
         >
           {children}
         </div>

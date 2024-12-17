@@ -13,9 +13,9 @@ $accent-faded: hsl(346, 24%, 88%);
 $dangerous: hsl(355, 66%, 80%);
 $dangerous-dark: hsl(355, 60%, 65%);
 $dangerous-darker: hsl(355, 75%, 45%);
-$warning: hsl(45, 80%, 90%);
+$warning: hsl(45, 90%, 45%);
+$warning-light: hsl(45, 80%, 90%);
 $warning-dark: hsl(45, 80%, 65%);
-$warning-darker: hsl(45, 90%, 45%);
 
 $linear-primary-secondary: linear-gradient($primary, $secondary);
 $linear-primary-accent: linear-gradient(to right, $accent, $accent-1);
@@ -344,7 +344,7 @@ span.input-group-text {
   }
 }
 
-.text-primary-accent::before,
+.text-primary-accent,
 .text-primary-accent::before {
   background: $linear-primary-accent;
   background-clip: text;
@@ -536,11 +536,21 @@ select.form-select:focus {
   box-shadow: 0 0 0 0.25rem hsla(345, 117%, 61%, 0.25) !important;
 }
 
+.limit-danger {
+  border-color: $dangerous-dark !important;
+  box-shadow: 0 0 0 0.25rem hsla(355, 75%, 45%, 0.25) !important;
+}
+
+.limit-warning {
+  border-color: $warning-dark !important;
+  box-shadow: 0 0 0 0.25rem hsla(45, 90%, 45%, 0.25) !important;
+}
+
 .resize-none {
   resize: none;
 }
 
-.outline-none{
+.outline-none {
   outline: none !important;
 }
 

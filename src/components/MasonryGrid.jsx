@@ -3,7 +3,6 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 export default function MasonryGrid({ children }) {
   return (
-    <div>
       <ResponsiveMasonry
       columnsCountBreakPoints={ {350: 1, 767: 2, 1230: 3} }
       >
@@ -11,7 +10,6 @@ export default function MasonryGrid({ children }) {
           {children}
         </Masonry>
       </ResponsiveMasonry>
-    </div>
   );
 }
 

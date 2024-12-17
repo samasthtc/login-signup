@@ -42,7 +42,7 @@ export const register = async ({ name, email, password, role }) => {
   if (existingUser) throw new Error("User already exists!");
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  
+
   const newUser = await createUser({
     name,
     email,
@@ -53,7 +53,7 @@ export const register = async ({ name, email, password, role }) => {
   return newUser;
 };
 
-export const saveProfile = async (updatedUser) => {
+export const updateUser = async (updatedUser) => {
   let finalUpdatedUser = {};
 
   const existingUser = await getFullUserById(updatedUser._id);
@@ -90,7 +90,7 @@ export const saveProfile = async (updatedUser) => {
     if (isNewMatch) throw new Error("New Password is the same as the old one!");
 
     const hashedPassword = await bcrypt.hash(updatedUser["New Password"], 10);
-    
+
     finalUpdatedUser.password = hashedPassword;
   }
 
@@ -99,7 +99,7 @@ export const saveProfile = async (updatedUser) => {
 };
 
 export const deleteProfile = async (id) => {
-  const deletedUser = await deleteUserById( id );
+  const deletedUser = await deleteUserById(id);
   if (!deletedUser) {
     throw new Error("User not found!");
   }

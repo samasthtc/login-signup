@@ -76,11 +76,11 @@ export function register({ name, email, password }, usersList) {
     isValid: true,
     newUser: newUser,
     updatedList: updatedList,
-    message: "User added successfully!"
+    message: "User added successfully!",
   };
 }
 
-export function saveProfile(id, { name, email, password }, usersList) {
+export function updateUser(id, { name, email, password }, usersList) {
   if (
     usersList.some(
       (user) =>

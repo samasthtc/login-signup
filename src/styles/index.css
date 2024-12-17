@@ -34,7 +34,7 @@
   --bs-accent: hsl(346, 83%, 63%);
   --bs-success: #198754;
   --bs-info: #0dcaf0;
-  --bs-warning: hsl(45, 80%, 90%);
+  --bs-warning: hsl(45, 90%, 45%);
   --bs-danger: #dc3545;
   --bs-light: #f8f9fa;
   --bs-dark: #212529;
@@ -43,7 +43,7 @@
   --bs-accent-rgb: 239, 82, 119;
   --bs-success-rgb: 25, 135, 84;
   --bs-info-rgb: 13, 202, 240;
-  --bs-warning-rgb: 250, 240, 209;
+  --bs-warning-rgb: 218, 166, 11;
   --bs-danger-rgb: 220, 53, 69;
   --bs-light-rgb: 248, 249, 250;
   --bs-dark-rgb: 33, 37, 41;
@@ -52,7 +52,7 @@
   --bs-accent-text-emphasis: #602130;
   --bs-success-text-emphasis: #0a3622;
   --bs-info-text-emphasis: #055160;
-  --bs-warning-text-emphasis: #646054;
+  --bs-warning-text-emphasis: #574204;
   --bs-danger-text-emphasis: #58151c;
   --bs-light-text-emphasis: #495057;
   --bs-dark-text-emphasis: #495057;
@@ -61,7 +61,7 @@
   --bs-accent-bg-subtle: #fcdce4;
   --bs-success-bg-subtle: #d1e7dd;
   --bs-info-bg-subtle: #cff4fc;
-  --bs-warning-bg-subtle: #fefcf6;
+  --bs-warning-bg-subtle: #f8edce;
   --bs-danger-bg-subtle: #f8d7da;
   --bs-light-bg-subtle: #fcfcfd;
   --bs-dark-bg-subtle: #ced4da;
@@ -70,7 +70,7 @@
   --bs-accent-border-subtle: #f9bac9;
   --bs-success-border-subtle: #a3cfbb;
   --bs-info-border-subtle: #9eeaf9;
-  --bs-warning-border-subtle: #fdf9ed;
+  --bs-warning-border-subtle: #f0db9d;
   --bs-danger-border-subtle: #f1aeb5;
   --bs-light-border-subtle: #e9ecef;
   --bs-dark-border-subtle: #adb5bd;
@@ -151,7 +151,7 @@
   --bs-accent-text-emphasis: #f597ad;
   --bs-success-text-emphasis: #75b798;
   --bs-info-text-emphasis: #6edff6;
-  --bs-warning-text-emphasis: #fcf6e3;
+  --bs-warning-text-emphasis: #e9ca6d;
   --bs-danger-text-emphasis: #ea868f;
   --bs-light-text-emphasis: #f8f9fa;
   --bs-dark-text-emphasis: #dee2e6;
@@ -160,7 +160,7 @@
   --bs-accent-bg-subtle: #301018;
   --bs-success-bg-subtle: #051b11;
   --bs-info-bg-subtle: #032830;
-  --bs-warning-bg-subtle: #32302a;
+  --bs-warning-bg-subtle: #2c2102;
   --bs-danger-bg-subtle: #2c0b0e;
   --bs-light-bg-subtle: #343a40;
   --bs-dark-bg-subtle: #1a1d20;
@@ -169,7 +169,7 @@
   --bs-accent-border-subtle: #8f3147;
   --bs-success-border-subtle: #0f5132;
   --bs-info-border-subtle: #087990;
-  --bs-warning-border-subtle: #96907d;
+  --bs-warning-border-subtle: #836407;
   --bs-danger-border-subtle: #842029;
   --bs-light-border-subtle: #495057;
   --bs-dark-border-subtle: #343a40;
@@ -2010,13 +2010,13 @@ progress {
 
 .table-warning {
   --bs-table-color: #000;
-  --bs-table-bg: #fefcf6;
-  --bs-table-border-color: #cbcac5;
-  --bs-table-striped-bg: #f1efea;
+  --bs-table-bg: #f8edce;
+  --bs-table-border-color: #c6bea5;
+  --bs-table-striped-bg: #ece1c4;
   --bs-table-striped-color: #000;
-  --bs-table-active-bg: #e5e3dd;
+  --bs-table-active-bg: #dfd5b9;
   --bs-table-active-color: #000;
-  --bs-table-hover-bg: #ebe9e4;
+  --bs-table-hover-bg: #e5dbbf;
   --bs-table-hover-color: #000;
   color: var(--bs-table-color);
   border-color: var(--bs-table-border-color);
@@ -3118,19 +3118,19 @@ textarea.form-control-lg {
 
 .btn-warning {
   --bs-btn-color: #000;
-  --bs-btn-bg: hsl(45, 80%, 90%);
-  --bs-btn-border-color: hsl(45, 80%, 90%);
+  --bs-btn-bg: hsl(45, 90%, 45%);
+  --bs-btn-border-color: hsl(45, 90%, 45%);
   --bs-btn-hover-color: #000;
-  --bs-btn-hover-bg: #fbf2d8;
-  --bs-btn-hover-border-color: #fbf2d6;
-  --bs-btn-focus-shadow-rgb: 213, 204, 178;
+  --bs-btn-hover-bg: #e0b330;
+  --bs-btn-hover-border-color: #deaf23;
+  --bs-btn-focus-shadow-rgb: 185, 141, 9;
   --bs-btn-active-color: #000;
-  --bs-btn-active-bg: #fbf3da;
-  --bs-btn-active-border-color: #fbf2d6;
+  --bs-btn-active-bg: #e1b83c;
+  --bs-btn-active-border-color: #deaf23;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #000;
-  --bs-btn-disabled-bg: hsl(45, 80%, 90%);
-  --bs-btn-disabled-border-color: hsl(45, 80%, 90%);
+  --bs-btn-disabled-bg: hsl(45, 90%, 45%);
+  --bs-btn-disabled-border-color: hsl(45, 90%, 45%);
 }
 
 .btn-danger {
@@ -3270,19 +3270,19 @@ textarea.form-control-lg {
 }
 
 .btn-outline-warning {
-  --bs-btn-color: hsl(45, 80%, 90%);
-  --bs-btn-border-color: hsl(45, 80%, 90%);
+  --bs-btn-color: hsl(45, 90%, 45%);
+  --bs-btn-border-color: hsl(45, 90%, 45%);
   --bs-btn-hover-color: #000;
-  --bs-btn-hover-bg: hsl(45, 80%, 90%);
-  --bs-btn-hover-border-color: hsl(45, 80%, 90%);
-  --bs-btn-focus-shadow-rgb: 250, 240, 209;
+  --bs-btn-hover-bg: hsl(45, 90%, 45%);
+  --bs-btn-hover-border-color: hsl(45, 90%, 45%);
+  --bs-btn-focus-shadow-rgb: 218, 166, 11;
   --bs-btn-active-color: #000;
-  --bs-btn-active-bg: hsl(45, 80%, 90%);
-  --bs-btn-active-border-color: hsl(45, 80%, 90%);
+  --bs-btn-active-bg: hsl(45, 90%, 45%);
+  --bs-btn-active-border-color: hsl(45, 90%, 45%);
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  --bs-btn-disabled-color: hsl(45, 80%, 90%);
+  --bs-btn-disabled-color: hsl(45, 90%, 45%);
   --bs-btn-disabled-bg: transparent;
-  --bs-btn-disabled-border-color: hsl(45, 80%, 90%);
+  --bs-btn-disabled-border-color: hsl(45, 90%, 45%);
   --bs-gradient: none;
 }
 
@@ -6966,8 +6966,8 @@ textarea.form-control-lg {
   text-decoration-color: RGBA(var(--bs-warning-rgb), var(--bs-link-underline-opacity, 1)) !important;
 }
 .link-warning:hover, .link-warning:focus {
-  color: RGBA(251, 243, 218, var(--bs-link-opacity, 1)) !important;
-  text-decoration-color: RGBA(251, 243, 218, var(--bs-link-underline-opacity, 1)) !important;
+  color: RGBA(225, 184, 60, var(--bs-link-opacity, 1)) !important;
+  text-decoration-color: RGBA(225, 184, 60, var(--bs-link-underline-opacity, 1)) !important;
 }
 
 .link-danger {
@@ -12494,7 +12494,7 @@ span.input-group-text:active {
   background-color: hsl(197, 84%, 54%) !important;
 }
 
-.text-primary-accent::before,
+.text-primary-accent,
 .text-primary-accent::before {
   background: linear-gradient(to right, hsl(346, 83%, 63%), hsl(345, 100%, 81%));
   background-clip: text;
@@ -12659,6 +12659,16 @@ aside.sidebar li.nav-item .nav-link.active:hover i {
 select.form-select:focus {
   border-color: hsl(345, 100%, 81%) !important;
   box-shadow: 0 0 0 0.25rem hsla(345, 100%, 61%, 0.25) !important;
+}
+
+.limit-danger {
+  border-color: hsl(355, 60%, 65%) !important;
+  box-shadow: 0 0 0 0.25rem hsla(355, 75%, 45%, 0.25) !important;
+}
+
+.limit-warning {
+  border-color: hsl(45, 80%, 65%) !important;
+  box-shadow: 0 0 0 0.25rem hsla(45, 90%, 45%, 0.25) !important;
 }
 
 .resize-none {

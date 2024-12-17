@@ -38,7 +38,7 @@ export default function Sidebar({
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSmall]);
 
   const tooltipRefs = {
@@ -81,23 +81,35 @@ export default function Sidebar({
 
   return (
     <>
+    {isSmall && (
+      <div
+      className="w-100 d-sm-none d-block bg-2 top-0 start-0 position-fixed shadow-sm"
+      style={{ height: "50px", zIndex: "100" }}
+    ></div>
+    )}
       <aside
         ref={sidebarRef}
-        className={`m-0 me-sm-2 p-sm-3 py-4 px-4 d-flex flex-column flex-shrink-0 bg-2 text-white
+        className={`m-0  p-sm-3 py-4 px-4 d-flex flex-column flex-shrink-0 bg-2 text-white
        rounded-end-4 position-fixed sidebar fs-5 fs-sm-6  ${
          isOpen
-           ? "col-10 col-md-auto col-sm-3 is-open"
+           ? "col-10 col-md-auto col-sm-3"
            : "collapsed col-sm-1 col-lg-05 col-xl-05 w-0 min-w-sm-0 ps-0 pe-0"
        }`}
-        style={{ minHeight: "100vh" }}
+        style={{ minHeight: "100vh", zIndex: "1000" }}
       >
-        {isSmall && <button
-          className={`btn d-sm-none sidebar-btn bg-transparent rounded-circle
-       p-0 border-0 ${isOpen ? "to-left" : ""}`}
-          onClick={toggleOpen}
-        >
-          <i className="fas fa-bars fa-2xl m-0 p-0"></i>
-        </button>}
+        {isSmall && (
+          <>
+            
+            <button
+              className={`btn d-sm-none sidebar-btn  rounded-circle
+              p-0 border-0`}
+              onClick={toggleOpen}
+              style={{ zIndex: "1000" }}
+            >
+              <i className="fas fa-bars fa-2xl m-0 p-0"></i>
+            </button>
+          </>
+        )}
 
         <button
           className={`btn side-btn rounded-circle
@@ -192,7 +204,7 @@ export default function Sidebar({
             </Link>
           </li>
 
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <Link
               to="#"
               className={`nav-link d-flex gap-2 align-items-center ${
@@ -207,7 +219,7 @@ export default function Sidebar({
               ></i>
               <span className={!isOpen ? "hidden" : ""}>Dashboard</span>
             </Link>
-          </li>
+          </li> */}
         </ul>
 
         <hr className={`text-secondary ${isSmall ? "me-4" : ""}`} />
