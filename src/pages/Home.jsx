@@ -1,13 +1,9 @@
 import LoadingSpinner from "@/components/common/LoadingSpinner";
-import MasonryGrid from "@/components/MasonryGrid";
-import PropTypes from "prop-types";
-import { forwardRef, useEffect, useRef, useState } from "react";
-import TextareaAutosize from "react-textarea-autosize";
-import { createPost, getAllPosts } from "../api/api";
-import { useAuth } from "../auth/AuthProvider";
-import { debounce } from "../utils/debounce";
 import PostCreation from "@/components/posts/PostCreation";
 import PostDisplay from "@/components/posts/PostDisplay";
+import { useEffect, useRef, useState } from "react";
+import { getAllPosts } from "../api/api";
+import { debounce } from "../utils/debounce";
 
 export default function Home() {
   // eslint-disable-next-line no-unused-vars
@@ -108,7 +104,11 @@ export default function Home() {
     >
       <PostCreation setPosts={setPosts} />
       {posts.length > 0 ? (
-        <PostDisplay posts={posts} lastPostRef={lastPostRef} refreshPosts={refreshPosts} />
+        <PostDisplay
+          posts={posts}
+          lastPostRef={lastPostRef}
+          refreshPosts={refreshPosts}
+        />
       ) : (
         <p>No posts to display</p>
       )}
