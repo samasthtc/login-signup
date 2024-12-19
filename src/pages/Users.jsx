@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { register } from "../api/api";
 import { useAuth } from "../auth/AuthProvider";
 
-export default function Home() {
+export default function Users() {
   const { loggedInUser } = useAuth();
   const isAdmin = loggedInUser?.role === "admin";
 
@@ -61,7 +61,7 @@ export default function Home() {
   return (
     <main
       className="container-fluid
-    d-flex justify-content-center align-items-center vh-100"
+    d-flex justify-content-center align-items-center h-100"
     >
       {content}
     </main>

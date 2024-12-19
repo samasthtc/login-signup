@@ -3,11 +3,14 @@ import PostCreation from "@/components/posts/PostCreation";
 import PostDisplay from "@/components/posts/PostDisplay";
 import { useEffect, useRef, useState } from "react";
 import { getAllPosts } from "../api/api";
+import { useAuth } from "../auth/AuthProvider";
 import { debounce } from "../utils/debounce";
 
 export default function Home() {
   // eslint-disable-next-line no-unused-vars
   const [resizeTrigger, setResizeTrigger] = useState(0);
+  const [isSmall, setIsSmall] = useState(window.innerWidth <= 577);
+  const { logout } = useAuth();
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -15,10 +18,10 @@ export default function Home() {
   const observer = useRef(null);
 
   useEffect(() => {
-    const handleResize = debounce(
-      () => setResizeTrigger((prev) => prev + 1),
-      150
-    );
+    const handleResize = debounce(() => {
+      setResizeTrigger((prev) => prev + 1);
+      setIsSmall(window.innerWidth <= 577);
+    }, 150);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -53,7 +56,9 @@ export default function Home() {
         setHasMore(false);
       }
     } catch (err) {
-      console.log(err);
+      if (err.message === "No token, authorization denied") {
+        logout();
+      }
       setHasMore(false);
     } finally {
       setIsLoading(false);
@@ -99,8 +104,10 @@ export default function Home() {
 
   return (
     <main
-      className="container-fluid  py-sm-3 p-2 pe-3 py-5 row-gap-4
-    d-flex flex-column justify-content-start align-items-center h-100"
+      className={`container-fluid py-sm-3 p-2 ${
+        isSmall ? "ps-3 " : ""
+      } pe-3 py-5 row-gap-4 d-flex flex-column justify-content-start align-items-center 
+      h-100`}
     >
       <PostCreation setPosts={setPosts} />
       {posts.length > 0 ? (
@@ -110,7 +117,7 @@ export default function Home() {
           refreshPosts={refreshPosts}
         />
       ) : (
-        <p>No posts to display</p>
+        !isLoading && <p>No posts to display</p>
       )}
       {isLoading && <LoadingSpinner />}
     </main>

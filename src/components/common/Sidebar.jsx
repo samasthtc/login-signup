@@ -52,7 +52,7 @@ export default function Sidebar({
     profile: "Go to Profile",
     home: "Go to Home",
     users: "Go to Users",
-    logOut: "Sign Out",
+    logOut: "Log Out",
   };
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export default function Sidebar({
         className={`m-0  p-sm-3 py-4 px-4 d-flex flex-column flex-shrink-0 bg-2 text-white
        rounded-end-4 position-fixed sidebar fs-5 fs-sm-6  ${
          isOpen
-           ? "col-10 col-md-auto col-sm-3"
+           ? "col-10 col-md-auto col-sm-auto"
            : "collapsed col-sm-1 col-lg-05 col-xl-05 w-0 min-w-sm-0 ps-0 pe-0"
        }`}
         style={{ minHeight: "100vh", zIndex: "1000" }}
@@ -149,7 +149,7 @@ export default function Sidebar({
                   !isOpen ? "d-sm-none" : ""
                 }`}
               >
-                {loggedInUser.name}
+                {loggedInUser?.name}
               </span>
             </Link>
           </li>
@@ -234,7 +234,7 @@ export default function Sidebar({
             role="button"
           >
             <i className="fa-solid fa-sign-out"></i>
-            <span className={`${!isOpen ? "hidden" : ""}`}>Sign Out</span>
+            <span className={`${!isOpen ? "hidden" : ""}`}>Log Out</span>
           </li>
         </ul>
       </aside>

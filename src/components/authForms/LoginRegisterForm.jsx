@@ -117,7 +117,7 @@ export default function LoginRegisterForm({ type, submit }) {
     if (success) {
       if (type === "register" || type === "add") {
         setTriggerFetch(true);
-        type === "register" && navigate("/login");
+        type === "register" && navigate("/login", { replace: true });
         if (type === "add") {
           resetFields();
           setAlert({

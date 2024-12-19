@@ -8,19 +8,24 @@ export const UsersListContext = createContext(null);
 
 export default function UsersListProvider({ children }) {
   const [users, setUsers] = useState([]);
-  const { token, isLoading, setIsLoading, triggerFetch, setTriggerFetch } =
+  const { isLoading, setIsLoading, triggerFetch, setTriggerFetch, logout } =
     useAuth();
 
   const fetchUsers = async () => {
     try {
-      const { success, data } = await getUsers(token);
+      const { success, data } = await getUsers();
       if (success) {
         setUsers(data);
       } else {
         console.error("Failed to fetch users");
       }
     } catch (error) {
-      console.error("Error fetching users", error);
+      if (
+        error.message === "Error: Token is not valid" ||
+        error.message === "No token, authorization denied"
+      ) {
+        logout();
+      }
     } finally {
       setIsLoading(false);
       setTriggerFetch(false);
@@ -42,6 +47,7 @@ export default function UsersListProvider({ children }) {
         setUsersList: setUsers,
         fetchUsers,
         isLoading,
+        setTriggerFetch,
       }}
     >
       {children}

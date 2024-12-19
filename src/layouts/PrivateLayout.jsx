@@ -2,12 +2,11 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 import Sidebar from "@/components/common/Sidebar";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import { debounce } from "../utils/debounce";
 
 export default function PrivateLayout({ children }) {
-  const { loggedInUser, token, isLoading } = useAuth();
+  const { loggedInUser, token, isLoading, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isSmall, setIsSmall] = useState(window.innerWidth <= 577);
   const isOpenAndSmall = isOpen && isSmall;
@@ -23,10 +22,18 @@ export default function PrivateLayout({ children }) {
     };
   }, []);
 
+  // const redirect = () => {
+  //   if (!loggedInUser || !token) {
+  //     logout();
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   redirect();
+  // }, [loggedInUser, token]);
+
   if (!isLoading) {
-    if (!loggedInUser || !token) {
-      return <Navigate to="/login" replace />;
-    }
+    // redirect();
 
     return (
       <>
@@ -38,10 +45,10 @@ export default function PrivateLayout({ children }) {
         />
         {/* <Navbar /> */}
         <div
-          className={`col ${isSmall ? "mt-3" : ""} p-0`}
+          className={`col ${isSmall ? "pt-3 " : ""} p-0 min-vh-100`}
           {...(isSmall
             ? {}
-            : { style: { marginLeft: `${isOpen ? "155px" : "100px"}` } })}
+            : { style: { marginLeft: `${isOpen ? "160px" : "100px"}` } })}
         >
           {children}
         </div>

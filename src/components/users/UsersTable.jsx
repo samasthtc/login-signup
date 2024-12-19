@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { UsersListContext } from "../../context/usersList/UsersListProvider";
 import useDebounce from "../../utils/debounce";
 import CardContainer from "../common/CardContainer";
@@ -7,10 +7,16 @@ import SearchField from "../inputFields/SearchField";
 import UserRow from "./UserRow";
 
 export default function UsersTable() {
-  const { usersList, isLoading } = useContext(UsersListContext);
+  const { usersList, isLoading, setTriggerFetch } =
+    useContext(UsersListContext);
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("name");
+
+  useEffect(() => {
+    setTriggerFetch(true);
+  }, [])
+  
 
   const debouncedSearchChange = useDebounce((value) => {
     setSearchTerm(value);

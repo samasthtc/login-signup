@@ -243,7 +243,7 @@ export default function UserEditForm({
       >
         {inputs}
 
-        {loggedInUser.role === "admin" ? (
+        {loggedInUser?.role === "admin" ? (
           roleSelector
         ) : (
           <p className="mt-3 ms-1 mb-0 text-capitalize">

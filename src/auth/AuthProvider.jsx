@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getUsers } from "../api/api";
 
 const AuthContext = createContext(null);
@@ -20,16 +21,20 @@ export const AuthProvider = ({ children }) => {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [triggerFetch, setTriggerFetch] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (token && storedUserId) {
       fetchUsers(token);
+    } else {
+      navigate("/login", { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const fetchUsers = async (token) => {
     try {
-      const { success, data } = await getUsers(token);
+      const { success, data } = await getUsers();
       if (success) {
         if (storedUserId) {
           const loggedIn = data.find((user) => user._id === storedUserId);
@@ -41,8 +46,10 @@ export const AuthProvider = ({ children }) => {
         console.error("Failed to fetch users");
       }
     } catch (error) {
-      console.error("Error fetching users", error);
-      if (error.message === "Token is not valid") {
+      if (
+        error.message === "Error: Token is not valid" ||
+        error.message === "No token, authorization denied"
+      ) {
         logout();
       }
     } finally {
@@ -59,6 +66,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    navigate("/login", { replace: true });
     setLoggedInUser(null);
     setToken(null);
     localStorage.removeItem("loggedInUserId");
