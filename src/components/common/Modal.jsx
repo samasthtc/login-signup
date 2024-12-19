@@ -14,8 +14,8 @@ export default function Modal({
     <div className="modal fade" id={id} ref={reff} tabIndex={-1}>
       <div className={`modal-dialog modal-dialog-centered modal-${size}`}>
         <div className="modal-content">
-          <div className="modal-header text-center pb-0">
-            <h2 className="modal-title overflow-auto text-center fw-bold">
+          <div className="modal-header  pb-0">
+            <h2 className="modal-title overflow-auto fw-bold">
               {title}
             </h2>
             <button
@@ -32,8 +32,9 @@ export default function Modal({
             <div className="modal-footer">
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="btn btn-light"
                 data-bs-dismiss="modal"
+                onClick={e => e.stopPropagation()}
               >
                 {cancelText}
               </button>

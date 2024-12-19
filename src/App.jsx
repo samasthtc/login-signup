@@ -11,6 +11,7 @@ const Users = lazy(() => import("./pages/Users.jsx"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const Profile = lazy(() => import("./pages/Profile"));
+const Post = lazy(() => import("./pages/Post"));
 
 const loadingSpinner = (
   <div
@@ -70,6 +71,16 @@ function App() {
                   <UsersListProvider>
                     <PrivateLayout>
                       <Profile />
+                    </PrivateLayout>
+                  </UsersListProvider>
+                }
+              />
+              <Route
+                path="/post/:id"
+                element={
+                  <UsersListProvider>
+                    <PrivateLayout>
+                      <Post />
                     </PrivateLayout>
                   </UsersListProvider>
                 }

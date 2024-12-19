@@ -1,8 +1,8 @@
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
+import { useEffect, useRef, useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 import { createPost } from "../../api/api";
 import { useAuth } from "../../auth/AuthProvider";
-import { useState, useRef, useEffect } from "react";
-import TextareaAutosize from "react-textarea-autosize";
 
 export default function PostCreation({ setPosts }) {
   const { loggedInUser } = useAuth();
@@ -84,15 +84,29 @@ export default function PostCreation({ setPosts }) {
         username: loggedInUser.name,
         body: postBody,
       });
-      console.log("Post submitted:", postBody);
-      console.log(success, data, message);
       if (success) {
         setPosts((prev) => [data, ...prev]);
         setPostBody("");
+        setAlert({
+          show: true,
+          success: true,
+          message: message,
+        });
+      } else {
+        setAlert({
+          show: true,
+          success: false,
+          message: message ?? "An error occured!",
+        });
       }
     } catch (error) {
       console.log(error);
     }
+
+    alert.show &&
+      setTimeout(() => {
+        setAlert({ show: false, success: false, message: "" });
+      }, 3000);
   };
 
   const handleDiscard = () => {
@@ -152,6 +166,19 @@ export default function PostCreation({ setPosts }) {
           >{`${postBody.length}/${lengthLimit}`}</p>
         </div>
         <div className="d-flex gap-3 flex-grow-0 justify-content-end align-items-center">
+          {alert.show && (
+            <div
+              className={`alert p-1 m-0-force ${
+                alert.success ? "alert-success" : "alert-danger"
+              } text-center fade-in-out w-100 flex-grow-1`}
+              role="alert"
+              onAnimationEnd={() => {
+                setAlert({ show: false, success: false, message: "" });
+              }}
+            >
+              {alert.message}
+            </div>
+          )}
           <div ref={tooltipRef}>
             <button
               className="btn btn-outline-primary rounded-pill fw-medium border-2"
@@ -175,5 +202,5 @@ export default function PostCreation({ setPosts }) {
 }
 
 PostCreation.propTypes = {
-  setPosts: PropTypes.func
-}
+  setPosts: PropTypes.func,
+};

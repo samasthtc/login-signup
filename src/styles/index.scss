@@ -9,6 +9,7 @@ $secondary: hsl(310, 83%, 74%);
 $accent: hsl(346, 83%, 63%);
 $accent-1: hsl(345, 100%, 81%);
 $accent-faded: hsl(346, 24%, 88%);
+$accent-darker: hsl(345, 99%, 32%);
 // $info: $accent;
 $dangerous: hsl(355, 66%, 80%);
 $dangerous-dark: hsl(355, 60%, 65%);
@@ -19,6 +20,11 @@ $warning-dark: hsl(45, 80%, 65%);
 
 $linear-primary-secondary: linear-gradient($primary, $secondary);
 $linear-primary-accent: linear-gradient(to right, $accent, $accent-1);
+$linear-primary-primary: linear-gradient(
+  to right,
+  $primary-faded,
+  $primary-faded
+);
 $linear-secondary-accent: linear-gradient(125deg, $secondary, $accent);
 $radial-primary-secondary: radial-gradient($primary, $secondary);
 $radial-primary-accent: radial-gradient($primary, $accent);
@@ -352,6 +358,18 @@ span.input-group-text {
   -webkit-text-fill-color: transparent;
 }
 
+.text-primary-faded {
+  color: $primary-faded !important;
+}
+
+.text-primary-faded2 {
+  color: $primary-faded2 !important;
+}
+
+.text-accent-faded {
+  color: $accent-faded !important;
+}
+
 .floating-btn {
   box-shadow: 0 4px 8px 2px rgba(31, 31, 31, 0.31);
   animation: floatBtn 2s ease-in-out both infinite;
@@ -552,6 +570,73 @@ select.form-select:focus {
 
 .outline-none {
   outline: none !important;
+}
+
+.like-btn {
+  stroke-width: 20 !important;
+  -webkit-text-stroke-color: $primary !important;
+  &:hover {
+    color: hsl(345, 60%, 61%);
+  }
+  &:active {
+    color: hsl(345, 60%, 41%) !important;
+  }
+}
+
+.heart {
+  display: inline-block;
+  width: 20px;
+  aspect-ratio: 1;
+  border-image: radial-gradient(rgb(0, 174, 255) 69%, #0000 70%) 84.5%/50%;
+  clip-path: polygon(-41% 0, 50% 91%, 141% 0);
+}
+
+.heart:hover {
+  border-image: radial-gradient(rgb(234, 0, 255) 69%, #0000 70%) 84.5%/50%;
+}
+
+.icon {
+  fill: transparent;
+  stroke: $accent;
+  stroke-width: 40;
+  cursor: pointer;
+  position: relative;
+
+  path {
+    transition: all 0.1s ease-in-out;
+    fill: transparent;
+  }
+
+  svg {
+    overflow: visible;
+  }
+
+  .heart-main:hover path {
+    fill: $accent;
+  }
+  .heart-main:active path {
+    stroke: $accent-darker;
+
+    fill: $accent-darker;
+  }
+
+  &.clicked {
+    .heart-main path {
+      fill: $accent;
+    }
+    .heart-main:hover path {
+      fill: $accent-faded;
+    }
+    .heart-main:active path {
+      stroke: $accent;
+
+      fill: transparent;
+    }
+  }
+}
+
+.m-0-force {
+  margin: 0 !important;
 }
 
 @media screen and (max-width: 767px) {

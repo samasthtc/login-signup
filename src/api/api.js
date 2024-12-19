@@ -33,6 +33,11 @@ export const updateUser = (id, changedData, token) =>
     changedData
   );
 
+export const visitProfile = (token) =>
+  apiRequest("/api/protected/profile", "GET", {
+    Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
+  });
+
 /** protected post requests */
 export const createPost = (postData, token) =>
   apiRequest(
@@ -45,7 +50,6 @@ export const createPost = (postData, token) =>
   );
 
 export const getAllPosts = (options = {}, token) => {
-  
   const queryParams = new URLSearchParams(options).toString();
   return apiRequest(`/api/protected/posts?${queryParams}`, "GET", {
     Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
@@ -94,4 +98,15 @@ export const getPostsByQuery = (query, options = {}, token) => {
   return apiRequest(`/api/protected/posts/search?${queryParams}`, "GET", {
     Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
   });
+};
+
+export const likePost = (postId, userId, like, token) => {
+  return apiRequest(
+    `/api/protected/posts/${postId}/like`,
+    "POST",
+    {
+      Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
+    },
+    { userId, like }
+  );
 };

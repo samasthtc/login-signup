@@ -2,7 +2,6 @@ import Post from "../models/Post.js";
 
 // fetch all posts with pagination and sorting
 export const getAllPosts = async (page = 1, limit = 10, descending = true) => {
-  
   const skip = (page - 1) * limit;
   const order = descending ? -1 : 1;
 
@@ -68,4 +67,22 @@ export const getPostsByQuery = async (
     .skip(skip)
     .limit(limit)
     .lean();
+};
+
+// like or unlike a post
+export const likePost = async (postId, userId, like = true) => {
+  const post = await Post.findById(postId);
+  if (!post) {
+    throw new Error("Post not found");
+  }
+
+  if (like) {
+    if (!post.likes.includes(userId)) {
+      post.likes.push(userId);
+    }
+  } else {
+    post.likes = post.likes.filter((id) => id.toString() !== userId);
+  }
+
+  return await post.save();
 };

@@ -5,6 +5,7 @@ import {
   getPostById,
   getPostsByQuery,
   getPostsByUser,
+  likePost,
   updatePostById,
 } from "../services/postService.js";
 
@@ -13,11 +14,7 @@ export const handleGetAllPosts = async (req, res, next) => {
   const { page = 1, limit = 10, descending = true } = req.query;
 
   try {
-    const posts = await getAllPosts(
-      Number(page),
-      Number(limit),
-      descending
-    );
+    const posts = await getAllPosts(Number(page), Number(limit), descending);
     res.status(200).json({
       success: true,
       data: posts,
@@ -155,6 +152,31 @@ export const handleGetPostsByQuery = async (req, res, next) => {
       success: true,
       data: posts,
       message: "Posts fetched successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// handle liking a post
+export const handleLikePost = async (req, res, next) => {
+  const { id } = req.params;
+  const { userId, like } = req.body;
+
+  try {
+    const post = await getPostById(id);
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    const response = await likePost(id, userId, like);
+    res.status(200).json({
+      success: true,
+      data: response,
+      message: "Post liked successfully",
     });
   } catch (error) {
     next(error);

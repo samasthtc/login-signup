@@ -12502,6 +12502,18 @@ span.input-group-text:active {
   -webkit-text-fill-color: transparent;
 }
 
+.text-primary-faded {
+  color: hsl(197, 45%, 67%) !important;
+}
+
+.text-primary-faded2 {
+  color: hsl(197, 25%, 77%) !important;
+}
+
+.text-accent-faded {
+  color: hsl(346, 24%, 88%) !important;
+}
+
 .floating-btn {
   box-shadow: 0 4px 8px 2px rgba(31, 31, 31, 0.31);
   animation: floatBtn 2s ease-in-out both infinite;
@@ -12677,6 +12689,68 @@ select.form-select:focus {
 
 .outline-none {
   outline: none !important;
+}
+
+.like-btn {
+  stroke-width: 20 !important;
+  -webkit-text-stroke-color: hsl(197, 84%, 54%) !important;
+}
+.like-btn:hover {
+  color: hsl(345, 60%, 61%);
+}
+.like-btn:active {
+  color: hsl(345, 60%, 41%) !important;
+}
+
+.heart {
+  display: inline-block;
+  width: 20px;
+  aspect-ratio: 1;
+  -o-border-image: radial-gradient(rgb(0, 174, 255) 69%, rgba(0, 0, 0, 0) 70%) 84.5%/50%;
+     border-image: radial-gradient(rgb(0, 174, 255) 69%, rgba(0, 0, 0, 0) 70%) 84.5%/50%;
+  -webkit-clip-path: polygon(-41% 0, 50% 91%, 141% 0);
+          clip-path: polygon(-41% 0, 50% 91%, 141% 0);
+}
+
+.heart:hover {
+  -o-border-image: radial-gradient(rgb(234, 0, 255) 69%, rgba(0, 0, 0, 0) 70%) 84.5%/50%;
+     border-image: radial-gradient(rgb(234, 0, 255) 69%, rgba(0, 0, 0, 0) 70%) 84.5%/50%;
+}
+
+.icon {
+  fill: transparent;
+  stroke: hsl(346, 83%, 63%);
+  stroke-width: 40;
+  cursor: pointer;
+  position: relative;
+}
+.icon path {
+  transition: all 0.1s ease-in-out;
+  fill: transparent;
+}
+.icon svg {
+  overflow: visible;
+}
+.icon .heart-main:hover path {
+  fill: hsl(346, 83%, 63%);
+}
+.icon .heart-main:active path {
+  stroke: hsl(345, 99%, 32%);
+  fill: hsl(345, 99%, 32%);
+}
+.icon.clicked .heart-main path {
+  fill: hsl(346, 83%, 63%);
+}
+.icon.clicked .heart-main:hover path {
+  fill: hsl(346, 24%, 88%);
+}
+.icon.clicked .heart-main:active path {
+  stroke: hsl(346, 83%, 63%);
+  fill: transparent;
+}
+
+.m-0-force {
+  margin: 0 !important;
 }
 
 @media screen and (max-width: 767px) {

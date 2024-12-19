@@ -1,9 +1,10 @@
 import express from "express";
+import authMiddleware from "../middleware/authMiddleware.js";
 import commonMiddleware from "../middleware/commonMiddleware.js";
 import errorHandler from "../middleware/errorMiddleware.js";
 import authRoutes from "../routes/authRoutes.js";
-import userRoutes from "../routes/protectedRoutes/userRoutes.js";
 import postRoutes from "../routes/protectedRoutes/postRoutes.js";
+import userRoutes from "../routes/protectedRoutes/userRoutes.js";
 import connectDB from "./config/db.js";
 
 const app = express();
@@ -14,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoutes);
-app.use("/api/protected/users", userRoutes);
+app.use("/api/protected", userRoutes);
 app.use("/api/protected/posts", postRoutes);
 
 app.use((req, res) => {

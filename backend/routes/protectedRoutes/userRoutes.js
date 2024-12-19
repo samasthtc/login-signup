@@ -9,8 +9,12 @@ import { requireRole } from "../../middleware/roleMiddleware.js";
 
 const router = express.Router();
 
-router.put("/:id", authMiddleware, handleUpdateUser);
-router.delete("/:id", authMiddleware, requireRole("admin"), handleDeleteUser);
-router.get("/", authMiddleware, handleGetUsers);
+router.put("/users/:id", authMiddleware, handleUpdateUser);
+router.delete("/users/:id", authMiddleware, requireRole("admin"), handleDeleteUser);
+router.get("/users", authMiddleware, handleGetUsers);
+router.get("/profile", authMiddleware, (req, res) => {
+  res.json({ success: true, message: "Profile visited" });
+});
+
 
 export default router;
