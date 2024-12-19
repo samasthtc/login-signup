@@ -115,8 +115,8 @@ export default function PostCreation({ setPosts }) {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // Prevent default newline behavior
-      handlePost(); // Submit the post
+      e.preventDefault(); 
+      handlePost(); 
     }
   };
 

@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import TextareaAutosize from "react-textarea-autosize";
 import { deletePost, likePost } from "../../api/api";
 import { useAuth } from "../../auth/AuthProvider";
 import Modal from "../common/Modal";
@@ -9,13 +10,14 @@ import Modal from "../common/Modal";
 const Post = forwardRef(({ post, refreshPosts }, ref) => {
   const { _id: postId, img, username, body, user, likes } = post;
   const { loggedInUser } = useAuth();
+  const isCurrentUser = loggedInUser._id === user;
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(likes?.length ?? 0);
   const navigate = useNavigate();
 
   const handleEdit = (e) => {
     e.stopPropagation();
-    navigate(`/profile?current=${user}&id=${postId}`);
+    navigate(`/post/${postId}?edit=true`);
   };
 
   const handleOpenPost = () => {
@@ -50,14 +52,13 @@ const Post = forwardRef(({ post, refreshPosts }, ref) => {
   const handleDelete = async (e) => {
     e.stopPropagation();
     try {
-      const { success, data, message } = await deletePost(postId);
-      console.log(success, data, message);
+      const { success, message } = await deletePost(postId);
       if (success) {
         // @ts-ignore
         ref?.current && ref?.current?.remove();
         refreshPosts();
       } else {
-        console.log("Failed to delete post");
+        console.log("Failed to delete post", message);
       }
     } catch (error) {
       console.log(error);
@@ -68,17 +69,19 @@ const Post = forwardRef(({ post, refreshPosts }, ref) => {
     <div className="dropdown fit-content ms-auto">
       <i
         role="button"
-        className="fas fa-ellipsis ms-auto dropdown-toggle text-accent"
+        className="fas fa-ellipsis fa-lg ms-auto dropdown-toggle text-accent"
         data-bs-toggle="dropdown"
         aria-expanded="false"
         onClick={(e) => e.stopPropagation()}
       ></i>
       <ul className="dropdown-menu overflow-hidden">
-        <li>
-          <button onClick={handleEdit} className="dropdown-item ">
-            Edit
-          </button>
-        </li>
+        {isCurrentUser && (
+          <li>
+            <button onClick={handleEdit} className="dropdown-item ">
+              Edit
+            </button>
+          </li>
+        )}
         <li>
           <button
             type="button"
@@ -123,8 +126,13 @@ const Post = forwardRef(({ post, refreshPosts }, ref) => {
             : null
           : actionsDropdown}
       </div>
-      <div className="d-flex flex-column mt-3 justify-content-start align-items-start">
-        <p className="p-0 m-0 mb-1 fw-normal">{body}</p>
+      <div className="d-flex w-100 flex-column mt-3 justify-content-start align-items-start">
+        <TextareaAutosize
+          className={`w-100 border-0 bg-transparent  resize-none outline-none
+                `}
+          disabled
+          value={body}
+        />
       </div>
       <hr className="text-primary border-1 fs-2 w-100 mt-4" />
       <div className="d-flex p-0 m-0 justify-content-start align-items-center">

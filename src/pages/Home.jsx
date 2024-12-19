@@ -26,19 +26,6 @@ export default function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // const posts = [
-  //   { username: "Osama", body: "Post Content" },
-  //   {
-  //     username: "User",
-  //     img: true,
-  //     body: "Post Content Post Content Post Content Post Content Post Content Post Content Post Content Post Content Post Content Post Content Post Content Post Content ",
-  //   },
-  //   { username: "Osama", body: "Post Content" },
-  //   { username: "Osama", img: true, body: "Post Content" },
-  //   { username: "Osama", body: "Post Content" },
-  //   { username: "Osama", img: true, body: "Post Content" },
-  // ];
-
   const fetchPosts = async (options) => {
     setIsLoading(true);
 
@@ -56,7 +43,10 @@ export default function Home() {
         setHasMore(false);
       }
     } catch (err) {
-      if (err.message === "No token, authorization denied") {
+      if (
+        err.message === "No token, authorization denied" ||
+        err.message === "Token is not valid"
+      ) {
         logout();
       }
       setHasMore(false);

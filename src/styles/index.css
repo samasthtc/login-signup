@@ -12641,6 +12641,10 @@ aside.sidebar li.nav-item .nav-link.active:hover i {
   max-width: 75% !important;
 }
 
+.min-w-100 {
+  min-width: 100% !important;
+}
+
 .p-25 {
   padding: 0.75rem !important;
 }
