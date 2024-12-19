@@ -115,8 +115,8 @@ export default function PostCreation({ setPosts }) {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); 
-      handlePost(); 
+      e.preventDefault();
+      handlePost();
     }
   };
 

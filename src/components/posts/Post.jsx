@@ -1,3 +1,4 @@
+import moment from "moment";
 import PropTypes from "prop-types";
 import { forwardRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +9,9 @@ import Modal from "../common/Modal";
 
 // @ts-ignore
 const Post = forwardRef(({ post, refreshPosts }, ref) => {
-  const { _id: postId, img, username, body, user, likes } = post;
+  const { _id: postId, img, username, body, user, likes, createdAt } = post;
+  const readableTime = moment(createdAt).format("MMM Do - h:mm A");
+
   const { loggedInUser } = useAuth();
   const isCurrentUser = loggedInUser._id === user;
   const [isLiked, setIsLiked] = useState(false);
@@ -118,7 +121,12 @@ const Post = forwardRef(({ post, refreshPosts }, ref) => {
             style={{ fontSize: "42px" }}
           ></i>
         )}
-        <p className="p-0 m-0 fw-semibold fs-5">{username}</p>
+        <div className="d-flex flex-column">
+          <p className="p-0 m-0 fw-semibold fs-6">{username}</p>
+          <p className="p-0 m-0" style={{ fontSize: "0.8rem", color: "grey" }}>
+            {readableTime}
+          </p>
+        </div>
 
         {loggedInUser?._id !== user
           ? loggedInUser?.role === "admin"
@@ -168,6 +176,7 @@ Post.propTypes = {
   post: PropTypes.shape({
     _id: PropTypes.any.isRequired,
     body: PropTypes.any.isRequired,
+    createdAt: PropTypes.any,
     img: PropTypes.any,
     likes: PropTypes.any,
     user: PropTypes.any,
