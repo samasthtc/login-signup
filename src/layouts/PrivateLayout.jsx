@@ -6,7 +6,7 @@ import { useAuth } from "../auth/AuthProvider";
 import { debounce } from "../utils/debounce";
 
 export default function PrivateLayout({ children }) {
-  const { loggedInUser, token, isLoading, logout } = useAuth();
+  const { isLoading } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isSmall, setIsSmall] = useState(window.innerWidth <= 577);
   const isOpenAndSmall = isOpen && isSmall;
