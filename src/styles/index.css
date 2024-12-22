@@ -49,7 +49,6 @@
   --bs-dark-rgb: 33, 37, 41;
   --bs-primary-text-emphasis: #10485e;
   --bs-secondary-text-emphasis: #62365a;
-  --bs-accent-text-emphasis: #602130;
   --bs-success-text-emphasis: #0a3622;
   --bs-info-text-emphasis: #055160;
   --bs-warning-text-emphasis: #574204;
@@ -58,7 +57,6 @@
   --bs-dark-text-emphasis: #495057;
   --bs-primary-bg-subtle: #d4f0fb;
   --bs-secondary-bg-subtle: #fde7f9;
-  --bs-accent-bg-subtle: #fcdce4;
   --bs-success-bg-subtle: #d1e7dd;
   --bs-info-bg-subtle: #cff4fc;
   --bs-warning-bg-subtle: #f8edce;
@@ -67,7 +65,6 @@
   --bs-dark-bg-subtle: #ced4da;
   --bs-primary-border-subtle: #a9e1f7;
   --bs-secondary-border-subtle: #fbcff3;
-  --bs-accent-border-subtle: #f9bac9;
   --bs-success-border-subtle: #a3cfbb;
   --bs-info-border-subtle: #9eeaf9;
   --bs-warning-border-subtle: #f0db9d;
@@ -148,7 +145,6 @@
   --bs-tertiary-bg-rgb: 43, 48, 53;
   --bs-primary-text-emphasis: #7dd2f4;
   --bs-secondary-text-emphasis: #f8b6ed;
-  --bs-accent-text-emphasis: #f597ad;
   --bs-success-text-emphasis: #75b798;
   --bs-info-text-emphasis: #6edff6;
   --bs-warning-text-emphasis: #e9ca6d;
@@ -157,7 +153,6 @@
   --bs-dark-text-emphasis: #dee2e6;
   --bs-primary-bg-subtle: #08242f;
   --bs-secondary-bg-subtle: #311b2d;
-  --bs-accent-bg-subtle: #301018;
   --bs-success-bg-subtle: #051b11;
   --bs-info-bg-subtle: #032830;
   --bs-warning-bg-subtle: #2c2102;
@@ -166,7 +161,6 @@
   --bs-dark-bg-subtle: #1a1d20;
   --bs-primary-border-subtle: #176c8e;
   --bs-secondary-border-subtle: #925087;
-  --bs-accent-border-subtle: #8f3147;
   --bs-success-border-subtle: #0f5132;
   --bs-info-border-subtle: #087990;
   --bs-warning-border-subtle: #836407;
@@ -7620,10 +7614,6 @@ textarea.form-control-lg {
   border-color: var(--bs-secondary-border-subtle) !important;
 }
 
-.border-accent-subtle {
-  border-color: var(--bs-accent-border-subtle) !important;
-}
-
 .border-success-subtle {
   border-color: var(--bs-success-border-subtle) !important;
 }
@@ -8642,10 +8632,6 @@ textarea.form-control-lg {
   color: var(--bs-secondary-text-emphasis) !important;
 }
 
-.text-accent-emphasis {
-  color: var(--bs-accent-text-emphasis) !important;
-}
-
 .text-success-emphasis {
   color: var(--bs-success-text-emphasis) !important;
 }
@@ -8933,10 +8919,6 @@ textarea.form-control-lg {
 
 .bg-secondary-subtle {
   background-color: var(--bs-secondary-bg-subtle) !important;
-}
-
-.bg-accent-subtle {
-  background-color: var(--bs-accent-bg-subtle) !important;
 }
 
 .bg-success-subtle {
@@ -12656,7 +12638,7 @@ aside.sidebar li.nav-item .nav-link.active:hover i {
 .border-accent-shadow {
   border-color: hsl(346, 24%, 88%) !important;
   box-shadow: 0 0 4px 0px hsl(346, 24%, 88%);
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .border-accent-shadow.hoverable:hover {
   border-color: hsl(346, 24%, 88%) !important;
@@ -12673,6 +12655,11 @@ aside.sidebar li.nav-item .nav-link.active:hover i {
 }
 
 select.form-select:focus {
+  border-color: hsl(345, 100%, 81%) !important;
+  box-shadow: 0 0 0 0.25rem hsla(345, 100%, 61%, 0.25) !important;
+}
+
+input.form-control[type=search]:focus {
   border-color: hsl(345, 100%, 81%) !important;
   box-shadow: 0 0 0 0.25rem hsla(345, 100%, 61%, 0.25) !important;
 }
@@ -12757,6 +12744,22 @@ select.form-select:focus {
   margin: 0 !important;
 }
 
+input.post-search::before {
+  content: "ss";
+}
+
+.ms-n5 {
+  margin-left: -40px;
+}
+
+.me-n5 {
+  margin-right: -40px;
+}
+
+.ps-45 {
+  padding-left: 2rem !important;
+}
+
 @media screen and (max-width: 767px) {
   .vr-hr {
     display: block;
@@ -12767,7 +12770,7 @@ select.form-select:focus {
     margin: 0 auto;
   }
 }
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 575px) {
   .email-header,
   .name-header,
   .user-info-md {

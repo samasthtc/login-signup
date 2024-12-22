@@ -104,8 +104,9 @@ const Post = forwardRef(({ post, refreshPosts }, ref) => {
       ref={ref}
       id={postId}
       onClick={handleOpenPost}
-      className="d-flex w-100 flex-column bg-2 border border-accent-shadow hoverable border-2 rounded-5 p-3 
+      className="container-fluid col-md-7 d-flex flex-column bg-2 border border-accent-shadow hoverable border-2 rounded-5 p-3 
      overflow-hidden justify-content-start align-items-start"
+      style={{ maxWidth: "600px" }}
     >
       <div className="d-flex w-100 flex-row justify-content-start align-items-center">
         {img ? (

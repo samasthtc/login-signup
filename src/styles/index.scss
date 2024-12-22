@@ -535,7 +535,7 @@ aside.sidebar {
 .border-accent-shadow {
   border-color: $accent-faded !important;
   box-shadow: 0 0 4px 0px $accent-faded;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   &.hoverable {
     &:hover {
@@ -554,6 +554,11 @@ aside.sidebar {
 }
 
 select.form-select:focus {
+  border-color: $accent-1 !important;
+  box-shadow: 0 0 0 0.25rem hsla(345, 117%, 61%, 0.25) !important;
+}
+
+input.form-control[type="search"]:focus {
   border-color: $accent-1 !important;
   box-shadow: 0 0 0 0.25rem hsla(345, 117%, 61%, 0.25) !important;
 }
@@ -643,6 +648,23 @@ select.form-select:focus {
   margin: 0 !important;
 }
 
+input.post-search {
+  &::before {
+    content: "ss";
+  }
+}
+
+.ms-n5 {
+  margin-left: -40px;
+}
+.me-n5 {
+  margin-right: -40px;
+}
+
+.ps-45 {
+  padding-left: 2rem !important;
+}
+
 @media screen and (max-width: 767px) {
   .vr-hr {
     display: block;
@@ -654,7 +676,7 @@ select.form-select:focus {
   }
 }
 
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 575px) {
   .email-header,
   .name-header,
   .user-info-md {

@@ -62,7 +62,12 @@ export const getPostsByQuery = async (
   const skip = (page - 1) * limit;
   const order = descending ? -1 : 1;
 
-  return await Post.find({ $text: { $search: query } })
+  return await Post.find({
+    $or: [
+      { username: { $regex: query, $options: "i" } },
+      { body: { $regex: query, $options: "i" } },
+    ],
+  })
     .sort({ createdAt: order })
     .skip(skip)
     .limit(limit)

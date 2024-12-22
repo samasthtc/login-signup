@@ -78,15 +78,16 @@ export default function Sidebar({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
 
   return (
     <>
-    {isSmall && (
-      <div
-      className="w-100 d-sm-none d-block bg-2 top-0 start-0 position-fixed shadow-sm"
-      style={{ height: "50px", zIndex: "100" }}
-    ></div>
-    )}
+      {isSmall && (
+        <div
+          className="w-100 d-sm-none d-block bg-2 top-0 start-0 position-fixed shadow-sm"
+          style={{ height: "50px", zIndex: "100" }}
+        ></div>
+      )}
       <aside
         ref={sidebarRef}
         className={`m-0  p-sm-3 py-4 px-4 d-flex flex-column flex-shrink-0 bg-2 text-white
@@ -99,7 +100,6 @@ export default function Sidebar({
       >
         {isSmall && (
           <>
-            
             <button
               className={`btn d-sm-none sidebar-btn  rounded-circle
               p-0 border-0`}

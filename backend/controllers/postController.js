@@ -117,7 +117,7 @@ export const handleGetPostsByUser = async (req, res, next) => {
       userId,
       Number(page),
       Number(limit),
-      descending === "true"
+      descending
     );
     res.status(200).json({
       success: true,
@@ -146,7 +146,7 @@ export const handleGetPostsByQuery = async (req, res, next) => {
       query,
       Number(page),
       Number(limit),
-      descending === "true"
+      descending
     );
     res.status(200).json({
       success: true,

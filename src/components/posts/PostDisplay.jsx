@@ -1,11 +1,11 @@
 import PropTypes from "prop-types";
-import MasonryGrid from "../MasonryGrid";
+// import MasonryGrid from "../MasonryGrid";
 import Post from "./Post";
 
 export default function PostDisplay({ posts, lastPostRef, refreshPosts }) {
   return (
-    <div className="row h-100 w-100">
-      <div className="p-0">
+    <div className="row h-100 w-100 d-flex flex-column gap-4">
+      {/* <div className="p-0">
         <MasonryGrid>
           {posts.map((post, index) => (
             <Post
@@ -17,7 +17,16 @@ export default function PostDisplay({ posts, lastPostRef, refreshPosts }) {
             />
           ))}
         </MasonryGrid>
-      </div>
+      </div> */}
+      {posts.map((post, index) => (
+            <Post
+              key={post._id}
+              // @ts-ignore
+              post={post}
+              refreshPosts={refreshPosts}
+              ref={index === posts.length - 1 ? lastPostRef : null}
+            />
+          ))}
     </div>
   );
 }

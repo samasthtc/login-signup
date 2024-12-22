@@ -1,15 +1,16 @@
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import PostCreation from "@/components/posts/PostCreation";
 import PostDisplay from "@/components/posts/PostDisplay";
+import PostSearch from "@/components/posts/PostSearch";
 import { useEffect, useRef, useState } from "react";
-import { getAllPosts } from "../api/api";
+import { getAllPosts, getPostsByQuery } from "../api/api";
 import { useAuth } from "../auth/AuthProvider";
-import { debounce } from "../utils/debounce";
+import useDebounce, { debounce } from "../utils/debounce";
 
 export default function Home() {
   // eslint-disable-next-line no-unused-vars
   const [resizeTrigger, setResizeTrigger] = useState(0);
-  const [isSmall, setIsSmall] = useState(window.innerWidth <= 577);
+  const [isSmall, setIsSmall] = useState(window.innerWidth <= 575);
   const { logout } = useAuth();
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
@@ -17,21 +18,36 @@ export default function Home() {
   const [hasMore, setHasMore] = useState(true);
   const observer = useRef(null);
 
+  const [searchInput, setSearchInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const debouncedSearchChange = useDebounce((value) => {
+    setSearchTerm(value);
+    refreshPosts();
+  });
+
+  const handleSearchChange = (value) => {
+    setSearchInput(value);
+    debouncedSearchChange(value);
+  };
+
   useEffect(() => {
     const handleResize = debounce(() => {
       setResizeTrigger((prev) => prev + 1);
-      setIsSmall(window.innerWidth <= 577);
+      setIsSmall(window.innerWidth <= 575);
     }, 150);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const fetchPosts = async (options) => {
+  const fetchPosts = async (query, options) => {
     setIsLoading(true);
 
     try {
       let success, data, message;
-      ({ success, data, message } = await getAllPosts(options));
+      ({ success, data, message } = query
+        ? await getPostsByQuery(query, options)
+        : await getAllPosts(options));
 
       if (success) {
         page === 1 ? setPosts(data) : setPosts((prev) => [...prev, ...data]);
@@ -56,9 +72,9 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchPosts({ page, limit: 9 });
+    fetchPosts(searchTerm, { page, limit: 9 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [searchTerm, page]);
 
   const refreshPosts = () => {
     setPage(1);
@@ -96,10 +112,11 @@ export default function Home() {
     <main
       className={`container-fluid py-sm-3 p-2 ${
         isSmall ? "ps-3 " : ""
-      } pe-3 py-5 row-gap-4 d-flex flex-column justify-content-start align-items-center 
+      } pe-3 pt-5 row-gap-4 d-flex flex-column justify-content-start align-items-center 
       h-100`}
     >
-      <PostCreation setPosts={setPosts} />
+      <PostSearch searchTerm={searchInput} setSearchTerm={handleSearchChange} />
+      <PostCreation searchTerm={searchInput} setPosts={setPosts} refreshPosts={refreshPosts} fetchPosts={fetchPosts} />
       {posts.length > 0 ? (
         <PostDisplay
           posts={posts}

@@ -4,7 +4,12 @@ import TextareaAutosize from "react-textarea-autosize";
 import { createPost } from "../../api/api";
 import { useAuth } from "../../auth/AuthProvider";
 
-export default function PostCreation({ setPosts }) {
+export default function PostCreation({
+  searchTerm,
+  setPosts,
+  refreshPosts,
+  fetchPosts,
+}) {
   const { loggedInUser } = useAuth();
   const [postBody, setPostBody] = useState("");
   const isPostEmpty = postBody.trim() === "";
@@ -85,7 +90,14 @@ export default function PostCreation({ setPosts }) {
         body: postBody,
       });
       if (success) {
-        setPosts((prev) => [data, ...prev]);
+        if (
+          searchTerm === "" ||
+          postBody.toLowerCase().includes(searchTerm.toLowerCase())
+        ) {
+          setPosts((prev) => [data, ...prev]);
+        }
+        // refreshPosts();
+        // fetchPosts();
         setPostBody("");
         setAlert({
           show: true,
@@ -135,14 +147,11 @@ export default function PostCreation({ setPosts }) {
     : "text-muted";
 
   return (
-    <div
-      className="row w-100 align-items-center column-gap-5"
-      style={{ height: "auto" }}
-    >
+    <div className="row w-100 align-items-center column-gap-5 justify-content-center">
       <div
-        className="col-md-6 p-3 bg-primary-subtle d-flex flex-column 
+        className="container-fluid col-md-7 p-3 bg-primary-subtle d-flex flex-column 
       justify-content-center gap-2 rounded-5 border border-primary border-2"
-        style={{ height: "auto" }}
+        style={{ maxWidth: "600px" }}
       >
         <div className="d-flex flex-column">
           <div
@@ -196,11 +205,13 @@ export default function PostCreation({ setPosts }) {
           </button>
         </div>
       </div>
-      <div className="col-auto border border-success border-2"></div>
     </div>
   );
 }
 
 PostCreation.propTypes = {
+  fetchPosts: PropTypes.func,
+  refreshPosts: PropTypes.func,
+  searchTerm: PropTypes.string,
   setPosts: PropTypes.func,
 };

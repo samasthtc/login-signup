@@ -8,12 +8,12 @@ import { debounce } from "../utils/debounce";
 export default function PrivateLayout({ children }) {
   const { isLoading } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [isSmall, setIsSmall] = useState(window.innerWidth <= 577);
+  const [isSmall, setIsSmall] = useState(window.innerWidth <= 575);
   const isOpenAndSmall = isOpen && isSmall;
 
   useEffect(() => {
     const handleResize = debounce(
-      () => setIsSmall(window.innerWidth <= 577),
+      () => setIsSmall(window.innerWidth <= 575),
       150
     );
     window.addEventListener("resize", handleResize);

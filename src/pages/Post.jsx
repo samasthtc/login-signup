@@ -57,7 +57,7 @@ export default function Post() {
     };
 
     fetchPost();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, loggedInUser._id, location.search]);
 
   const handleEditToggle = (isEditMode) => {
@@ -234,12 +234,20 @@ export default function Post() {
     }
   };
 
+  const handleGoBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <main
       className="container-fluid d-flex justify-content-center
        align-items-center align-content-center h-100"
     >
-      <CardContainer styleClasses="hoverable">
+      <CardContainer styleClasses="hoverable col-md-3">
         <div
           id={postId}
           className="d-flex w-100 p-1 flex-column overflow-hidden justify-content-start 
@@ -319,17 +327,30 @@ export default function Post() {
                 </button>
               </div>
             ) : (
-              <div className="d-flex">
-                <div
-                  role="button"
-                  onClick={handleLikeUnlike}
-                  className={`icon ${isLiked ? "clicked" : ""}`}
-                >
-                  <svg className="heart-main" viewBox="0 0 512 512" width="22">
-                    <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z" />
-                  </svg>
+              <div className="d-flex align-items-start justify-content-between w-100">
+                <div className="d-flex">
+                  <div
+                    role="button"
+                    onClick={handleLikeUnlike}
+                    className={`icon ${isLiked ? "clicked" : ""}`}
+                  >
+                    <svg
+                      className="heart-main"
+                      viewBox="0 0 512 512"
+                      width="22"
+                    >
+                      <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z" />
+                    </svg>
+                  </div>
+                  <p className="p-0 m-0 ms-1 fw-medium">{likesCount}</p>
                 </div>
-                <p className="p-0 m-0 ms-1 fw-medium">{likesCount}</p>
+                <button
+                  type="button"
+                  className="btn border-2 rounded-pill back-btn text-semibold "
+                  onClick={handleGoBack}
+                >
+                  Back
+                </button>
               </div>
             )}
           </div>
