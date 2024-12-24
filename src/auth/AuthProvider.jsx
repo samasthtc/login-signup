@@ -24,6 +24,19 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const handleStorageChange = () => {
+      const updatedToken = localStorage.getItem("token");
+      setToken(updatedToken);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  useEffect(() => {
     if (token && storedUserId) {
       fetchUsers(token);
     } else {

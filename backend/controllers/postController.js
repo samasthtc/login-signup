@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import {
   createPost,
   deletePostById,
@@ -15,11 +16,17 @@ export const handleGetAllPosts = async (req, res, next) => {
 
   try {
     const posts = await getAllPosts(Number(page), Number(limit), descending);
-    res.status(200).json({
-      success: true,
-      data: posts,
-      message: "Posts fetched successfully",
-    });
+    if (posts.length === 0) {
+      return res
+        .status(200)
+        .json({ success: true, data: [], message: "No posts found" });
+    } else {
+      return res.status(200).json({
+        success: true,
+        data: posts,
+        message: "Posts fetched successfully",
+      });
+    }
   } catch (error) {
     next(error);
   }
@@ -27,10 +34,10 @@ export const handleGetAllPosts = async (req, res, next) => {
 
 // Handle fetching a single post by ID
 export const handleGetPostById = async (req, res, next) => {
-  const { id } = req.params;
+  const { postId } = req.params;
 
   try {
-    const post = await getPostById(id);
+    const post = await getPostById(postId);
     if (!post) {
       return res.status(404).json({
         success: false,
@@ -65,11 +72,19 @@ export const handleCreatePost = async (req, res, next) => {
 
 // Handle updating a post by ID
 export const handleUpdatePostById = async (req, res, next) => {
-  const { id } = req.params;
+  const { postId } = req.params;
   const updatedPostData = req.body;
 
+  //post cant be empty
+  if (!updatedPostData) {
+    return res.status(400).json({
+      success: false,
+      message: "Post cannot be empty!",
+    });
+  }
+
   try {
-    const updatedPost = await updatePostById(id, updatedPostData);
+    const updatedPost = await updatePostById(postId, updatedPostData);
     if (!updatedPost) {
       return res.status(404).json({
         success: false,
@@ -88,10 +103,10 @@ export const handleUpdatePostById = async (req, res, next) => {
 
 // Handle deleting a post by ID
 export const handleDeletePostById = async (req, res, next) => {
-  const { id } = req.params;
+  const { postId } = req.params;
 
   try {
-    const deletedPost = await deletePostById(id);
+    const deletedPost = await deletePostById(postId);
     if (!deletedPost) {
       return res.status(404).json({
         success: false,
@@ -112,6 +127,13 @@ export const handleGetPostsByUser = async (req, res, next) => {
   const { userId } = req.params;
   const { page = 1, limit = 10, descending = true } = req.query;
 
+  if (!mongoose.isValidObjectId(userId)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid user ID format",
+    });
+  }
+
   try {
     const posts = await getPostsByUser(
       userId,
@@ -119,20 +141,36 @@ export const handleGetPostsByUser = async (req, res, next) => {
       Number(limit),
       descending
     );
-    res.status(200).json({
-      success: true,
-      data: posts,
-      message: "Posts fetched successfully",
-    });
+
+    if (posts.length === 0) {
+      return res
+        .status(200)
+        .json({ success: true, data: [], message: "No posts found" });
+    } else {
+      return res.status(200).json({
+        success: true,
+        data: posts,
+        message: "Posts fetched successfully",
+      });
+    }
   } catch (error) {
+    if (
+      error.message.includes("Cast to ObjectId failed") ||
+      error.message.includes("No matching user")
+    ) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
     next(error);
   }
 };
 
 // Handle fetching posts by search query
 export const handleGetPostsByQuery = async (req, res, next) => {
-  const { query } = req.query;
-  const { page = 1, limit = 10, descending = true } = req.query;
+  const { query, page = 1, limit = 10, descending = true } = req.query;
 
   if (!query) {
     return res.status(400).json({
@@ -148,11 +186,17 @@ export const handleGetPostsByQuery = async (req, res, next) => {
       Number(limit),
       descending
     );
-    res.status(200).json({
-      success: true,
-      data: posts,
-      message: "Posts fetched successfully",
-    });
+    if (posts.length === 0) {
+      return res
+        .status(200)
+        .json({ success: true, data: [], message: "No posts found" });
+    } else {
+      return res.status(200).json({
+        success: true,
+        data: posts,
+        message: "Posts fetched successfully",
+      });
+    }
   } catch (error) {
     next(error);
   }
@@ -160,11 +204,11 @@ export const handleGetPostsByQuery = async (req, res, next) => {
 
 // handle liking a post
 export const handleLikePost = async (req, res, next) => {
-  const { id } = req.params;
+  const { postId } = req.params;
   const { userId, like } = req.body;
 
   try {
-    const post = await getPostById(id);
+    const post = await getPostById(postId);
     if (!post) {
       return res.status(404).json({
         success: false,
@@ -172,10 +216,10 @@ export const handleLikePost = async (req, res, next) => {
       });
     }
 
-    const response = await likePost(id, userId, like);
-    res.status(200).json({
+    const returnedPost = await likePost(postId, userId, like);
+    res.status(201).json({
       success: true,
-      data: response,
+      data: returnedPost,
       message: "Post liked successfully",
     });
   } catch (error) {

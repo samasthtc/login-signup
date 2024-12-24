@@ -1,0 +1,536 @@
+/protected/posts/:
+  get:
+    responses:
+      "200":
+        description: Posts fetched successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Post"
+                message:
+                  type: string
+                  example: Posts fetched successfully
+      "202":
+        description: No posts found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  type: array
+                  items:
+                    oneOf: []
+                message:
+                  type: string
+                  example: No posts found
+    tags:
+      - Posts
+    description: Get all posts that fit the conditions of page and limit. Can be in ascending or descending (default) order based on time created.
+    operationId: getPosts
+    summary: Get Posts
+    parameters:
+      - schema:
+          type: integer
+          default: 1
+          minimum: 1
+        in: query
+        name: page
+        description: "Subset of posts to fetch. eg. 1 to {limit}, {limit} to {2*limit}, ..., etc."
+      - schema:
+          type: integer
+          default: 10
+          minimum: 1
+        in: query
+        name: limit
+        description: Number of posts to fetch.
+      - schema:
+          type: boolean
+          default: true
+        in: query
+        name: descending
+        description: Sorting based on time created.
+  post:
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              user: 60d0fe4f5311236168a109cb
+              username: John Doe
+              body: This is a sample post content.
+              images:
+                - "https://example.com/image1.jpg"
+                - "https://example.com/image2.jpg"
+            required:
+              - user
+              - username
+              - body
+            properties:
+              user:
+                type: string
+                description: ID of the user who created the post
+              username:
+                type: string
+                description: Username of the post creator
+              body:
+                type: string
+                description: Content of the post (max 250 characters)
+              images:
+                type: array
+                description: List of image URLs associated with the post
+                items:
+                  type: string
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            example:
+              user: 60d0fe4f5311236168a109cb
+              username: John Doe
+              body: This is a sample post content.
+              images:
+                - "https://example.com/image1.jpg"
+                - "https://example.com/image2.jpg"
+            required:
+              - user
+              - username
+              - body
+            properties:
+              user:
+                type: string
+                description: ID of the user who created the post
+              username:
+                type: string
+                description: Username of the post creator
+              body:
+                type: string
+                description: Content of the post (max 250 characters)
+              images:
+                type: array
+                description: List of image URLs associated with the post
+                items:
+                  type: string
+    responses:
+      "201":
+        description: Post created successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  $ref: "#/components/schemas/Post"
+                message:
+                  type: string
+                  example: Post created successfully!
+    tags:
+      - Posts
+    description: 
+    operationId: createPost
+    summary: Create Post
+/protected/posts/search:
+  get:
+    responses:
+      "200":
+        description: Posts fetched successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Post"
+                message:
+                  type: string
+                  example: Posts fetched successfully
+      "202":
+        description: No posts found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  type: array
+                  items:
+                    oneOf: []
+                message:
+                  type: string
+                  example: No posts found
+      "400":
+        description: No search query entered
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: Search query is required
+    tags:
+      - Posts
+    description: Search for post body or user name with the same query.
+    operationId: searchForPostsByQuery
+    summary: Search for Posts by Query
+    parameters:
+      - schema:
+          type: string
+        in: query
+        name: query
+        description: Query to search for. Can refer to post content or user name.
+        required: true
+      - schema:
+          type: integer
+          default: 1
+          minimum: 1
+        in: query
+        name: page
+        description: "Subset of posts to fetch. eg. 1 to {limit}, {limit} to {2*limit}, ..., etc."
+      - schema:
+          type: integer
+          default: 10
+          minimum: 1
+        in: query
+        name: limit
+        description: Number of posts to fetch.
+      - schema:
+          type: boolean
+          default: true
+        in: query
+        name: descending
+        description: Sorting based on time created.
+"/protected/posts/user/{userId}":
+  parameters:
+    - in: path
+      name: userId
+      required: true
+      schema:
+        type: string
+    - schema:
+        type: integer
+        default: 1
+        minimum: 1
+      in: query
+      name: page
+      description: "Subset of posts to fetch. eg. 1 to {limit}, {limit} to {2*limit}, ..., etc."
+    - schema:
+        type: integer
+        default: 10
+        minimum: 1
+      in: query
+      name: limit
+      description: Number of posts to fetch.
+    - schema:
+        type: boolean
+        default: true
+      in: query
+      name: descending
+      description: Sorting based on time created.
+  get:
+    responses:
+      "200":
+        description: Posts fetched successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Post"
+                message:
+                  type: string
+                  example: Posts fetched successfully
+      "202":
+        description: No posts found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  type: array
+                  items:
+                    oneOf: []
+                message:
+                  type: string
+                  example: No posts found
+    tags:
+      - Posts
+    description: 
+    operationId: getPostsByUser
+    summary: Get Posts by User
+"/protected/posts/{postId}":
+  parameters:
+    - in: path
+      name: postId
+      required: true
+      schema:
+        type: string
+  delete:
+    responses:
+      "200":
+        description: Post deleted successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                message:
+                  type: string
+                  example: Post deleted successfully!
+      "404":
+        description: Post Not Found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: Post Not Found!
+    tags:
+      - Posts
+    description:
+    operationId: deletePostById
+    summary: Delete Post by ID
+  get:
+    responses:
+      "200":
+        description: Post fetched successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  $ref: "#/components/schemas/Post"
+                message:
+                  type: string
+                  example: Posts fetched successfully
+      "404":
+        description: Post not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                message:
+                  type: string
+                  example: Post not found
+    tags:
+      - Posts
+    description:
+    operationId: getPostById
+    summary: Get Post by ID
+  put:
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - body
+            properties:
+              body:
+                type: string
+                description: Content of the post (max 250 characters)
+              images:
+                type: array
+                description: List of image URLs associated with the post
+                items:
+                  type: string
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - body
+            properties:
+              body:
+                type: string
+                description: Content of the post (max 250 characters)
+              images:
+                type: array
+                description: List of image URLs associated with the post
+                items:
+                  type: string
+    responses:
+      "200":
+        description: Post updated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  $ref: "#/components/schemas/Post"
+                message:
+                  type: string
+                  example: Post updated successfully!
+      "400":
+        description: Post is empty.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: Post cannot be empty!
+      "404":
+        description: Post Not Found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: Post Not Found!
+    tags:
+      - Posts
+    description: Update Post by ID
+    operationId: updatePostById
+    summary: Update Post by ID
+"/protected/posts/{postId}/like":
+  parameters:
+    - in: path
+      name: postId
+      required: true
+      schema:
+        type: string
+  post:
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - userId
+            properties:
+              userId:
+                type: string
+                example: 60d0fe4f5311236168a109ca
+              like:
+                type: boolean
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - userId
+            properties:
+              userId:
+                type: string
+                example: 60d0fe4f5311236168a109ca
+              like:
+                type: boolean
+    responses:
+      "201":
+        description: Post liked successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  $ref: "#/components/schemas/Post"
+                message:
+                  type: string
+            examples:
+              Like post:
+                value:
+                  success: true
+                  data:
+                    _id: 60d0fe4f5311236168a109ca
+                    user: 60d0fe4f5311236168a109cb
+                    username: John Doe
+                    body: This is a sample post content.
+                    images:
+                      - "https://example.com/image1.jpg"
+                      - "https://example.com/image2.jpg"
+                    likes:
+                      - 60d0fe4f5311236168a109cc
+                      - 60d0fe4f5311236168a109cd
+                    createdAt: "2023-12-22T10:15:30.000Z"
+                    updatedAt: "2023-12-22T12:30:45.000Z"
+                  message: Post liked successfully!
+              Unlike post:
+                value:
+                  success: true
+                  data:
+                    _id: 60d0fe4f5311236168a109ca
+                    user: 60d0fe4f5311236168a109cb
+                    username: John Doe
+                    body: This is a sample post content.
+                    images:
+                      - "https://example.com/image1.jpg"
+                      - "https://example.com/image2.jpg"
+                    likes:
+                      - 60d0fe4f5311236168a109cc
+                      - 60d0fe4f5311236168a109cd
+                    createdAt: "2023-12-22T10:15:30.000Z"
+                    updatedAt: "2023-12-22T12:30:45.000Z"
+                  message: Post unliked successfully!
+      "404":
+        description: Post Not Found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: Post Not Found!
+    tags:
+      - Posts
+    description: Like/Unlike Post
+    operationId: likeUnlikePost
+    summary: Like/Unlike Post

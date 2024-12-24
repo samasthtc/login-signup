@@ -1,22 +1,47 @@
+import fs from "fs";
+import yaml from "js-yaml";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import modelsSchemas from "./components.js";
-import authPaths from "./paths/authPaths.js";
-import postPaths from "./paths/postPaths.js";
-import userPaths from "./paths/userPaths.js";
+
+const filterInternalSchemas = (schemas) => {
+  const filteredSchemas = {};
+  for (const [key, value] of Object.entries(schemas)) {
+    if (!value["x-internal"]) {
+      filteredSchemas[key] = value;
+    }
+  }
+  return filteredSchemas;
+};
+
+const authPaths = yaml.load(
+  fs.readFileSync("docs/paths/authPaths.yaml", "utf8")
+);
+const userPaths = yaml.load(
+  fs.readFileSync("docs/paths/userPaths.yaml", "utf8")
+);
+const postPaths = yaml.load(
+  fs.readFileSync("docs/paths/postPaths.yaml", "utf8")
+);
 
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
       title: "ExTask API",
-      version: "1.0.0",
+      version: "1.0.0-oas3",
       description: "ExTask API",
     },
     servers: [
       {
-        url: "http://localhost:5000",
+        url: "{baseUrl}:5000/api",
         description: "Development server",
+        variables: {
+          baseUrl: {
+            default: "http://localhost",
+            description: "Local server",
+          },
+        },
       },
     ],
     components: {
@@ -27,19 +52,21 @@ const swaggerOptions = {
           bearerFormat: "JWT",
         },
       },
-      schemas: modelsSchemas,
+      schemas: filterInternalSchemas(modelsSchemas),
     },
+    tags: [
+      { name: "Authentication", description: "Authentication endpoints" },
+      { name: "Users", description: "Users related endpoints" },
+      { name: "Posts", description: "Posts related endpoints" },
+    ],
     paths: {
+      ...authPaths,
       ...userPaths,
       ...postPaths,
-      ...authPaths,
     },
+    security: [{ bearerAuth: [] }],
   },
-  security: [{ bearerAuth: [] }],
-  apis: [
-    "C:/Users/Osama.shoora/Documents/Tasks/React/login-signup/backend/routes/**/*.js",
-    "D:/coding/Training/Login-Signup-React/login-signup/backend/routes/**/*.js",
-  ],
+  apis: [],
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);

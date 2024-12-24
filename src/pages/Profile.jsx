@@ -1,26 +1,8 @@
 import EditForm from "@/components/editForms/EditForm";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { visitProfile } from "../api/api";
-import { useAuth } from "../auth/AuthProvider";
 
 export default function Profile() {
-  const { logout } = useAuth();
-  useEffect(() => {
-    const visit = async () => {
-      try {
-        await visitProfile();
-      } catch (error) {
-        if (error.message === "No token, authorization denied") {
-          logout();
-        }
-      }
-    };
-
-    visit();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const location = useLocation();
   const [queries, setQueries] = useState({
     userId: null,

@@ -2,14 +2,22 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 import Sidebar from "@/components/common/Sidebar";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import { debounce } from "../utils/debounce";
 
 export default function PrivateLayout({ children }) {
-  const { isLoading } = useAuth();
+  const { isLoading, token } = useAuth();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isSmall, setIsSmall] = useState(window.innerWidth <= 575);
   const isOpenAndSmall = isOpen && isSmall;
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login", { replace: true });
+    }
+  }, [token, navigate]);
 
   useEffect(() => {
     const handleResize = debounce(
@@ -54,16 +62,16 @@ export default function PrivateLayout({ children }) {
         </div>
       </>
     );
-  } else {
-    return (
-      <div
-        className="d-flex justify-content-center align-items-center my-auto"
-        style={{ height: "90vh" }}
-      >
-        <LoadingSpinner />
-      </div>
-    );
   }
+
+  return (
+    <div
+      className="d-flex justify-content-center align-items-center my-auto"
+      style={{ height: "90vh" }}
+    >
+      <LoadingSpinner />
+    </div>
+  );
 }
 
 PrivateLayout.propTypes = {

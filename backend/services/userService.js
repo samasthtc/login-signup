@@ -8,12 +8,16 @@ export const getUserByEmail = async (email) => {
   return await User.findOne({ email }).select("-password");
 };
 
-export const getUserById = async (id) => {
-  return await User.findById(id).select("-password");
+export const getFullUserByEmail = async (email) => {
+  return await User.findOne({ email });
 };
 
-export const getFullUserById = async (id) => {
-  return await User.findById(id);
+export const getUserById = async (userId) => {
+  return await User.findById(userId).select("-password");
+};
+
+export const getFullUserById = async (userId) => {
+  return await User.findById(userId);
 };
 
 export const createUser = async (userData) => {
@@ -22,12 +26,12 @@ export const createUser = async (userData) => {
   return await User.findById(user._id).select("-password").lean();
 };
 
-export const updateUserById = async (id, updatedUserData) => {
-  return await User.findByIdAndUpdate(id, updatedUserData, {
+export const updateUserById = async (userId, updatedUserData) => {
+  return await User.findByIdAndUpdate(userId, updatedUserData, {
     new: true,
   }).select("-password");
 };
 
-export const deleteUserById = async (id) => {
-  return await User.findByIdAndDelete(id).select("-password");
+export const deleteUserById = async (userId) => {
+  return await User.findByIdAndDelete(userId).select("-password");
 };

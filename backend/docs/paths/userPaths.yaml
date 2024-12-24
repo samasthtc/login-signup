@@ -1,0 +1,211 @@
+/protected/users/:
+  get:
+    responses:
+      "200":
+        description: Users fetched successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/UserNoPassword"
+                message:
+                  type: string
+                  example: Users fetched successfully
+      "202":
+        description: No users found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  type: array
+                  items:
+                    oneOf: []
+                message:
+                  type: string
+                  example: No users found
+    tags:
+      - Users
+    description: ""
+    operationId: getUsers
+    summary: Get Users
+"/protected/users/{userId}":
+  parameters:
+    - in: path
+      name: userId
+      required: true
+      schema:
+        type: string
+  delete:
+    responses:
+      "200":
+        description: User deleted successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                message:
+                  type: string
+                  example: User deleted successfully!
+      "404":
+        description: User Not Found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: User Not Found!
+    tags:
+      - Users
+    description: ""
+    operationId: deleteUser
+    summary: Delete User
+  put:
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              name:
+                type: string
+              role:
+                enum:
+                  - user
+                  - admin
+                default: user
+              Confirm Password:
+                type: string
+              New Password:
+                type: string
+              Old Password:
+                type: string
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              name:
+                type: string
+              role:
+                enum:
+                  - user
+                  - admin
+                default: user
+              Confirm Password:
+                type: string
+              New Password:
+                type: string
+              Old Password:
+                type: string
+    responses:
+      "200":
+        description: User updated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                data:
+                  $ref: "#/components/schemas/UserNoPassword"
+                message:
+                  type: string
+                  example: User updated successfully!
+      "400":
+        description: Invalid data.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Name must have more than 2 characters.
+                    email:
+                      type: string
+                      example: Invalid email.
+                    password:
+                      type: string
+                      example: Password must contain at least one number.
+      "401":
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: Old password is incorrect!
+      "404":
+        description: User Not Found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: User Not Found!
+      "409":
+        description: Conflict
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+            examples:
+              emailConflict:
+                summary: Email already exists
+                value:
+                  success: false
+                  message: Email already exists!
+              passwordConflict:
+                summary: New password conflict
+                value:
+                  success: false
+                  message: New password is the same as the old one!
+    tags:
+      - Users
+    description: All values provided are optional; can include one value or all.
+    operationId: editUser
+    summary: Edit User

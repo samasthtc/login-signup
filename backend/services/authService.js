@@ -4,6 +4,7 @@ import {
   createUser,
   deleteUserById,
   getAllUsers,
+  getFullUserByEmail,
   getFullUserById,
   getUserByEmail,
   getUserById,
@@ -14,8 +15,8 @@ export const getUsers = async () => {
   return await getAllUsers();
 };
 
-export const findUserById = async (id) => {
-  const user = await getUserById(id);
+export const findUserById = async (userId) => {
+  const user = await getUserById(userId);
   if (!user) throw new Error("User not found!");
   // eslint-disable-next-line no-unused-vars
   const { password, ...userWithoutPassword } = user;
@@ -23,7 +24,7 @@ export const findUserById = async (id) => {
 };
 
 export const login = async ({ email, password }) => {
-  const user = await getUserByEmail(email);
+  const user = await getFullUserByEmail(email);
   if (!user) throw new Error("Invalid credentials");
 
   const isMatch = await bcrypt.compare(password, user.password);
@@ -98,8 +99,8 @@ export const updateUser = async (updatedUser) => {
   return updatedUser;
 };
 
-export const deleteProfile = async (id) => {
-  const deletedUser = await deleteUserById(id);
+export const deleteProfile = async (userId) => {
+  const deletedUser = await deleteUserById(userId);
   if (!deletedUser) {
     throw new Error("User not found!");
   }

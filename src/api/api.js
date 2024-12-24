@@ -13,9 +13,9 @@ export const getUsers = (token) =>
     Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
   });
 
-export const deleteUser = (id, user, token) =>
+export const deleteUser = (userId, user, token) =>
   apiRequest(
-    `/api/protected/users/${id}`,
+    `/api/protected/users/${userId}`,
     "DELETE",
     {
       Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
@@ -23,9 +23,9 @@ export const deleteUser = (id, user, token) =>
     user
   );
 
-export const updateUser = (id, changedData, token) =>
+export const updateUser = (userId, changedData, token) =>
   apiRequest(
-    `/api/protected/users/${id}`,
+    `/api/protected/users/${userId}`,
     "PUT",
     {
       Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
@@ -56,14 +56,14 @@ export const getAllPosts = (options = {}, token) => {
   });
 };
 
-export const getPostById = (id, token) =>
-  apiRequest(`/api/protected/posts/${id}`, "GET", {
+export const getPostById = (postId, token) =>
+  apiRequest(`/api/protected/posts/${postId}`, "GET", {
     Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
   });
 
-export const updatePost = (id, changedData, token) =>
+export const updatePost = (postId, changedData, token) =>
   apiRequest(
-    `/api/protected/posts/${id}`,
+    `/api/protected/posts/${postId}`,
     "PUT",
     {
       Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
@@ -71,9 +71,9 @@ export const updatePost = (id, changedData, token) =>
     changedData
   );
 
-export const deletePost = (id, token) =>
+export const deletePost = (postId, token) =>
   apiRequest(
-    `/api/protected/posts/${id}`,
+    `/api/protected/posts/${postId}`,
     "DELETE",
     {
       Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
