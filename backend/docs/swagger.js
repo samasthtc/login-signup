@@ -1,7 +1,9 @@
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import modelsSchemas from "./components.js";
-import userPaths from "./userPaths.js";
+import authPaths from "./paths/authPaths.js";
+import postPaths from "./paths/postPaths.js";
+import userPaths from "./paths/userPaths.js";
 
 const swaggerOptions = {
   definition: {
@@ -27,34 +29,16 @@ const swaggerOptions = {
       },
       schemas: modelsSchemas,
     },
-  },
-  security: [{ bearerAuth: [] }],
-  paths: {
-    ...userPaths,
-    "/users": {
-      get: {
-        tags: ["Users"],
-        summary: "Get all users",
-        responses: {
-          200: {
-            description: "List of users",
-            content: {
-              "application/json": {
-                schema: {
-                  type: "array",
-                  items: {
-                    $ref: "#/components/schemas/User",
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
+    paths: {
+      ...userPaths,
+      ...postPaths,
+      ...authPaths,
     },
   },
+  security: [{ bearerAuth: [] }],
   apis: [
     "C:/Users/Osama.shoora/Documents/Tasks/React/login-signup/backend/routes/**/*.js",
+    "D:/coding/Training/Login-Signup-React/login-signup/backend/routes/**/*.js",
   ],
 };
 

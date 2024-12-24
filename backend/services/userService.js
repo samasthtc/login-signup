@@ -5,7 +5,7 @@ export const getAllUsers = async () => {
 };
 
 export const getUserByEmail = async (email) => {
-  return await User.findOne({ email });
+  return await User.findOne({ email }).select("-password");
 };
 
 export const getUserById = async (id) => {
@@ -18,7 +18,8 @@ export const getFullUserById = async (id) => {
 
 export const createUser = async (userData) => {
   const user = new User(userData);
-  return await user.save();
+  await user.save();
+  return await User.findById(user._id).select("-password").lean();
 };
 
 export const updateUserById = async (id, updatedUserData) => {

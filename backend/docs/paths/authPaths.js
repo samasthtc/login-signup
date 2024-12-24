@@ -1,17 +1,17 @@
-const userPaths = {
-  "/users": {
+const authPaths = {
+  "/login": {
     get: {
-      tags: ["Users"],
-      summary: "Get all users",
+      tags: ["Authentication"],
+      summary: "Login",
       responses: {
         200: {
-          description: "List of users",
+          description: "Logged in user",
           content: {
             "application/json": {
               schema: {
                 type: "array",
                 items: {
-                  $ref: "#/components/schemas/User",
+                  $ref: "#/components/schemas/UserNoPassword",
                 },
               },
             },
@@ -22,4 +22,4 @@ const userPaths = {
   },
 };
 
-export default userPaths;
+export default authPaths;

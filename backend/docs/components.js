@@ -49,7 +49,10 @@ const modelsSchemas = {
       user: "60d0fe4f5311236168a109cb",
       username: "john_doe",
       body: "This is a sample post content.",
-      images: ["https://example.com/image1.jpg", "https://example.com/image2.jpg"],
+      images: [
+        "https://example.com/image1.jpg",
+        "https://example.com/image2.jpg",
+      ],
       likes: ["60d0fe4f5311236168a109cc", "60d0fe4f5311236168a109cd"],
       createdAt: "2023-12-22T10:15:30.000Z",
       updatedAt: "2023-12-22T12:30:45.000Z",
@@ -63,7 +66,10 @@ const modelsSchemas = {
       name: { type: "string", description: "User's name" },
       email: { type: "string", description: "User's email address" },
       password: { type: "string", description: "User's password" },
-      role: { type: "string", description: "User's role (user or admin). Default is user" },
+      role: {
+        type: "string",
+        description: "User's role (user or admin). Default is user",
+      },
     },
     example: {
       id: "60d0fe4f5311236168a109ca",
@@ -73,6 +79,25 @@ const modelsSchemas = {
       role: "user",
     },
   },
-}
+  UserNoPassword: {
+    type: "object",
+    required: ["name", "email"],
+    properties: {
+      id: { type: "string", description: "Auto-generated ID" },
+      name: { type: "string", description: "User's name" },
+      email: { type: "string", description: "User's email address" },
+      role: {
+        type: "string",
+        description: "User's role (user or admin). Default is user",
+      },
+    },
+    example: {
+      id: "60d0fe4f5311236168a109ca",
+      name: "John Doe",
+      email: "john.doe@example.com",
+      role: "user",
+    },
+  },
+};
 
-export default modelsSchemas
+export default modelsSchemas;
