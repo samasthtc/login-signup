@@ -45,9 +45,10 @@ export default function Post() {
         setPostBody(response.data.body);
         setLikesCount(response.data.likes.length);
         setIsLiked(response.data.likes.includes(loggedInUser?._id));
+        
         setIsEditing(
           searchParams.get("edit") === "true" &&
-            response.data.user === loggedInUser?._id
+            response.data.userId === loggedInUser?._id
         );
       } catch (error) {
         errorText.current = `Error fetching post\n${error}`;
@@ -155,6 +156,8 @@ export default function Post() {
 
   const { _id: postId, img, username, body, userId } = post;
   const isCurrentUser = loggedInUser?._id === userId;
+  console.log(isEditing, isCurrentUser);
+  
 
   const handleInputChange = (e) => {
     const value = e.target.value;
