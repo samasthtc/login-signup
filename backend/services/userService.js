@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import Post from "../models/Post.js";
 import User from "../models/User.js";
 
 export const getAllUsers = async () => {
@@ -96,6 +97,12 @@ export const updateUser = async (updatedUser) => {
 
 export const deleteUser = async (userId) => {
   const deletedUser = await deleteUserById(userId);
+  await Post.deleteMany({ userId: userId });
+  await Post.updateMany(
+    { likes: userId }, 
+    { $pull: { likes: userId } }
+  );
+
   if (!deletedUser) {
     throw new Error("User not found!");
   }
