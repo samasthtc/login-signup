@@ -10,7 +10,7 @@ export const handleGetUsers = async (req, res, next) => {
     const users = await getUsers();
     if (users.length === 0) {
       return res
-        .status(200)
+        .status(202)
         .json({ success: true, data: [], message: "No users found" });
     } else {
       return res.status(200).json({

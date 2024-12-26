@@ -18,7 +18,7 @@ export const handleGetAllPosts = async (req, res, next) => {
     const posts = await getAllPosts(Number(page), Number(limit), descending);
     if (posts.length === 0) {
       return res
-        .status(200)
+        .status(202)
         .json({ success: true, data: [], message: "No posts found" });
     } else {
       return res.status(200).json({
@@ -145,7 +145,7 @@ export const handleGetPostsByUser = async (req, res, next) => {
 
     if (posts.length === 0) {
       return res
-        .status(200)
+        .status(202)
         .json({ success: true, data: [], message: "No posts found" });
     } else {
       return res.status(200).json({
@@ -189,7 +189,7 @@ export const handleGetPostsByQuery = async (req, res, next) => {
     );
     if (posts.length === 0) {
       return res
-        .status(200)
+        .status(202)
         .json({ success: true, data: [], message: "No posts found" });
     } else {
       return res.status(200).json({
@@ -208,6 +208,13 @@ export const handleLikePost = async (req, res, next) => {
   const { postId } = req.params;
   const { userId, like } = req.body;
 
+  if (!mongoose.isValidObjectId(userId)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid user ID format",
+    });
+  }
+
   try {
     const post = await getPostById(postId);
     if (!post) {
@@ -224,6 +231,16 @@ export const handleLikePost = async (req, res, next) => {
       message: "Post liked successfully",
     });
   } catch (error) {
+    if (
+      error.message.includes("Cast to ObjectId failed") ||
+      error.message.includes("No matching user")
+    ) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
     next(error);
   }
 };
