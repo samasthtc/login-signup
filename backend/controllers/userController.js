@@ -83,7 +83,7 @@ export const handleUpdateUser = async (req, res, next) => {
         message: { userId: error.message },
       });
     } else if (error.message === "Old Password is Incorrect!") {
-      return res.status(401).json({
+      return res.status(409).json({
         success: false,
         message: { password: error.message },
       });
