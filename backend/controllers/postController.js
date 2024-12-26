@@ -56,10 +56,11 @@ export const handleGetPostById = async (req, res, next) => {
 
 // Handle creating a new post
 export const handleCreatePost = async (req, res, next) => {
+  const { userId, username } = req;
   const postData = req.body;
 
   try {
-    const newPost = await createPost(postData);
+    const newPost = await createPost({ userId, username, ...postData });
     res.status(201).json({
       success: true,
       data: newPost,

@@ -80,10 +80,13 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     navigate("/login", { replace: true });
-    setLoggedInUser(null);
-    setToken(null);
-    localStorage.removeItem("loggedInUserId");
-    localStorage.removeItem("token");
+    
+    setTimeout(() => {
+      setLoggedInUser(null);
+      setToken(null);
+      localStorage.removeItem("loggedInUserId");
+      localStorage.removeItem("token");
+    }, 100);
   };
 
   return (

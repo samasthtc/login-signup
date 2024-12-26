@@ -66,23 +66,10 @@
           schema:
             type: object
             example:
-              userId: 60d0fe4f5311236168a109cb
-              username: John Doe
               body: This is a sample post content.
-              images:
-                - "https://example.com/image1.jpg"
-                - "https://example.com/image2.jpg"
             required:
-              - user
-              - username
               - body
             properties:
-              userId:
-                type: string
-                description: ID of the user who created the post
-              username:
-                type: string
-                description: Username of the post creator
               body:
                 type: string
                 description: Content of the post (max 250 characters)
@@ -95,23 +82,10 @@
           schema:
             type: object
             example:
-              userId: 60d0fe4f5311236168a109cb
-              username: John Doe
               body: This is a sample post content.
-              images:
-                - "https://example.com/image1.jpg"
-                - "https://example.com/image2.jpg"
             required:
-              - user
-              - username
               - body
             properties:
-              userId:
-                type: string
-                description: ID of the user who created the post
-              username:
-                type: string
-                description: Username of the post creator
               body:
                 type: string
                 description: Content of the post (max 250 characters)
@@ -380,11 +354,6 @@
               body:
                 type: string
                 description: Content of the post (max 250 characters)
-              images:
-                type: array
-                description: List of image URLs associated with the post
-                items:
-                  type: string
         application/x-www-form-urlencoded:
           schema:
             type: object
@@ -394,11 +363,6 @@
               body:
                 type: string
                 description: Content of the post (max 250 characters)
-              images:
-                type: array
-                description: List of image URLs associated with the post
-                items:
-                  type: string
     responses:
       "200":
         description: Post updated successfully

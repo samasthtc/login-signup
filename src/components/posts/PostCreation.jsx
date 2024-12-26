@@ -2,10 +2,8 @@ import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { createPost } from "../../api/api";
-import { useAuth } from "../../auth/AuthProvider";
 
 export default function PostCreation({ searchTerm, setPosts }) {
-  const { loggedInUser } = useAuth();
   const [postBody, setPostBody] = useState("");
   const isPostEmpty = postBody.trim() === "";
   const lengthLimit = 250;
@@ -82,8 +80,6 @@ export default function PostCreation({ searchTerm, setPosts }) {
 
     try {
       const { success, data, message } = await createPost({
-        userId: loggedInUser?._id,
-        username: loggedInUser?.name,
         body: cleanedPostBody,
       });
       if (success) {
