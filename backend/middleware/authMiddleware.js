@@ -4,7 +4,7 @@ const authMiddleware = (req, res, next) => {
   const token = req.header("Authorization")?.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json({ message: "No token, authorization denied" });
+    return res.status(401).json({ message: "Unauthorized: Invalid or missing Bearer token" });
   }
 
   try {
@@ -13,7 +13,7 @@ const authMiddleware = (req, res, next) => {
     req.user = decoded.userId;
     next();
   } catch (error) {
-    res.status(401).json({ message: "Token is not valid", error });
+    res.status(401).json({ message: "Unauthorized: Invalid or missing Bearer token", error });
   }
 };
 

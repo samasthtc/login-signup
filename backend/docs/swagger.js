@@ -15,13 +15,13 @@ const filterInternalSchemas = (schemas) => {
 };
 
 const authPaths = yaml.load(
-  fs.readFileSync("docs/paths/authPaths.yaml", "utf8")
+  fs.readFileSync("docs/endpoints/authPaths.yaml", "utf8")
 );
 const userPaths = yaml.load(
-  fs.readFileSync("docs/paths/userPaths.yaml", "utf8")
+  fs.readFileSync("docs/endpoints/userPaths.yaml", "utf8")
 );
 const postPaths = yaml.load(
-  fs.readFileSync("docs/paths/postPaths.yaml", "utf8")
+  fs.readFileSync("docs/endpoints/postPaths.yaml", "utf8")
 );
 
 const swaggerOptions = {
@@ -34,12 +34,20 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "{baseUrl}:5000/api",
+        url: "http://localhost:5000/api",
         description: "Development server",
+      },
+      {
+        url: "{baseUrl}:{basePort}/api",
+        description: "Customizable Development server",
         variables: {
           baseUrl: {
             default: "http://localhost",
             description: "Local server",
+          },
+          basePort: {
+            default: "5000",
+            description: "Default port",
           },
         },
       },
@@ -53,6 +61,28 @@ const swaggerOptions = {
         },
       },
       schemas: filterInternalSchemas(modelsSchemas),
+      responses: {
+        UnauthorizedError: {
+          description: "Access token is missing or invalid",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  success: {
+                    type: "boolean",
+                    default: false,
+                  },
+                  message: {
+                    type: "string",
+                    default: "Unauthorized: Invalid or missing Bearer token",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     },
     tags: [
       { name: "Authentication", description: "Authentication endpoints" },
@@ -72,6 +102,7 @@ const swaggerOptions = {
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 export default function swaggerDocs(app, port) {
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use("/docs/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.get("/docs/json", (req, res) => res.json(swaggerSpec));
   console.log(`Swagger Docs available at http://localhost:${port}/api-docs`);
 }

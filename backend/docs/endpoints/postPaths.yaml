@@ -1,4 +1,4 @@
-/protected/posts/:
+/posts/:
   get:
     responses:
       "200":
@@ -45,7 +45,7 @@
           minimum: 1
         in: query
         name: page
-        description: "Subset of posts to fetch. eg. 1 to {limit}, {limit} to {2*limit}, ..., etc."
+        description: "Subset of posts to fetch. eg. 1 to {limit}, {limit+1} to {2*limit}, ..., etc."
       - schema:
           type: integer
           default: 10
@@ -135,12 +135,14 @@
                 message:
                   type: string
                   example: Post created successfully!
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
     tags:
       - Posts
-    description: 
+    description:
     operationId: createPost
     summary: Create Post
-/protected/posts/search:
+/posts/search:
   get:
     responses:
       "200":
@@ -188,6 +190,8 @@
                 message:
                   type: string
                   example: Search query is required
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
     tags:
       - Posts
     description: Search for post body or user name with the same query.
@@ -206,7 +210,7 @@
           minimum: 1
         in: query
         name: page
-        description: "Subset of posts to fetch. eg. 1 to {limit}, {limit} to {2*limit}, ..., etc."
+        description: "Subset of posts to fetch. eg. 1 to {limit}, {limit+1} to {2*limit}, ..., etc."
       - schema:
           type: integer
           default: 10
@@ -220,7 +224,7 @@
         in: query
         name: descending
         description: Sorting based on time created.
-"/protected/posts/user/{userId}":
+"/posts/user/{userId}":
   parameters:
     - in: path
       name: userId
@@ -233,7 +237,7 @@
         minimum: 1
       in: query
       name: page
-      description: "Subset of posts to fetch. eg. 1 to {limit}, {limit} to {2*limit}, ..., etc."
+      description: "Subset of posts to fetch. eg. 1 to {limit}, {limit+1} to {2*limit}, ..., etc."
     - schema:
         type: integer
         default: 10
@@ -281,12 +285,14 @@
                 message:
                   type: string
                   example: No posts found
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
     tags:
       - Posts
-    description: 
+    description:
     operationId: getPostsByUser
     summary: Get Posts by User
-"/protected/posts/{postId}":
+"/posts/{postId}":
   parameters:
     - in: path
       name: postId
@@ -307,6 +313,8 @@
                 message:
                   type: string
                   example: Post deleted successfully!
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "404":
         description: Post Not Found
         content:
@@ -341,6 +349,8 @@
                 message:
                   type: string
                   example: Posts fetched successfully
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "404":
         description: Post not found
         content:
@@ -417,6 +427,8 @@
                 message:
                   type: string
                   example: Post cannot be empty!
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "404":
         description: Post Not Found
         content:
@@ -435,7 +447,7 @@
     description: Update Post by ID
     operationId: updatePostById
     summary: Update Post by ID
-"/protected/posts/{postId}/like":
+"/posts/{postId}/like":
   parameters:
     - in: path
       name: postId
@@ -516,6 +528,8 @@
                     createdAt: "2023-12-22T10:15:30.000Z"
                     updatedAt: "2023-12-22T12:30:45.000Z"
                   message: Post unliked successfully!
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "404":
         description: Post Not Found
         content:

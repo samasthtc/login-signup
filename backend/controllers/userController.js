@@ -1,8 +1,4 @@
-import {
-  deleteProfile,
-  getUsers,
-  updateUser,
-} from "../services/authService.js";
+import { deleteUser, getUsers, updateUser } from "../services/userService.js";
 import {
   validateEmail,
   validateName,
@@ -31,7 +27,7 @@ export const handleGetUsers = async (req, res, next) => {
 export const handleDeleteUser = async (req, res, next) => {
   const { userId } = req.params;
   try {
-    await deleteProfile(userId);
+    await deleteUser(userId);
     res.json({ success: true, message: "User deleted successfully!" });
   } catch (error) {
     if (error.message === "User not found!") {

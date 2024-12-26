@@ -1,0 +1,25 @@
+[
+  {
+    "bearerToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzUxYjExM2Y1ZmE2ZTlhMjc3ZWRhZjIiLCJpYXQiOjE3MzUyMTQwNzcsImV4cCI6MTczNTIxNzY3N30.J68lWj-P5SjA5sx4GkfWJ2UqQomf5PuKqdBUkAeq6HU",
+    "loginEmail": "osamashoora22@gmail.com",
+    "password": "Osama.sh11",
+    "registerEmail": "newnew@gmail.com",
+    "name": "New2",
+    "deleteUserId": "675ae3b3c9bc6004837e8e2e",
+    "userId": "67559eee188425c9b629f0c6",
+    "editEmail": "user2edited@gmail.com",
+    "editName": "User2Edited",
+    "editRole": "admin",
+    "postUserId": "6751b113f5fa6e9a277edaf2",
+    "userName": "Osama S",
+    "body": "post from test",
+    "query": "os",
+    "getPostUserId": "6751b113f5fa6e9a277edaf2",
+    "deletePostId": "676d35ec95e9d23d8abfc2bf",
+    "postId": "6767e42c45363b8b3736951d",
+    "updateBody": "Hey",
+    "likePostId": "676d1ddd07f8944723888328",
+    "likeUserId": "6751b113f5fa6e9a277edaf2",
+    "like": true
+  }
+]

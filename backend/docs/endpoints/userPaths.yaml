@@ -1,4 +1,4 @@
-/protected/users/:
+/users/:
   get:
     responses:
       "200":
@@ -33,12 +33,14 @@
                 message:
                   type: string
                   example: No users found
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
     tags:
       - Users
     description: ""
     operationId: getUsers
     summary: Get Users
-"/protected/users/{userId}":
+"/users/{userId}":
   parameters:
     - in: path
       name: userId
@@ -46,6 +48,26 @@
       schema:
         type: string
   delete:
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              role:
+                enum:
+                  - user
+                  - admin
+                default: user
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              role:
+                enum:
+                  - user
+                  - admin
+                default: user
     responses:
       "200":
         description: User deleted successfully
@@ -59,6 +81,8 @@
                 message:
                   type: string
                   example: User deleted successfully!
+      "401":
+        $ref: "#/components/responses/UnauthorizedError"
       "404":
         description: User Not Found
         content:
@@ -92,7 +116,8 @@
                 enum:
                   - user
                   - admin
-                default: user
+                  - ""
+                default: ""
               Confirm Password:
                 type: string
               New Password:
@@ -111,7 +136,8 @@
                 enum:
                   - user
                   - admin
-                default: user
+                  - ""
+                default: ""
               Confirm Password:
                 type: string
               New Password:
@@ -156,18 +182,7 @@
                       type: string
                       example: Password must contain at least one number.
       "401":
-        description: Unauthorized
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                success:
-                  type: boolean
-                  example: false
-                message:
-                  type: string
-                  example: Old password is incorrect!
+        $ref: "#/components/responses/UnauthorizedError"
       "404":
         description: User Not Found
         content:
@@ -199,7 +214,12 @@
                 value:
                   success: false
                   message: Email already exists!
-              passwordConflict:
+              oldPasswordConflict:
+                summary: Old password conflict
+                value:
+                  success: false
+                  message: Old password is incorrect!
+              newPasswordConflict:
                 summary: New password conflict
                 value:
                   success: false

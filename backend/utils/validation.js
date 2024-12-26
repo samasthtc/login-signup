@@ -12,7 +12,7 @@ export function validateName(value) {
 }
 
 export function validateEmail(value) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+  return /^[\w-_]+(\.[\w-_]+)*@[\w-_]+(\.[\w-_]+)*(\.[a-z]{2,})$/.test(value)
     ? { isValid: true, message: "" }
     : { isValid: false, message: "Invalid email." };
 }

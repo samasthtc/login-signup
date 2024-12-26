@@ -4,8 +4,8 @@ import swaggerDocs from "../docs/swagger.js";
 import commonMiddleware from "../middleware/commonMiddleware.js";
 import errorHandler from "../middleware/errorMiddleware.js";
 import authRoutes from "../routes/authRoutes.js";
-import postRoutes from "../routes/protectedRoutes/postRoutes.js";
-import userRoutes from "../routes/protectedRoutes/userRoutes.js";
+import postRoutes from "../routes/postRoutes.js";
+import userRoutes from "../routes/userRoutes.js";
 
 const app = express();
 // eslint-disable-next-line no-undef
@@ -17,8 +17,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoutes);
-app.use("/api/protected", userRoutes);
-app.use("/api/protected/posts", postRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/posts", postRoutes);
 
 swaggerDocs(app, PORT);
 

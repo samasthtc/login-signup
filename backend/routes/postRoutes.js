@@ -8,8 +8,8 @@ import {
   handleGetPostsByUser,
   handleLikePost,
   handleUpdatePostById,
-} from "../../controllers/postController.js";
-import authMiddleware from "../../middleware/authMiddleware.js";
+} from "../controllers/postController.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 /**
  * @swagger
  * tags:

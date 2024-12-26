@@ -81,7 +81,7 @@ export const likePost = async (postId, userId, like = true) => {
     throw new Error("Post not found");
   }
 
-  if (like) {
+  if (like === true || like === "true") {
     if (!post.likes.includes(userId)) {
       post.likes.push(userId);
     }
