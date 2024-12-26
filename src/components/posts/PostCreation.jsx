@@ -85,8 +85,8 @@ export default function PostCreation({
 
     try {
       const { success, data, message } = await createPost({
-        user: loggedInUser._id,
-        username: loggedInUser.name,
+        user: loggedInUser?._id,
+        username: loggedInUser?.name,
         body: postBody,
       });
       if (success) {

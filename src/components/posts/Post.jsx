@@ -13,7 +13,7 @@ const Post = forwardRef(({ post, refreshPosts }, ref) => {
   const readableTime = moment(createdAt).format("MMM Do - h:mm A");
 
   const { loggedInUser } = useAuth();
-  const isCurrentUser = loggedInUser._id === user;
+  const isCurrentUser = loggedInUser?._id === user;
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(likes?.length ?? 0);
   const navigate = useNavigate();
@@ -37,13 +37,13 @@ const Post = forwardRef(({ post, refreshPosts }, ref) => {
     try {
       const { success, data, message } = await likePost(
         postId,
-        loggedInUser._id,
+        loggedInUser?._id,
         like
       );
 
       if (success) {
         setLikesCount(data.likes.length);
-        setIsLiked(data.likes.includes(loggedInUser._id));
+        setIsLiked(data.likes.includes(loggedInUser?._id));
       } else {
         console.log(message);
       }

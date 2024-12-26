@@ -142,7 +142,7 @@ export default function Sidebar({
               }
                sidebar-header p-25 py-3 `}
             >
-               <iclassName="fa-regular fa-circle-user fs-2"></i>
+              <i className="fa-regular fa-circle-user fs-2"></i>
               <span
                 className={`fw-semibold text-wrap p-0 m-0 ms-2 ${
                   !isOpen ? "d-sm-none" : ""
@@ -181,7 +181,7 @@ export default function Sidebar({
               <span className={!isOpen ? "hidden" : ""}>Home</span>
             </Link>
           </li>
-          {loggedInUser.role === "admin" && (
+          {loggedInUser?.role === "admin" && (
             <li
               ref={tooltipRefs.users}
               data-bs-toggle={tooltipRefs.users}

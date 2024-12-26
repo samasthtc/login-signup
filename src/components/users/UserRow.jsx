@@ -9,7 +9,7 @@ export default function UserRow({ user }) {
   const { loggedInUser, logout, setTriggerFetch } = useAuth();
   const { _id, name, email } = user;
   const navigate = useNavigate();
-  const userisLoggedIn = loggedInUser._id === _id;
+  const userisLoggedIn = loggedInUser?._id === _id;
   const errorModalRef = useRef();
 
   const handleEdit = () => {

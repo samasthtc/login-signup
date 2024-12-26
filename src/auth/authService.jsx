@@ -14,7 +14,11 @@ export function validateName(value) {
 }
 
 export function validateEmail(value) {
-  if (value.toLowerCase().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+  if (
+    value
+      .toLowerCase()
+      .match(/^[\w-_]+(\.[\w-_]+)*@[\w-_]+(\.[\w-_]+)*(\.[a-z]{2,})$/)
+  ) {
     return {
       isValid: true,
       errorMessage: "",

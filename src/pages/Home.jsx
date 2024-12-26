@@ -60,8 +60,7 @@ export default function Home() {
       }
     } catch (err) {
       if (
-        err.message === "No token, authorization denied" ||
-        err.message === "Token is not valid"
+        err.message === "Unauthorized: Invalid or missing Bearer token"
       ) {
         logout();
       }

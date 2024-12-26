@@ -61,8 +61,7 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       if (
-        error.message === "Error: Token is not valid" ||
-        error.message === "No token, authorization denied"
+        error.message === "Unauthorized: Invalid or missing Bearer token"
       ) {
         logout();
       }

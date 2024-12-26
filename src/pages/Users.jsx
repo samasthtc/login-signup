@@ -8,7 +8,7 @@ import { useAuth } from "../auth/AuthProvider";
 export default function Users() {
   const { loggedInUser } = useAuth();
 
-  if (loggedInUser.role !== "admin") {
+  if (loggedInUser?.role !== "admin") {
     return <Navigate to="/" />;
   }
 

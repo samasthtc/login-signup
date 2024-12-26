@@ -44,10 +44,10 @@ export default function Post() {
         setPost(response.data);
         setPostBody(response.data.body);
         setLikesCount(response.data.likes.length);
-        setIsLiked(response.data.likes.includes(loggedInUser._id));
+        setIsLiked(response.data.likes.includes(loggedInUser?._id));
         setIsEditing(
           searchParams.get("edit") === "true" &&
-            response.data.user === loggedInUser._id
+            response.data.user === loggedInUser?._id
         );
       } catch (error) {
         errorText.current = `Error fetching post\n${error}`;
@@ -58,7 +58,7 @@ export default function Post() {
 
     fetchPost();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, loggedInUser._id, location.search]);
+  }, [id, loggedInUser?._id, location.search]);
 
   const handleEditToggle = (isEditMode) => {
     const currentParams = new URLSearchParams(location.search);
@@ -154,7 +154,7 @@ export default function Post() {
   }
 
   const { _id: postId, img, username, body, user } = post;
-  const isCurrentUser = loggedInUser._id === user;
+  const isCurrentUser = loggedInUser?._id === user;
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -219,13 +219,13 @@ export default function Post() {
     try {
       const { success, data, message } = await likePost(
         postId,
-        loggedInUser._id,
+        loggedInUser?._id,
         like
       );
 
       if (success) {
         setLikesCount(data.likes.length);
-        setIsLiked(data.likes.includes(loggedInUser._id));
+        setIsLiked(data.likes.includes(loggedInUser?._id));
       } else {
         console.log(message);
       }

@@ -9,13 +9,13 @@ export const register = (userData) =>
 
 /** protected user requests */
 export const getUsers = (token) =>
-  apiRequest("/api/protected/users/", "GET", {
+  apiRequest("/api/users/", "GET", {
     Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
   });
 
 export const deleteUser = (userId, user, token) =>
   apiRequest(
-    `/api/protected/users/${userId}`,
+    `/api/users/${userId}`,
     "DELETE",
     {
       Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
@@ -25,7 +25,7 @@ export const deleteUser = (userId, user, token) =>
 
 export const updateUser = (userId, changedData, token) =>
   apiRequest(
-    `/api/protected/users/${userId}`,
+    `/api/users/${userId}`,
     "PUT",
     {
       Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
@@ -34,14 +34,14 @@ export const updateUser = (userId, changedData, token) =>
   );
 
 export const visitProfile = (token) =>
-  apiRequest("/api/protected/profile", "GET", {
+  apiRequest("/api/profile", "GET", {
     Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
   });
 
 /** protected post requests */
 export const createPost = (postData, token) =>
   apiRequest(
-    "/api/protected/posts/",
+    "/api/posts/",
     "POST",
     {
       Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
@@ -51,19 +51,19 @@ export const createPost = (postData, token) =>
 
 export const getAllPosts = (options = {}, token) => {
   const queryParams = new URLSearchParams(options).toString();
-  return apiRequest(`/api/protected/posts?${queryParams}`, "GET", {
+  return apiRequest(`/api/posts?${queryParams}`, "GET", {
     Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
   });
 };
 
 export const getPostById = (postId, token) =>
-  apiRequest(`/api/protected/posts/${postId}`, "GET", {
+  apiRequest(`/api/posts/${postId}`, "GET", {
     Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
   });
 
 export const updatePost = (postId, changedData, token) =>
   apiRequest(
-    `/api/protected/posts/${postId}`,
+    `/api/posts/${postId}`,
     "PUT",
     {
       Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
@@ -73,7 +73,7 @@ export const updatePost = (postId, changedData, token) =>
 
 export const deletePost = (postId, token) =>
   apiRequest(
-    `/api/protected/posts/${postId}`,
+    `/api/posts/${postId}`,
     "DELETE",
     {
       Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
@@ -84,7 +84,7 @@ export const deletePost = (postId, token) =>
 export const getPostsByUser = (userId, options = {}, token) => {
   const queryParams = new URLSearchParams(options).toString();
   apiRequest(
-    `/api/protected/posts/user/${userId}?${queryParams}`,
+    `/api/posts/user/${userId}?${queryParams}`,
     "GET",
     {
       Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
@@ -95,14 +95,14 @@ export const getPostsByUser = (userId, options = {}, token) => {
 
 export const getPostsByQuery = (query, options = {}, token) => {
   const queryParams = new URLSearchParams({ ...options, query }).toString();
-  return apiRequest(`/api/protected/posts/search?${queryParams}`, "GET", {
+  return apiRequest(`/api/posts/search?${queryParams}`, "GET", {
     Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
   });
 };
 
 export const likePost = (postId, userId, like, token) => {
   return apiRequest(
-    `/api/protected/posts/${postId}/like`,
+    `/api/posts/${postId}/like`,
     "POST",
     {
       Authorization: `Bearer ${token ? token : localStorage.getItem("token")}`,
