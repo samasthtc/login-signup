@@ -23,7 +23,8 @@ export default function Home() {
 
   const debouncedSearchChange = useDebounce((value) => {
     setSearchTerm(value);
-    refreshPosts();
+    setPage(1);
+    setHasMore(true);
   });
 
   const handleSearchChange = (value) => {
@@ -59,9 +60,7 @@ export default function Home() {
         setHasMore(false);
       }
     } catch (err) {
-      if (
-        err.message === "Unauthorized: Invalid or missing Bearer token"
-      ) {
+      if (err.message === "Unauthorized: Invalid or missing Bearer token") {
         logout();
       }
       setHasMore(false);
@@ -78,6 +77,7 @@ export default function Home() {
   const refreshPosts = () => {
     setPage(1);
     setHasMore(true);
+    fetchPosts(searchTerm, { page, limit: 9 });
   };
 
   const lastPostRef = useRef();
@@ -115,7 +115,7 @@ export default function Home() {
       h-100`}
     >
       <PostSearch searchTerm={searchInput} setSearchTerm={handleSearchChange} />
-      <PostCreation searchTerm={searchInput} setPosts={setPosts} refreshPosts={refreshPosts} fetchPosts={fetchPosts} />
+      <PostCreation searchTerm={searchInput} setPosts={setPosts} />
       {posts.length > 0 ? (
         <PostDisplay
           posts={posts}

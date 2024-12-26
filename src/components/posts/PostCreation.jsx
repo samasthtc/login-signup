@@ -4,12 +4,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import { createPost } from "../../api/api";
 import { useAuth } from "../../auth/AuthProvider";
 
-export default function PostCreation({
-  searchTerm,
-  setPosts,
-  refreshPosts,
-  fetchPosts,
-}) {
+export default function PostCreation({ searchTerm, setPosts }) {
   const { loggedInUser } = useAuth();
   const [postBody, setPostBody] = useState("");
   const isPostEmpty = postBody.trim() === "";
@@ -83,16 +78,18 @@ export default function PostCreation({
   const handlePost = async () => {
     if (isPostEmpty) return;
 
+    const cleanedPostBody = postBody.trim();
+
     try {
       const { success, data, message } = await createPost({
         user: loggedInUser?._id,
         username: loggedInUser?.name,
-        body: postBody,
+        body: cleanedPostBody,
       });
       if (success) {
         if (
           searchTerm === "" ||
-          postBody.toLowerCase().includes(searchTerm.toLowerCase())
+          cleanedPostBody.toLowerCase().includes(searchTerm.toLowerCase())
         ) {
           setPosts((prev) => [data, ...prev]);
         }
@@ -210,8 +207,6 @@ export default function PostCreation({
 }
 
 PostCreation.propTypes = {
-  fetchPosts: PropTypes.func,
-  refreshPosts: PropTypes.func,
   searchTerm: PropTypes.string,
   setPosts: PropTypes.func,
 };
