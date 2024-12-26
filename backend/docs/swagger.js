@@ -104,5 +104,5 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
 export default function swaggerDocs(app, port) {
   app.use("/docs/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
   app.get("/docs/json", (req, res) => res.json(swaggerSpec));
-  console.log(`Swagger Docs available at http://localhost:${port}/api-docs`);
+  console.log(`Swagger Docs available at http://localhost:${port}/docs/api-docs`);
 }
