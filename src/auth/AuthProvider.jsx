@@ -57,6 +57,7 @@ export const AuthProvider = ({ children }) => {
         }
       } else {
         console.error("Failed to fetch users");
+        logout()
       }
     } catch (error) {
       if (

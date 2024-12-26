@@ -16,6 +16,8 @@ export default function UsersListProvider({ children }) {
       const { success, data } = await getUsers();
       if (success) {
         setUsers(data);
+        
+        
       } else {
         console.error("Failed to fetch users");
       }

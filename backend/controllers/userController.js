@@ -12,7 +12,7 @@ import {
 export const handleGetUsers = async (req, res, next) => {
   try {
     const users = await getUsers();
-    if (users.length !== 0) {
+    if (users.length === 0) {
       return res
         .status(200)
         .json({ success: true, data: [], message: "No users found" });

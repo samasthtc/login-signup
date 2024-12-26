@@ -12,6 +12,7 @@ const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Post = lazy(() => import("./pages/Post"));
+const UserWelcome = lazy(() => import("./pages/UserWelcome"));
 
 const loadingSpinner = (
   <div
@@ -81,6 +82,16 @@ function App() {
                   <UsersListProvider>
                     <PrivateLayout>
                       <Post />
+                    </PrivateLayout>
+                  </UsersListProvider>
+                }
+              />
+              <Route
+                path="/welcome"
+                element={
+                  <UsersListProvider>
+                    <PrivateLayout>
+                      <UserWelcome />
                     </PrivateLayout>
                   </UsersListProvider>
                 }

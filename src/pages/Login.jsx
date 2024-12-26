@@ -7,7 +7,8 @@ export default function Login() {
   const { loggedInUser } = useAuth();
 
   if (loggedInUser) {
-    return <Navigate to="/" />;
+    const path = loggedInUser.role === "admin" ? "/users" : "/welcome";
+    return <Navigate to={path} />;
   }
 
   return (

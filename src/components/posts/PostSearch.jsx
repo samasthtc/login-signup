@@ -3,7 +3,7 @@ export default function PostSearch({ searchTerm, setSearchTerm }) {
   return (
     <div className="input-group fit-content ">
       <input
-        className="form-control rounded-pill ps-45 z-1"
+        className="form-control rounded-pill ps-45 z-1 search"
         type="search"
         name="search"
         placeholder="Search posts..."

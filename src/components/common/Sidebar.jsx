@@ -78,7 +78,6 @@ export default function Sidebar({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
 
   return (
     <>
@@ -143,7 +142,7 @@ export default function Sidebar({
               }
                sidebar-header p-25 py-3 `}
             >
-              <i className="fa-regular fa-circle-user fs-2"></i>
+               <iclassName="fa-regular fa-circle-user fs-2"></i>
               <span
                 className={`fw-semibold text-wrap p-0 m-0 ms-2 ${
                   !isOpen ? "d-sm-none" : ""
@@ -182,27 +181,31 @@ export default function Sidebar({
               <span className={!isOpen ? "hidden" : ""}>Home</span>
             </Link>
           </li>
-          <li
-            ref={tooltipRefs.users}
-            data-bs-toggle={tooltipRefs.users}
-            className={`nav-item w-100 ${isOpen ? "" : "fit-content"}`}
-            onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
-          >
-            <Link
-              to="/users"
-              className={`nav-link d-flex gap-2 align-items-center ${
-                isCurrent.users ? "active" : ""
-              }  ${isOpen ? "" : "rounded-circle p-25 justify-content-center"}`}
-              aria-current="page"
-              style={{ minWidth: "49px", minHeight: "49px" }}
+          {loggedInUser.role === "admin" && (
+            <li
+              ref={tooltipRefs.users}
+              data-bs-toggle={tooltipRefs.users}
+              className={`nav-item w-100 ${isOpen ? "" : "fit-content"}`}
+              onClick={isOpenAndSmall ? () => setIsOpen(false) : () => {}}
             >
-              <i
-                className="fa-solid fa-users-line fs-5 d-flex justify-content-center"
-                style={{ minWidth: "25px" }}
-              ></i>
-              <span className={!isOpen ? "hidden" : ""}>Users</span>
-            </Link>
-          </li>
+              <Link
+                to="/users"
+                className={`nav-link d-flex gap-2 align-items-center ${
+                  isCurrent.users ? "active" : ""
+                }  ${
+                  isOpen ? "" : "rounded-circle p-25 justify-content-center"
+                }`}
+                aria-current="page"
+                style={{ minWidth: "49px", minHeight: "49px" }}
+              >
+                <i
+                  className="fa-solid fa-users-line fs-5 d-flex justify-content-center"
+                  style={{ minWidth: "25px" }}
+                ></i>
+                <span className={!isOpen ? "hidden" : ""}>Users</span>
+              </Link>
+            </li>
+          )}
 
           {/* <li className="nav-item">
             <Link

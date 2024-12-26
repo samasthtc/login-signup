@@ -35,6 +35,7 @@ export default function UsersTable() {
       return valueToCheck.includes(searchTerm.toLowerCase());
     });
   }, [usersList, searchTerm, filter]);
+  
 
   if (isLoading) {
     return <LoadingSpinner />;
