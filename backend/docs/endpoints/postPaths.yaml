@@ -66,7 +66,7 @@
           schema:
             type: object
             example:
-              user: 60d0fe4f5311236168a109cb
+              userId: 60d0fe4f5311236168a109cb
               username: John Doe
               body: This is a sample post content.
               images:
@@ -77,7 +77,7 @@
               - username
               - body
             properties:
-              user:
+              userId:
                 type: string
                 description: ID of the user who created the post
               username:
@@ -95,7 +95,7 @@
           schema:
             type: object
             example:
-              user: 60d0fe4f5311236168a109cb
+              userId: 60d0fe4f5311236168a109cb
               username: John Doe
               body: This is a sample post content.
               images:
@@ -106,7 +106,7 @@
               - username
               - body
             properties:
-              user:
+              userId:
                 type: string
                 description: ID of the user who created the post
               username:
@@ -499,7 +499,7 @@
                   success: true
                   data:
                     _id: 60d0fe4f5311236168a109ca
-                    user: 60d0fe4f5311236168a109cb
+                    userId: 60d0fe4f5311236168a109cb
                     username: John Doe
                     body: This is a sample post content.
                     images:
@@ -516,7 +516,7 @@
                   success: true
                   data:
                     _id: 60d0fe4f5311236168a109ca
-                    user: 60d0fe4f5311236168a109cb
+                    userId: 60d0fe4f5311236168a109cb
                     username: John Doe
                     body: This is a sample post content.
                     images:

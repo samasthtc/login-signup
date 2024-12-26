@@ -3,7 +3,7 @@ const modelsSchemas = {
     type: "object",
     example: {
       _id: "60d0fe4f5311236168a109ca",
-      user: "60d0fe4f5311236168a109cb",
+      userId: "60d0fe4f5311236168a109cb",
       username: "John Doe",
       body: "This is a sample post content.",
       images: [
@@ -20,7 +20,7 @@ const modelsSchemas = {
         type: "string",
         description: "Auto-generated ID of the post",
       },
-      user: {
+      userId: {
         type: "string",
         description: "ID of the user who created the post",
       },

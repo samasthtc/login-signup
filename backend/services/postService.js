@@ -45,7 +45,7 @@ export const getPostsByUser = async (
   const skip = (page - 1) * limit;
   const order = descending ? -1 : 1;
 
-  return await Post.find({ user: userId })
+  return await Post.find({ userId: userId })
     .sort({ createdAt: order })
     .skip(skip)
     .limit(limit)

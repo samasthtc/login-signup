@@ -180,7 +180,7 @@ Post.propTypes = {
     createdAt: PropTypes.any,
     img: PropTypes.any,
     likes: PropTypes.any,
-    user: PropTypes.any,
+    userId: PropTypes.any,
     username: PropTypes.any.isRequired,
   }).isRequired,
   refreshPosts: PropTypes.func,

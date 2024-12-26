@@ -82,7 +82,7 @@ export default function PostCreation({ searchTerm, setPosts }) {
 
     try {
       const { success, data, message } = await createPost({
-        user: loggedInUser?._id,
+        userId: loggedInUser?._id,
         username: loggedInUser?.name,
         body: cleanedPostBody,
       });
