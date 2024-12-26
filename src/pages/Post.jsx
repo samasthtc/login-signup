@@ -153,8 +153,8 @@ export default function Post() {
     return <p className="text-center mt-5">{errorText.current}</p>;
   }
 
-  const { _id: postId, img, username, body, user } = post;
-  const isCurrentUser = loggedInUser?._id === user;
+  const { _id: postId, img, username, body, userId } = post;
+  const isCurrentUser = loggedInUser?._id === userId;
 
   const handleInputChange = (e) => {
     const value = e.target.value;

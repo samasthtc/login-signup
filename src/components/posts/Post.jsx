@@ -9,11 +9,11 @@ import Modal from "../common/Modal";
 
 // @ts-ignore
 const Post = forwardRef(({ post, refreshPosts }, ref) => {
-  const { _id: postId, img, username, body, user, likes, createdAt } = post;
+  const { _id: postId, img, username, body, userId, likes, createdAt } = post;
   const readableTime = moment(createdAt).format("MMM Do - h:mm A");
 
   const { loggedInUser } = useAuth();
-  const isCurrentUser = loggedInUser?._id === user;
+  const isCurrentUser = loggedInUser?._id === userId;
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(likes?.length ?? 0);
   const navigate = useNavigate();
@@ -129,7 +129,7 @@ const Post = forwardRef(({ post, refreshPosts }, ref) => {
           </p>
         </div>
 
-        {loggedInUser?._id !== user
+        {loggedInUser?._id !== userId
           ? loggedInUser?.role === "admin"
             ? actionsDropdown
             : null
