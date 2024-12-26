@@ -45,7 +45,7 @@ export default function Post() {
         setPostBody(response.data.body);
         setLikesCount(response.data.likes.length);
         setIsLiked(response.data.likes.includes(loggedInUser?._id));
-        
+
         setIsEditing(
           searchParams.get("edit") === "true" &&
             response.data.userId === loggedInUser?._id
@@ -77,8 +77,7 @@ export default function Post() {
 
   const handleDelete = async () => {
     try {
-      const { success, data, message } = await deletePost(postId);
-      console.log(success, data, message);
+      const { success } = await deletePost(postId);
       if (success) {
         // @ts-ignore
         navigate("/", { replace: true });
@@ -156,8 +155,6 @@ export default function Post() {
 
   const { _id: postId, img, username, body, userId } = post;
   const isCurrentUser = loggedInUser?._id === userId;
-  console.log(isEditing, isCurrentUser);
-  
 
   const handleInputChange = (e) => {
     const value = e.target.value;
